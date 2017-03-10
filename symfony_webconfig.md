@@ -11,6 +11,17 @@ Aby używać Symfony pod IIS w konfiguracji DEV z działającym profilerem zmie�
         <rewrite>
 		<rules>
                	<clear />
+               	
+               	<!-- Rule dla plików statycznych jak CSS/JS -->
+               	<rule name="StaticFiles" stopProcessing="true">
+                    <match url="^(.*)$" />
+                    <conditions logicalGrouping="MatchAll" trackAllCaptures="false">
+                        <add input="{REQUEST_FILENAME}" matchType="IsFile"/>
+                    </conditions>
+                    <action type="Rewrite" url="{R:0}" logRewrittenUrl="true" />
+                </rule>
+               	
+               	
                	<rule name="Symfony 1" stopProcessing="true">
                     <match url="^app\.php(/(.*)|$)" ignoreCase="false" />
                     <conditions logicalGrouping="MatchAll" trackAllCaptures="false" />
