@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zadanie 1</title>
+</head>
+<body>
+
+</body>
+<script>
+
+    function prefixer(prefix) {
+
+        function add(string) {
+            return prefix + string;
+        }
+
+        return add;
+    }
+
+    var prefixAAA = prefixer('AAA_');
+    var prefixZZZ = prefixer('ZZZ_');
+
+
+
+    console.log(prefixAAA('przykladowy_string'));
+    console.log(prefixAAA('kolejny_przykladowy_string'));
+    console.log(prefixZZZ('tym_razem_inny_prefix_niz_poprzednio'));
+
+
+
+</script>
+</html>
