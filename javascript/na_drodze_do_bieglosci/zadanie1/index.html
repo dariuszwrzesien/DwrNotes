@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zadanie 1</title>
+</head>
+<body>
+
+</body>
+    <script>
+        const cenaTel = 199900;
+        const cenaAkcesoriow = 29900;
+        const podatek = 0.24;
+
+        const cenaZestawu = obliczCeneZestawu();
+
+        var saldo = 2000000;
+        var cenaZakupu = 0;
+        var iloscKupionychTelefonow = 0;
+
+
+        function obliczCeneZestawu() {
+            var wartoscPodatku = (cenaTel + cenaAkcesoriow) * podatek;
+            return cenaTel + cenaAkcesoriow + wartoscPodatku;
+        }
+
+        function kupTelefony() {
+            for (iloscKupionychTelefonow = 0;
+                 cenaZestawu <= saldo;
+                 iloscKupionychTelefonow++) {
+                saldo = saldo - cenaZestawu;
+                cenaZakupu += cenaZestawu;
+            }
+
+            return iloscKupionychTelefonow;
+        }
+
+        function konwertujNaZlote(cena) {
+            return (cena/100) + "zl";
+        }
+
+        console.log("Ilosc telefonow: " + kupTelefony());
+        console.log("Cena zakupu: " + konwertujNaZlote(cenaZakupu));
+        console.log("Cena zestawu: " + konwertujNaZlote(cenaZestawu));
+
+
+
+    </script>
+</html>
