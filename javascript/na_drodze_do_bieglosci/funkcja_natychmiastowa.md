@@ -19,10 +19,12 @@ poza tą funkcją
 
 ```javascript
     var a = 'Hello';
+
     (function IIFE(){
-    var a = 'Hi';
-    console.log( a );
+        var a = 'Hi';
+        console.log( a );
     })();
+
     console.log( a );
     // Hi
     // Hello
@@ -34,7 +36,8 @@ Funkcja IIFE może zwracać wartość:
     var x = (function IIFE(){
         return 42;
     })();
-    x;
+
+    console.log( x );
 
     // 42
 ````
