@@ -28,7 +28,6 @@ fred.login("fred", "admin1");
 Funkcja User() przechowuje zmienne username i password oraz funkcję doLogin.
 Są to prywatne szczegóły modułu User, niedostępne z zewnątrz.
 
-
 Wewnętrzna funkcja doLogin() ma **domknięcie** przez username i password,
 oznacza to zachowanie dostępu do wymienionych elementów nawet po zakoń-
 czeniu wykonywania funkcji User() .
