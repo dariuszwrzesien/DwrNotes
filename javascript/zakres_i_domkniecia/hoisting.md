@@ -1,5 +1,6 @@
-Ciekawymi przykładami do rozważenia przed wyjaśnieniem zasady hoistingu
-(hoisting - podnoszenie, wciąganie, windowanie) są:
+**Hoisting** (z ang. podnoszenie, wciąganie, windowanie).
+
+Ciekawymi przykładami do rozważenia przed wyjaśnieniem zasady hoistingu są:
 
 1.
 
@@ -24,7 +25,7 @@ Kolejny przykład:
 
 Bazując na poprzednim przykładzie można by sądzić że skoro wyszukiwanie
 nie odbywa się od początku do końca kodu to wynikiem może będzie 2.
-Niestety prawda jest inna, wynikiem jes ***undefined***.
+Niestety prawda jest inna, wynikiem jest ***undefined***.
 
 Kiedy Kompilator widzi polecenie **var a = 2** traktuje je jako dwa polecenia:
 
@@ -32,7 +33,6 @@ Kiedy Kompilator widzi polecenie **var a = 2** traktuje je jako dwa polecenia:
  var a;
  a = 2;
  ```
-
 
 Wracając do przykładów podanych na początku.
 Pierwszy przykład kompilator widzi w następujący sposób:
@@ -61,7 +61,7 @@ funkcję mają pierwszeństwo przed zmiennymi.
 
 ```javascript
     foo(); // 1
-        var foo;
+    var foo;
     function foo() {
         console.log( 1 );
     }
@@ -84,7 +84,7 @@ Przedstawiony fragment jest interpretowany w następujący sposób:
     };
 ```
 
-Kolejny przykład: *każda powielająca się deklaracja funkcji **nadpisuje** poprzednią*
+Kolejny przykład: *każda powielająca się deklaracja funkcji **nadpisuje** poprzednią*.
 
 ```javascript
     foo(); // 3
@@ -98,7 +98,6 @@ Kolejny przykład: *każda powielająca się deklaracja funkcji **nadpisuje** po
 ```
 
 Podsumowując, wszystkie deklaracje w zakresie, niezależnie od miejsca ich występowania,
-sąprzetwarzane przed rozpoczęciem wykonywania kodu. Można powiedzieć że
+są przetwarzane przed rozpoczęciem wykonywania kodu. Można powiedzieć że
 deklaracje (funkcji i zmiennych) są przenoszone na początek ich zakresów - i to właśnie jest **hoisting**.
 Kod odpowiedzialny za przypisanie lub wykonanie pozostaje w dotychczasowym miejscu.
-
