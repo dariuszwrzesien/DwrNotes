@@ -62,3 +62,9 @@ add(fetchX(), fetchY())
 
 ```
 
+Obietnice rozwiązują problem związany z odwróceniem kontroli stanowiący prawdziwe utrapienie w przypadku kodu bazującego
+tylko na wywołaniach zwrotnych. Obietnice nie oznaczają całkowitego pozbycia się wywołań zwrotnych, a jedynie przekierowują
+sterowanie nimi do godnego zaufania mechanizmu umieszczonego między aplikacją i innym narzędziem.
+Łańcuch obietnic zaczyna stanowić lepszy (choć bez wątpienia niedoskonały) sposób synchro-
+nicznego wyrażenia asynchronicznej kontroli przepływu działania programu. Dzięki temu mo-
+żemy znacznie lepiej zaplanować i obsługiwać asynchronicznie działający kod.
