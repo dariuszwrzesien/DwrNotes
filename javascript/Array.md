@@ -38,3 +38,42 @@ niż długość tablicy**, *nawet jeśli poszczególne indeksy nie zostały wcze
 ```
 
 **Array.reduce**
+
+Metoda **reduce** wykonuje funkcję callback raz dla każdego elementu występującego w tablicy, wyłączając dziury. Funkcja callback
+przyjmuje cztery argumenty: wartość początkową (lub wartość poprzedniego wywołania callback), wartość obecnego elementu,
+jego indeks, oraz tablicę na której zachodzi proces iteracji.
+
+```javascript
+[0, 1, 2, 3, 4].reduce(function(previousValue, currentValue, index, array) {
+  return previousValue + currentValue; //10
+});
+```
+
+Natomiast, jeśli dostarczylibyśmy wartość początkową jako drugi argument funkcji przekazanej do reduce, wynik wyglądałby
+jak poniżej:
+
+```javascript
+[0, 1, 2, 3, 4].reduce(function(previousValue, currentValue, index, array) {
+  return previousValue + currentValue; //20
+}, 10)
+```
+
+**Więcej przykładów:**
+
+Zsumowanie wszystkich wartości w tablicy.
+
+```javascript
+var total = [0, 1, 2, 3].reduce(function(a, b) {
+  return a + b;
+});
+// total == 6
+```
+
+Spłaszczenie tablicy tablic.
+
+```javascript
+var flattened = [[0, 1], [2, 3], [4, 5]].reduce(function(a, b) {
+  return a.concat(b);
+});
+// flattened is [0, 1, 2, 3, 4, 5]
+```
