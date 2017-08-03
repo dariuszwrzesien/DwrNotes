@@ -21,7 +21,7 @@ zwróci true. Funkcja callback wywoływana jest jedynie dla indeksów tablicy, k
 
 Sprawdza, czy jakikolwiek element tablicy zalicza test zaimplementowany przez dostarczoną funkcję.
 
-metoda ***some*** wykonuje funkcję callback() na każdym elemencie tablicy, aż znajdzie taki, dla którego callback zwróci
+Metoda ***some*** wykonuje funkcję callback() na każdym elemencie tablicy, aż znajdzie taki, dla którego callback zwróci
 prawdę (true). Jeżeli taki element zostanie znaleziony, ***some*** zakończy swoje działanie i zwróci prawdę (true),
 w przeciwnym przypadku (gdy callback zwróci fałsz dla każdego z elementów) ***some*** zwróci false.
 Tablice traktowane są jako "zwarte" - czyli callback zostanie wywołane **dla każdego elementu o indeksie mniejszym
