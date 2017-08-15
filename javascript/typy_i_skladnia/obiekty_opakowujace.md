@@ -2,7 +2,9 @@
 
 W JavaScript wartości prymitywne (string, number, boolean itd.) nie mają właściwości ani metod.
 Aby uzyskać dostęp do włąściwości **.lenght** lub metody **.toString()** niezbędne jest opakowanie
-wartości za pomocą **OBIEKTY OPAKOWUJĄCEGO**.
+wartości za pomocą **OBIEKTU OPAKOWUJĄCEGO**.
+Obiektem opakowującym są tzw. **obiekty mcieżyste**:
+**String(), Number(), Boolean(), Array(), Object(), Function() itd.**
 
 JavaScript na szczęście **AUTOMATYCZNIE OPAKOWUJE** wartości prymitywne.
 
