@@ -29,9 +29,9 @@ Zawsze wybieraj wariant użycia dosłownych wartości prymitywnych **"abc"**, **
 Aby rozpakować wartość prymitywną opakowaną obiektem, można skorzystać z metody ***valueOf()***
 
 ```javascript
-    var a = new String( "abc" );
-    var b = new Number( 42 );
-    var c = new Boolean( true );
+    var a = new String("abc");
+    var b = new Number(42);
+    var c = new Boolean(true);
 
     a.valueOf(); // "abc"
     b.valueOf(); // 42
