@@ -44,3 +44,51 @@ console.log(h); //true
 Należy pamiętać że wywołanie konwersji odbywa się bez słowa kluczowego **new**.
 Słowem kluczowym **new Boolean(...)** tworzymy obiekt opakowujący.
 
+**Operator jednoargumetowy *"!"* i *"!!"***
+
+Operator negacji **!** jawnie przeprowadza konwersję typu na typ **boolean**.
+Problem polega na ty, że operator ten dokonuje również odwrócenia wartości z prawdziwej na fałszywą, lub odwrotnie.
+Zatem najczęściej wykorzystywany sposób konwersji jawnej na typ **booolean** to zastosowanie podwójenej negacji **!!**.
+
+
+```javascript
+var a = "0";
+var b = [];
+var c = {};
+var d = "";
+var e = 0;
+var f = null;
+var g;
+
+Boolean(a); //true
+Boolean(b); //true
+Boolean(c); //true
+
+Boolean(d); //false
+Boolean(e); //false
+Boolean(f); //false
+Boolean(g); //false
+
+var a = "0";
+var b = [];
+var c = {};
+var d = "";
+var e = 0;
+var f = null;
+var g;
+
+!!a; //true
+!!b; //true
+!!c; //true
+
+!!d; //false
+!!e; //false
+!!f; //false
+!!g; //false
+```
+
+Gdyby nie użyto funkcji Boolean(..) lub operatora !! , dowolna z tych operacji konwersji typów
+opartych na operacji ToBoolean przebiegłaby niejawnie w przypadku zastosowania ich w kontekście
+typu **boolean** , takiego jak instrukcja if (..) .. . Celem jest tutaj jednak jawne wymuszenie konwersji
+typu wartości na typ **boolean** , aby wyraźnie pokazać, że zamierzona jest konwersja typów bazująca
+na operacji **ToBoolean**.
