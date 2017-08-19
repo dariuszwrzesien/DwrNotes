@@ -38,7 +38,6 @@ Jeśli żadna operacja nie może zapeniwć wartości prymitywnej, zostanie zgło
     Number([]);      // 0
     Number(null);    // 0
     Number(["abc"]); // NaN
-
 ```
 
 Należy pamiętać że wywołanie konwersji odbywa się bez słowa kluczowego **new**.
