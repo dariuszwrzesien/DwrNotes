@@ -39,5 +39,8 @@ var g = function(){}; //pusta funkcja
 var h = Boolean(e && f && g);
 
 console.log(h); //true
-
 ```
+
+Należy pamiętać że wywołanie konwersji odbywa się bez słowa kluczowego **new**.
+Słowem kluczowym **new Boolean(...)** tworzymy obiekt opakowujący.
+

@@ -41,6 +41,9 @@ Jeśli żadna operacja nie może zapeniwć wartości prymitywnej, zostanie zgło
 
 ```
 
+Należy pamiętać że wywołanie konwersji odbywa się bez słowa kluczowego **new**.
+Słowem kluczowym **new Number(...)** tworzymy obiekt opakowujący.
+
 **parseInt**
 
 Metoda **parseInt** analizuje łańcuch znaków (*string*) od lewej do prawej, w momencie napotkania znaku innego niż liczbowy,
@@ -59,7 +62,3 @@ parseInt(b); //42
 
 Nie należy używać metody **parseInt** z inną wartością wejściową niż **string**, wywołanie takie powoduje
 że najpierw jest wywoływana metoda **ToString** a następnie **parseInt** co oznacza bardzo niejawną konwersję.
-
-
-
-
