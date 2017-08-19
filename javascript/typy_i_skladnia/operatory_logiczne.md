@@ -58,3 +58,14 @@ Wynikiem wyrażenia z operatorem || lub && zawsze jest bazowa wartość jednego 
 a nie (prawdopodobnie poddany konwersji typu) wynik testu. W wyrażeniu c && b argument c to
 wartość null , a zatem wartość „fałszywa”. Samo jednak wyrażenie z operatorem && zapewnia wartość
 null (wartość argumentu c ), a nie poddaną konwersji typu wartość **false** używaną w teście.
+
+W przybliżeniu można to postrzegać w ten sposób:
+
+```javascript
+    a || b;
+    // w przybliżeniu odpowiada to wyrażeniu:
+    a ? a : b;
+    a && b;
+    // w przybliżeniu odpowiada to wyrażeniu:
+    a ? b : a;
+```
