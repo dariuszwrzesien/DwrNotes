@@ -41,4 +41,25 @@ Jeśli żadna operacja nie może zapeniwć wartości prymitywnej, zostanie zgło
 
 ```
 
+**parseInt**
+
+Metoda **parseInt** analizuje łańcuch znaków (*string*) od lewej do prawej, w momencie napotkania znaku innego niż liczbowy,
+metoda kończy analize i zwraca wartość typu number. Konwersja typów za pomocą **Number** nie daje takich możliwości.
+
+```javascript
+var a = "42";
+var b = "42px";
+
+Number(a); //42
+parseInt(a); //42
+
+Number(b); //NaN
+parseInt(b); //42
+```
+
+Nie należy używać metody **parseInt** z inną wartością wejściową niż **string**, wywołanie takie powoduje
+że najpierw jest wywoływana metoda **ToString** a następnie **parseInt** co oznacza bardzo niejawną konwersję.
+
+
+
 
