@@ -92,3 +92,67 @@ opartych na operacji ToBoolean przebiegłaby niejawnie w przypadku zastosowania 
 typu **boolean** , takiego jak instrukcja if (..) .. . Celem jest tutaj jednak jawne wymuszenie konwersji
 typu wartości na typ **boolean** , aby wyraźnie pokazać, że zamierzona jest konwersja typów bazująca
 na operacji **ToBoolean**.
+
+**Porównanie dowolnej wartości z wartością boolowską**
+
+Jedna z najwększych pułapek związanych z niejawną konwersją typów towarzyszącą operatorow równości luźnej **==**
+objawia się przy próbie porównania wartości bezpośrednio z wartością **true** lub **false**.
+
+```javascript
+var a = "42";
+var b = true;
+
+a == b; //false
+```
+
+Ale dlaczego ?
+
+1. Jeśli **Type(x)** to **Boolean** to zostanie zwrócony wynik porównania **ToNumber(x) == y**.
+2. Jeśli **Type(y)** to **Boolean** to zostanie zwrócony wynik porównania **x == ToNumber(y)**.
+
+A więc:
+
+```javasctipt
+var x = true;
+var y = "42";
+
+x == y; //false
+```
+
+**Type(x)** to **Boolean**, dlatego wykonywana jest operacja **ToNumber(x)**, która dokonuje
+konwersji typu wartości **true** na wartość **1** typu **number**.
+A więc mamy porówananie **1 == "42"**. Ponieważ typu nadal są różne, ponownie stostowany jest algorytm
+konwersji typu "42" na typ wartości 42. Wynikiem porównania jest więć **1 == 42** co daje **false**.
+
+Jak więc najlepiej przeprowadzać porównanie:
+
+```javascript
+    var a = "42";
+    // źle (wystąpi niepowodzenie!):
+    if (a == true) {
+        // ..
+    }
+
+    // również źle (wystąpi niepowodzenie!):
+    if (a === true) {
+        // ..
+    }
+
+    // wystarczająco dobrze (działanie niejawne):
+    if (a) {
+        // ..
+    }
+
+    // lepiej (działanie jawne):
+    if (!!a) {
+        // ..
+    }
+
+    // znakomicie (działanie jawne):
+    if (Boolean( a )) {
+        // ..
+    }
+```
+
+Należy zatem **zawsze unikać** używania w kodzie instrukcji **== true** lub **== false**
+czyli równości luźnej z wartością typu **boolean**.
