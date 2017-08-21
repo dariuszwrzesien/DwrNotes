@@ -133,7 +133,7 @@ Jak więc najlepiej przeprowadzać porównanie:
         // ..
     }
 
-    // również źle (wystąpi niepowodzenie!):
+    // również źle (wystąpi niepowodzenie! - różne typy):
     if (a === true) {
         // ..
     }
