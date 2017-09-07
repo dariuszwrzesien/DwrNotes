@@ -12,6 +12,7 @@ Mariusz mówił o modelowaniu procesów biznesowych z użyciem wzorca Sagi. Poda
 event stormingu z klientami, podczas których, nierzadko klient uświadamiał sobie że procesy,
 które do tej pory wydawały mu się logiczne, nie są takimi do końca.
 Skoro jeśmy już przy Mariuszu chciałbym polecić wszystkim jego rozmowę z Maćkiem Aniserowiczem na kanale devtalk.
+
 https://devstyle.pl/2017/03/06/devtalk51-o-php-z-mariuszem-gilem/
 
 Kolejny wykład był poświęcony wykrywaniu błędów w kodzie za pomocą PHPStorma i zintegoranego z nim TeamCity.
@@ -62,7 +63,6 @@ GRPC to framework protokółu zdalnego wywołania procedur (RPC) dostarczony prz
 Dla zainteresowanych zgłębieniem tematu polecam stronę:
 
 https://grpc.io/docs/
-
 
 Podsumowując Poznańskie PHPers Summit mogę śmiało powiedzieć że nie zawiodłem się po raz kolejny.
 Duża dawka nowej wiedzy i ciekawi prowadzący. 400 uczestników (o 100 więcej niż w zeszłym roku) pokazuje że Poznańskie
