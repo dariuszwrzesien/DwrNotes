@@ -1,0 +1,117 @@
+logo-bck.jpg
+
+WebAssembly. Gdy główni producenci przeglądarek łaczą siły w pracy nad jedną technologią to wiec że coś się dzieje ...
+
+Ale zanim przejdę do omawiania WebAssembly, opisze dotychczasowe rozwiązania bo koncepcja stojąca za WebAssmebly nie jest wcale nowa, ani unikatowa.
+
+Od dłuższego czasu producenci przeglądarek internetowych pracowali nad wprowadzeniem możliwości uruchomienia skopilowanego kodu C/C++ bezpośrednio w przeglądarce. W 2011 roku przy okazji debiutu Chrome OS, Google zaprezentowało Native Clienta (NaCl), środowisko w którym można było używać skompilowanego kodu C/C++.
+Niestety NaCl posiadał bardzo ograniczoną kompatabilność, skompilowany kod uruchamiał się tylko na maszynach z procesorami x86. Poprawiono to w kolejnej wersji o nazwie Portable Native Client (pNaCl) jednakże środowisko to nie odniosło spektakularnego sukcesu.
+
+W roku 2013 Mozilla wprowadziła własną platformę asm.js, działającą we wszystkich przeglądarkach z wydajnością zbliżoną do natywnej. Asm.js umożliwiał uruchomienie oprogramowania napisanego w C, przy zachowaniu wydajności znacznie lepszej niż standardowy JavaScript, między innymi dzięki zastosowaniu statycznego typowania oraz ograniczeniu niektórych cech języka Javascript do podatnych na optymalizację AOT (https://en.wikipedia.org/wiki/Ahead-of-time_compilation). Kompilacja w asm.js wygląda następująco:
+
+--kompilacja-asm.png
+
+Kod źródłowy napisany w C/C++ zostaje skompilowany do kodu bajtowego LLVM, a następnie Emscripten kompiluje go do JavaScriptu (asm.js).
+
+Asm.js niestety posiada też swoje wady. Pomimo że wzrost prędkości jest znaczący w porównaniu do zwykłageo Javascriptu, asm.js nie daje nam żadnej gwaracji że aplikacja będzie działać z tą samą prędkością we wszystkich przeglądarkach, spowodowane jest to brakiem otwartego standardu oraz nieformalną specyfikacją.
+
+Mimo to Asm.js odniósł spory sukces. Quake, Doom czy Linux przeniesione do przeglądarki internetowej to tylko nieliczne rezultaty zastosowania asm.js.
+
+Microsoft nie opracowało własnej platformy do kompilacji kodu z C/C++ do Javascript, wybrało jednak nieco odmienną strategię, prezentując w 2012 roku TypeScript. TypeScript to nadzbiór języka JavaScript, który kompiluje się do standardowego Javascriptu. Dużą zaletą TypeScriptu jest jego statyczne typowanie z zastosowaną inferencją typów.
+
+Jak widać, wszyscy główni producenci przeglądarek internetowych posiadają swoją "alternatywę" dla języka JavaScript i najwidoczniej doszli także do wniosku że ich dotychczasowe rozwiązania nie są wystarczająco dobre, dlatego też połączyli wspólnie siły w pracy nad WebAssembly.
+
+WebAssembly jest nowym rodzajem języka, który może być uruchomiony w nowoczesnych wersjach przeglądarek internetowych. WebAssembly nazywany też WASM, to język niskopoziomowym, który działa z szybkością zbliżoną do rozwiązań natywnych i pozwala na kompilacje kodu napisanego w C/C++ do kodu binarnego działającego w przeglądarce internetowej. Co również ważne WebAssembly jest opracowywany jako otwarty standard webowy, nie jest w żaden sposób opatentowany ani chroniony prawami autorskimi. Nad całością projektu czuwa W3C WebAssembly Working Group (https://www.w3.org/wasm/).
+
+Na dzień dzisiejszy (2017-11-05) wsparcie dla WASM wygląda następująco
+wasm-status.png 
+
+Aktualną tabelę można znależć na http://caniuse.com/#feat=wasm
+
+Czym WebAssembly nie jest?
+
+WebAssembly nie jest tworzony z myślą o zastąpieniu Javascriptu, a raczej jego uzupełnieniu.
+WebAssembly jest uruchamiany w tej samej maszynie wirtualnej (VM) co JavaScript, dzięki czemu możemy czerpać korzyści z obu tych języków. WebAssembly da nam możliwość przygotowania modułów, które będziemy mogli używać w aplikacjach napisanych w JavaScripcie.
+
+Wynikowy kod WebAssembly nie jest kompilowany do JavaScript jak ma to na przykład miejsce w przypadku CoffeScript lub we wcześniej wspomnianym TypeScripcie.
+
+WebAssembly to nie jezyk programowania którym posługują się programiści. WebAssembly jest kodem bajtowym tworzonym przez odpowiednie narzędzia a nie przez programistów.
+
+
+
+
+
+
+Jak zatem działa WebAssembly.
+
+Kod źródłowy napisany w języku C/C++ jest kompilowany do pliku .wasm. Plik ten jest modułem WASM który za pomocą JavaSctiptu dołączony zostaje do strony i przesłany do przeglądarki.
+
+
+ https://tutorialzine.com/2017/06/getting-started-with-web-assembly
+
+----------dalszy opis działania jesli cos sie uda wymysleć - OBEJRZEC WYKŁDY tam napewno bedzie jakiś pomysł
+
+
+
+
+
+
+
+
+
+
+
+
+. 
+
+Ale dlaczego potrzebujemy WebAssembly:
+
+1. Wydajność.
+
+Wydajność języka javascript jest ograniczona jego architekturą, mam tutaj na myśli to że jest to język z założenia którym posługuja się ludzie do komunikacji z komputerem. I przez to ma swoje ogranczenia.
+Przyjrzyjmy się na przykład jak wygląda realizacja tej prostej funckji przez silnik javascipt:
+
+funcition a+b 
+
+
+przerysować schemat z https://www.youtube.com/watch?v=6v4E6oksar0
+
+
+Do czego dążą nowoczesne kompilatory to jak największe skrócenie tej drogi. Najlepiej by było aby a+b można wykonać za pomocą jednej dyrektywy na CPU. I do tgo własnie słuzy Webassembly. 
+
+Obecnie webassemby działa z prędkoscią 1.2x native ?
+
+
+Różnica pomiedzy asm.js a webassembly
+
+Czy webassembly ma dostep do WebApi(co to jest WebApi) do kamerki itp ?
+
+
+WebAssembly status na dzisiaj https://www.youtube.com/watch?v=6v4E6oksar0 23 minuta
+
+
+DEMO
+
+CONWAY GAME OF LIVE
+MANDEKBROT VISUALIZATION
+WEB DSP - wideo editor in a browser
+
+
+
+Poczytać
+https://rsms.me/wasm-intro
+https://kripken.github.io/mloc_emscripten_talk/cppcon.html#/18
+
+
+ŹRÓDŁA
+https://www.youtube.com/watch?v=AFy5TdrFG9Y
+
+
+
+https://www.youtube.com/watch?v=iJL59lh4IJA
+https://www.youtube.com/watch?v=6v4E6oksar0
+https://www.youtube.com/watch?v=DKHuEkmsx3M
+https://www.youtube.com/watch?v=PvZdTZ1Nl5o
+https://www.youtube.com/watch?v=kq2HBddiyh0
+https://www.youtube.com/watch?v=6owJlpaV0XA
+https://www.youtube.com/watch?v=S8uAeC-6CMU
