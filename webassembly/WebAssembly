@@ -1,8 +1,8 @@
 logo-bck.jpg
 
-WebAssembly. Gdy główni producenci przeglądarek łaczą siły w pracy nad jedną technologią to wiec że coś się dzieje ...
+WebAssembly. Gdy Microsoft, Mozilla i Google pracują nad jedną technologią to wiec że coś się dzieje ...
 
-Ale zanim przejdę do omawiania WebAssembly, opisze dotychczasowe rozwiązania bo koncepcja stojąca za WebAssmebly nie jest wcale nowa.
+Ale zanim przejdę do omawiania głównego tematu jakim jest WebAssembly, opisze dotychczasowe rozwiązania bo koncepcja stojąca za WebAssmebly nie jest wcale nowa.
 
 Od dłuższego czasu producenci przeglądarek internetowych pracowali nad wprowadzeniem możliwości uruchomienia skopilowanego kodu C/C++ bezpośrednio w przeglądarce. W 2011 roku przy okazji debiutu Chrome OS, Google zaprezentowało Native Clienta (NaCl), środowisko w którym można było używać skompilowanego kodu C/C++.
 Niestety NaCl posiadał bardzo ograniczoną kompatabilność, skompilowany kod uruchamiał się tylko na maszynach z procesorami x86. Poprawiono to w kolejnej wersji o nazwie Portable Native Client (pNaCl) jednakże środowisko to nie odniosło spektakularnego sukcesu.
@@ -17,7 +17,7 @@ Asm.js niestety posiada też swoje wady. Pomimo że wzrost prędkości jest znac
 
 Mimo to Asm.js odniósł spory sukces. Quake, Doom czy Linux przeniesione do przeglądarki internetowej to tylko nieliczne rezultaty zastosowania asm.js.
 
-Microsoft nie opracowało własnej platformy do kompilacji kodu z C/C++ do Javascript, wybrało jednak nieco odmienną strategię, prezentując w 2012 roku TypeScript. TypeScript to nadzbiór języka JavaScript, który kompiluje się do standardowego Javascriptu. Dużą zaletą TypeScriptu jest jego statyczne typowanie z zastosowaną inferencją typów.
+Microsoft co prawda nie prowadziło zaawansowanych prac nad własną dedykowaną platformą do kompilacji kodu z C/C++ do Javascript, wybrało jednak nieco odmienną strategię, prezentując w 2012 roku TypeScript. TypeScript to nadzbiór języka JavaScript, który kompiluje się do standardowego Javascriptu. Dużą zaletą TypeScriptu jest jego statyczne typowanie z zastosowaną inferencją typów.
 
 Jak widać, wszyscy główni producenci przeglądarek internetowych posiadają swoją "alternatywę" dla języka JavaScript i najwidoczniej doszli także do wniosku że ich dotychczasowe rozwiązania nie są wystarczająco dobre, dlatego też połączyli wspólnie siły w pracy nad WebAssembly.
 
@@ -46,12 +46,90 @@ Głównymi obszarami zastosowania dla WASM są:
 4. 64-bitowe obliczenia matematyczne (SHA512,  Fractal Calculations)
 
 
+Pierwszy program w WebAssembly.
 
-Jak zatem działa WebAssembly.
 
-Kod źródłowy napisany w języku C/C++ jest kompilowany do pliku .wasm. Plik ten jest modułem WASM który za pomocą JavaSctiptu dołączony zostaje do strony i przesłany do przeglądarki.
+1. Zacznijmy od pobrania i zainstalowania Portable Emscripten SDK (Linux & OS X version)
+https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz
+lub z mojego githuba
 
+Po rozpakowaniu z poziomu terminala wydajemy polecenia:
+
+$ ./emsdk update
+$ ./emsdk install latest
+
+
+Po zaninstalowaniu Emscripten SDK posiadamy cały niezbędny zestaw narzędzi (Clang, Python, Node.js oraz integrację z Visual Studio) aby zacząć pracę z WebAssembly.
+
+Gdy instalacja się zakończy należy aktywować SDK:
+
+$ ./emsdk activate latest
+$ source ./emsdk_env.sh  # możesz dodać tę linię do .bashrc
+
+2. Utwórzmy prosty program w C.
+
+
+int counter = 100;
+
+int count() {  
+    counter += 1;
+    return counter;
+}
+
+
+
+3. Kompilacja z C do .wasm
+
+emcc counter.c -s WASM=1 -o counter.wasm
+
+
+emcc - Kompilator Emscripten
+counter.c - Plik z kodem źródłowym napisanym w C (input)
+-s WASM=1 - Ustawiamy flagę kompilatora na WASM=1, w innym razie zostanie wygenerowany kod asm.js
+-o counter.wasm - plik wynikowy (output)
+
+4. Hurra !!! właśnie utworzyliśmy nasz pierwszy moduł w WebAssmebly.
+
+Niestety  sam plik .wasm nie robi niczego spektakularnego. Przyjrzyjmy się poniższemu schematowi.
 kompilacja-wasm.png
+Jak widać na schemacie, kod źródłowy napisany w języku C/C++ jest kompilowany do pliku .wasm. Plik ten jest modułem WASM który dopiero za pomocą JavaSctiptu dołączony zostanie do strony i przesłany do przeglądarki.
+
+Skompilujmy zatem jeszcze raz nasz program - ale teraz użyjmy nazwy counter.js jako pliku wynikowego.
+Kompilator utworzy pliki counter.wasm i counter.js. Counter.wasm jest modułem WebAssembly a counter.js plikiem który pozwoli nam załadować ten moduł do przeglądarki.
+
+5. Załadujmy moduł do przeglądarki
+
+Utwórz plik index.html o następującej treści.
+
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>WebAssembly Counter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <script src="counter.js"></script>
+  </body>
+</html>
+
+6. Web server
+Możemy posłuzyć się web serverem dostarczonym wraz z Emscripten SDK.
+emrun --no_browser --port 8080 .
+i otwórzmy stronę localhost:8080/index.html
+
+/// jak dopisze /// W konsoli powinna pojawić się informacja: WebAssembly module loaded.
+
+7. Ostatnią rzeczą jaka została nam do zrobienia to wykorzystanie modułu WebAssembly z poziomu JavaScript.
+
+var result = Module.ccall(
+    'count',     // nazwa funkcji napisanej w C 
+    'number'    // zwracany typ
+);
+
+
+
+
 
  https://tutorialzine.com/2017/06/getting-started-with-web-assembly
 https://blog.openbloc.fr/webassembly-first-steps/
@@ -67,8 +145,11 @@ https://blog.openbloc.fr/webassembly-first-steps/
 
 
 
+Podsumowanie.
 
-
+WebAssembly stale się rozwija - roadmape można zobaczyć tutaj https://wasmdash.appspot.com/
+Wszellkie informacje pojawiające się w sieci na temat WebAssembly są skrupulatnie dodawane tutaj
+https://github.com/mbasso/awesome-wasm
 
 
 
