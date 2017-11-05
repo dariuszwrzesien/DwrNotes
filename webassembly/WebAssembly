@@ -2,7 +2,7 @@ logo-bck.jpg
 
 WebAssembly. Gdy główni producenci przeglądarek łaczą siły w pracy nad jedną technologią to wiec że coś się dzieje ...
 
-Ale zanim przejdę do omawiania WebAssembly, opisze dotychczasowe rozwiązania bo koncepcja stojąca za WebAssmebly nie jest wcale nowa, ani unikatowa.
+Ale zanim przejdę do omawiania WebAssembly, opisze dotychczasowe rozwiązania bo koncepcja stojąca za WebAssmebly nie jest wcale nowa.
 
 Od dłuższego czasu producenci przeglądarek internetowych pracowali nad wprowadzeniem możliwości uruchomienia skopilowanego kodu C/C++ bezpośrednio w przeglądarce. W 2011 roku przy okazji debiutu Chrome OS, Google zaprezentowało Native Clienta (NaCl), środowisko w którym można było używać skompilowanego kodu C/C++.
 Niestety NaCl posiadał bardzo ograniczoną kompatabilność, skompilowany kod uruchamiał się tylko na maszynach z procesorami x86. Poprawiono to w kolejnej wersji o nazwie Portable Native Client (pNaCl) jednakże środowisko to nie odniosło spektakularnego sukcesu.
@@ -35,10 +35,15 @@ WebAssembly jest uruchamiany w tej samej maszynie wirtualnej (VM) co JavaScript,
 
 Wynikowy kod WebAssembly nie jest kompilowany do JavaScript jak ma to na przykład miejsce w przypadku CoffeScript lub we wcześniej wspomnianym TypeScripcie.
 
-WebAssembly to nie jezyk programowania którym posługują się programiści. WebAssembly jest kodem bajtowym tworzonym przez odpowiednie narzędzia a nie przez programistów.
+WebAssembly to nie język programowania, którym posługują się programiści. WebAssembly jest kodem bajtowym tworzonym przez odpowiednie narzędzia a nie przez programistów.
 
+Obszary zastosowania:
 
-
+Głównymi obszarami zastosowania dla WASM są: 
+1. gry, 
+2. multimedia (rozpoznawanie obrazów, edycja video, aplikacje typu CAD)
+3. możliwość wykorzystania istniejących rozwiązań napisanych w C/C++ (OpenCV, Box2D, DICOM)
+4. 64-bitowe obliczenia matematyczne (SHA512,  Fractal Calculations)
 
 
 
@@ -46,10 +51,22 @@ Jak zatem działa WebAssembly.
 
 Kod źródłowy napisany w języku C/C++ jest kompilowany do pliku .wasm. Plik ten jest modułem WASM który za pomocą JavaSctiptu dołączony zostaje do strony i przesłany do przeglądarki.
 
+kompilacja-wasm.png
 
  https://tutorialzine.com/2017/06/getting-started-with-web-assembly
+https://blog.openbloc.fr/webassembly-first-steps/
 
 ----------dalszy opis działania jesli cos sie uda wymysleć - OBEJRZEC WYKŁDY tam napewno bedzie jakiś pomysł
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -115,3 +132,8 @@ https://www.youtube.com/watch?v=PvZdTZ1Nl5o
 https://www.youtube.com/watch?v=kq2HBddiyh0
 https://www.youtube.com/watch?v=6owJlpaV0XA
 https://www.youtube.com/watch?v=S8uAeC-6CMU
+
+
+
+zbiór wszystkiego o WASM
+https://github.com/mbasso/awesome-wasm
