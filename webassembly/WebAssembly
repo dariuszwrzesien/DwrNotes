@@ -154,9 +154,10 @@ https://blog.openbloc.fr/webassembly-first-steps/
 
 Podsumowanie.
 
-WebAssembly stale się rozwija - roadmape można zobaczyć tutaj https://wasmdash.appspot.com/
-Wszellkie informacje pojawiające się w sieci na temat WebAssembly są skrupulatnie dodawane tutaj
-https://github.com/mbasso/awesome-wasm
+Webassembly to długo wyczekiwany, kolejny, kamień milowy w rozwoju przeglądarek internetowych.
+Przypomnijmy że zaprojektowany w 1995 roku Javascript nie był pisany z myślą o obsłudze dużych aplikacji internetowych, to dzięki ogromenj pracy twórców przeglądarek internetowych i wprowadzeniu bardzo wydajnych silników Javascript (jak np. V8, SpiderMonkey) od niedawna możemy cieszyć się szybkim działaniem Javascriptu. Jednakże nic nie może równać się z możliwością uruchomienia kodu bajtowego tak blisko "metalu" jaką daje nam WebAssembly. Jeśli chcesz zgłębić temat bardziej wnikliwie polecam zajrzeć na https://github.com/mbasso/awesome-wasm.
+
+Plan rozwoju (road map) mozna zobaczyć tutaj https://wasmdash.appspot.com/
 
 
 
