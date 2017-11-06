@@ -9,11 +9,11 @@ Niestety NaCl posiadał bardzo ograniczoną kompatabilność, skompilowany kod u
 
 W roku 2013 Mozilla wprowadziła własną platformę asm.js, działającą we wszystkich przeglądarkach z wydajnością zbliżoną do natywnej. Asm.js umożliwiał uruchomienie oprogramowania napisanego w C, przy zachowaniu wydajności znacznie lepszej niż standardowy JavaScript, między innymi dzięki zastosowaniu statycznego typowania oraz ograniczeniu niektórych cech języka Javascript do podatnych na optymalizację AOT (https://en.wikipedia.org/wiki/Ahead-of-time_compilation). Kompilacja w asm.js wygląda następująco:
 
---kompilacja-asm.png
+kompilacja-asm.jpg
 
 Kod źródłowy napisany w C/C++ zostaje skompilowany do kodu bajtowego LLVM, a następnie Emscripten kompiluje go do JavaScriptu (asm.js).
 
-Asm.js niestety posiada też swoje wady. Pomimo że wzrost prędkości jest znaczący w porównaniu do zwykłageo Javascriptu, asm.js nie daje nam żadnej gwaracji że aplikacja będzie działać z tą samą prędkością we wszystkich przeglądarkach, spowodowane jest to brakiem otwartego standardu oraz nieformalną specyfikacją.
+Asm.js niestety posiada też swoje wady. Pomimo że wzrost prędkości jest znaczący w porównaniu do zwykłageo Javascriptu, asm.js nie daje nam żadnej gwaracji że aplikacja będzie działać z tą samą prędkością we wszystkich przeglądarkach, spowodowane jest to brakiem otwartego standardu oraz nieformalną specyfikacją utrudniającą wdrożenie asm.js we wszystkich przeglądarkach jednakowo.
 
 Mimo to Asm.js odniósł spory sukces. Quake, Doom czy Linux przeniesione do przeglądarki internetowej to tylko nieliczne rezultaty zastosowania asm.js.
 
@@ -33,7 +33,7 @@ Czym WebAssembly nie jest?
 WebAssembly nie jest tworzony z myślą o zastąpieniu Javascriptu, a raczej jego uzupełnieniu.
 WebAssembly jest uruchamiany w tej samej maszynie wirtualnej (VM) co JavaScript, dzięki czemu możemy czerpać korzyści z obu tych języków. WebAssembly da nam możliwość przygotowania modułów, które będziemy mogli używać w aplikacjach napisanych w JavaScripcie.
 
-Wynikowy kod WebAssembly nie jest kompilowany do JavaScript jak ma to na przykład miejsce w przypadku CoffeScript lub we wcześniej wspomnianym TypeScripcie.
+Wynikowy kod WebAssembly nie jest kompilowany do JavaScript jak ma to na przykład miejsce w przypadku CoffeScript lub we wcześniej wspomnianym TypeScripcie lub asm.js.
 
 WebAssembly to nie język programowania, którym posługują się programiści. WebAssembly jest kodem bajtowym tworzonym przez odpowiednie narzędzia a nie przez programistów.
 
@@ -45,9 +45,7 @@ Głównymi obszarami zastosowania dla WASM są:
 3. możliwość wykorzystania istniejących rozwiązań napisanych w C/C++ (OpenCV, Box2D, DICOM)
 4. 64-bitowe obliczenia matematyczne (SHA512,  Fractal Calculations)
 
-
-Pierwszy program w WebAssembly.
-
+Pierwsze kroki z WebAssembly.
 
 1. Zacznijmy od pobrania i zainstalowania Portable Emscripten SDK (Linux & OS X version)
 https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz
@@ -80,21 +78,25 @@ int count() {
 
 3. Kompilacja z C do .wasm
 
-emcc counter.c -s WASM=1 -o counter.wasm
+emcc counter.c -01 -s WASM=1 -o counter.wasm
 
 
 emcc - Kompilator Emscripten
 counter.c - Plik z kodem źródłowym napisanym w C (input)
+-01 - Stopień optymalizacji kodu
 -s WASM=1 - Ustawiamy flagę kompilatora na WASM=1, w innym razie zostanie wygenerowany kod asm.js
 -o counter.wasm - plik wynikowy (output)
 
 4. Hurra !!! właśnie utworzyliśmy nasz pierwszy moduł w WebAssmebly.
 
 Niestety  sam plik .wasm nie robi niczego spektakularnego. Przyjrzyjmy się poniższemu schematowi.
-kompilacja-wasm.png
+kompilacja-wasm.jpg
 Jak widać na schemacie, kod źródłowy napisany w języku C/C++ jest kompilowany do pliku .wasm. Plik ten jest modułem WASM który dopiero za pomocą JavaSctiptu dołączony zostanie do strony i przesłany do przeglądarki.
 
 Skompilujmy zatem jeszcze raz nasz program - ale teraz użyjmy nazwy counter.js jako pliku wynikowego.
+
+emcc counter.c -01 -s WASM=1 -o counter.js
+
 Kompilator utworzy pliki counter.wasm i counter.js. Counter.wasm jest modułem WebAssembly a counter.js plikiem który pozwoli nam załadować ten moduł do przeglądarki.
 
 5. Załadujmy moduł do przeglądarki
@@ -119,6 +121,11 @@ emrun --no_browser --port 8080 .
 i otwórzmy stronę localhost:8080/index.html
 
 /// jak dopisze /// W konsoli powinna pojawić się informacja: WebAssembly module loaded.
+
+
+Otwórzmy przegladarke internetową i zajrzyjmy do konsoli. Powinien pojawić sie komunikat:
+WebAssembly module loaded. 
+Firefox 52+ oraz Chrome 67+ mają domyślnie włączoną obsługę Webassembly, jeśli jednak używasz wcześniejszej wersji może byc konieczne ręczne właczenie obsługi Webassembly.
 
 7. Ostatnią rzeczą jaka została nam do zrobienia to wykorzystanie modułu WebAssembly z poziomu JavaScript.
 
