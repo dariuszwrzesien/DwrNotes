@@ -160,6 +160,10 @@ Przypomnijmy że zaprojektowany w 1995 roku Javascript nie był pisany z myślą
 Plan rozwoju (road map) mozna zobaczyć tutaj https://wasmdash.appspot.com/
 
 
+Pytania:
+Czy webassembly ma dostęp do WebApi (kamerki itd)?
+Czy komunikacja z modułem WebAssmebly jest synchroniczna czy asynchroniczna?
+
 
 
 
