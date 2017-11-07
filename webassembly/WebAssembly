@@ -1,6 +1,6 @@
 logo-bck.jpg
 
-WebAssembly. Gdy Microsoft, Mozilla i Google pracują nad jedną technologią to wiec że coś się dzieje ...
+WebAssembly. Gdy Microsoft, Mozilla i Google pracują nad jedną technologią to wiedz że coś się dzieje ...
 
 Ale zanim przejdę do omawiania głównego tematu jakim jest WebAssembly, opisze dotychczasowe rozwiązania bo koncepcja stojąca za WebAssmebly nie jest wcale nowa.
 
@@ -51,7 +51,6 @@ Po tym  przydługawym wstępnie czas na trochę praktyki. Poniżej przedstawie w
 
 1. Zacznijmy od pobrania i zainstalowania Portable Emscripten SDK (Linux & OS X version)
 https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz
-lub z mojego githuba
 
 Po rozpakowaniu z poziomu terminala wydajemy polecenia:
 
@@ -147,106 +146,31 @@ Firefox 52+ oraz Chrome 67+ mają domyślnie włączoną obsługę Webassembly, 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>WebAssembly</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
   </head>
   <body>
-    <div class="dice dice-6"></div>
-    <span>kliknij aby rzucić kostką</span>  
-  
+    <div class="score"></div>
+    <button class="roll">Losuj</button>
     <script src="diceroll.js"></script>
-
     <script>
-      var dice = document.querySelector('.dice');
-      dice.addEventListener('click', function() {
-
+      var score = document.querySelector('.score');
+      var roll = document.querySelector('.roll');
+      roll.addEventListener('click', function() {
 	//w tym miejscu odwołujemy się do funkcji napisanej w C
         var result = _roll_dice();
-
-        dice.className = "dice dice-" + result;                   
+        console.log(result)
+	score.innerHTML = result;
       });
     </script>
   </body>
-</html> 
+</html>
 
-
-
+Klikając na przycisk losuj javascript odnosi się do moduły WASM w celu pogrania losowej wartości.
+kod źródłowy można pograć tutaj: diceroll.tar.gz
 
 Podsumowanie.
 
 Webassembly to długo wyczekiwany, kolejny, kamień milowy w rozwoju przeglądarek internetowych.
 Przypomnijmy że zaprojektowany w 1995 roku Javascript nie był pisany z myślą o obsłudze dużych aplikacji internetowych, to dzięki ogromenj pracy twórców przeglądarek internetowych i wprowadzeniu bardzo wydajnych silników Javascript (jak np. V8, SpiderMonkey) od niedawna możemy cieszyć się szybkim działaniem Javascriptu. Jednakże nic nie może równać się z możliwością uruchomienia kodu bajtowego tak blisko "metalu" jaką daje nam WebAssembly. Jeśli chcesz zgłębić temat bardziej wnikliwie polecam zajrzeć na https://github.com/mbasso/awesome-wasm.
 
-Plan rozwoju (road map) mozna zobaczyć tutaj https://wasmdash.appspot.com/
 
-
-Pytania:
-Czy webassembly ma dostęp do WebApi (kamerki itd)?
-Czy komunikacja z modułem WebAssmebly jest synchroniczna czy asynchroniczna?
-
-
-
-
-
-
-
-
-
-. 
-
-Ale dlaczego potrzebujemy WebAssembly:
-
-1. Wydajność.
-
-Wydajność języka javascript jest ograniczona jego architekturą, mam tutaj na myśli to że jest to język z założenia którym posługuja się ludzie do komunikacji z komputerem. I przez to ma swoje ogranczenia.
-Przyjrzyjmy się na przykład jak wygląda realizacja tej prostej funckji przez silnik javascipt:
-
-funcition a+b 
-
-
-przerysować schemat z https://www.youtube.com/watch?v=6v4E6oksar0
-
-
-Do czego dążą nowoczesne kompilatory to jak największe skrócenie tej drogi. Najlepiej by było aby a+b można wykonać za pomocą jednej dyrektywy na CPU. I do tgo własnie słuzy Webassembly. 
-
-Obecnie webassemby działa z prędkoscią 1.2x native ?
-
-
-Różnica pomiedzy asm.js a webassembly
-
-Czy webassembly ma dostep do WebApi(co to jest WebApi) do kamerki itp ?
-
-
-WebAssembly status na dzisiaj https://www.youtube.com/watch?v=6v4E6oksar0 23 minuta
-
-
-DEMO
-
-CONWAY GAME OF LIVE
-MANDEKBROT VISUALIZATION
-WEB DSP - wideo editor in a browser
-
-
-
-Poczytać
-https://rsms.me/wasm-intro
-https://kripken.github.io/mloc_emscripten_talk/cppcon.html#/18
-
-
-ŹRÓDŁA
-https://www.youtube.com/watch?v=AFy5TdrFG9Y
-
-
-
-https://www.youtube.com/watch?v=iJL59lh4IJA
-https://www.youtube.com/watch?v=6v4E6oksar0
-https://www.youtube.com/watch?v=DKHuEkmsx3M
-https://www.youtube.com/watch?v=PvZdTZ1Nl5o
-https://www.youtube.com/watch?v=kq2HBddiyh0
-https://www.youtube.com/watch?v=6owJlpaV0XA
-https://www.youtube.com/watch?v=S8uAeC-6CMU
-
-
-
-zbiór wszystkiego o WASM
-https://github.com/mbasso/awesome-wasm
