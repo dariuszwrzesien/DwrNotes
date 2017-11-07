@@ -1533,9 +1533,9 @@ function integrateWasmJS() {
   var method = Module['wasmJSMethod'] || 'native-wasm';
   Module['wasmJSMethod'] = method;
 
-  var wasmTextFile = Module['wasmTextFile'] || 'index.wast';
-  var wasmBinaryFile = Module['wasmBinaryFile'] || 'index.wasm';
-  var asmjsCodeFile = Module['asmjsCodeFile'] || 'index.temp.asm.js';
+  var wasmTextFile = Module['wasmTextFile'] || 'diceroll.wast';
+  var wasmBinaryFile = Module['wasmBinaryFile'] || 'diceroll.wasm';
+  var asmjsCodeFile = Module['asmjsCodeFile'] || 'diceroll.temp.asm.js';
 
   if (typeof Module['locateFile'] === 'function') {
     wasmTextFile = Module['locateFile'](wasmTextFile);
@@ -1937,7 +1937,7 @@ STATICTOP = STATIC_BASE + 3056;
 /* global initializers */  __ATINIT__.push();
 
 
-memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "index.js.mem" : null;
+memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "diceroll.js.mem" : null;
 
 
 

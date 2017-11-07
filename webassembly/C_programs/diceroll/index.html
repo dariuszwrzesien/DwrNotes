@@ -3,30 +3,21 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>WebAssembly Example</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
   </head>
   <body>
-
-    <div class="dice dice-6"></div>
-    <span>Click Dice To Roll</span>    
-
-    <!-- Include the JavaScript glue code. -->
-    <!-- This will load the WebAssembly module and run its main. --> 
-    <script src="index.js"></script>
+    <div class="score"></div>
+    <button class="roll">Losuj</button>
+    <script src="diceroll.js"></script>
     <script>
-
-      // When a HTML dice is clicked, it's value will change.
-      var dice = document.querySelector('.dice');
-
-      dice.addEventListener('click', function(){
-        
-        // Make a call to the roll_dice function from the C code.
+      var score = document.querySelector('.score');
+      var roll = document.querySelector('.roll');
+      roll.addEventListener('click', function() {
+		//w tym miejscu odwołujemy się do funkcji napisanej w C
         var result = _roll_dice();
-        dice.className = "dice dice-" + result;                   
-
+        console.log(result)
+		score.innerHTML = result;
       });
     </script>
-   
   </body>
 </html> 

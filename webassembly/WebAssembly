@@ -47,6 +47,8 @@ Głównymi obszarami zastosowania dla WASM są:
 
 Pierwsze kroki z WebAssembly.
 
+Po tym  przydługawym wstępnie czas na trochę praktyki. Poniżej przedstawie w kilku krokach jak zacząć przygodę z WebAssembly.
+
 1. Zacznijmy od pobrania i zainstalowania Portable Emscripten SDK (Linux & OS X version)
 https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz
 lub z mojego githuba
@@ -64,28 +66,34 @@ Gdy instalacja się zakończy należy aktywować SDK:
 $ ./emsdk activate latest
 $ source ./emsdk_env.sh  # możesz dodać tę linię do .bashrc
 
-2. Utwórzmy prosty program w C.
+2. Utwórzmy prosty program w C. Nasz program losuję liczbę z zakresu od 1 do 6 co odpowiada rzutowi kostką do gry.
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-int counter = 100;
-
-int count() {  
-    counter += 1;
-    return counter;
+int main(int argc, char ** argv) {
+    printf("Wczytano moduł WebAssembly \n");
 }
 
+int roll_dice() {
+    srand ( time(NULL) );
+    return rand() % 6 + 1;
+}
 
+Zapisz powyższy kod do pliku diceroll.c
 
 3. Kompilacja z C do .wasm
 
-emcc counter.c -01 -s WASM=1 -o counter.wasm
+emcc diceroll.c -O1 -o diceroll.wasm -s WASM=1
 
+Gdzie:
 
-emcc - Kompilator Emscripten
-counter.c - Plik z kodem źródłowym napisanym w C (input)
--01 - Stopień optymalizacji kodu
--s WASM=1 - Ustawiamy flagę kompilatora na WASM=1, w innym razie zostanie wygenerowany kod asm.js
--o counter.wasm - plik wynikowy (output)
+emcc - to kompilator Emscriten
+diceroll.c - plik z kodem źródłowym w C (input)
+-01 - Poziom optymalizacji 
+-o diceroll.wasm - plik z kodem WebAssembly (output)
+-s WASM=1 - informacja dla kompilatora aby pracował w trybie WASM, jeśli nie ustawimy tej flagi domyślnie kompilator pracuje w trybie asm.js
 
 4. Hurra !!! właśnie utworzyliśmy nasz pierwszy moduł w WebAssmebly.
 
@@ -93,11 +101,18 @@ Niestety  sam plik .wasm nie robi niczego spektakularnego. Przyjrzyjmy się poni
 kompilacja-wasm.jpg
 Jak widać na schemacie, kod źródłowy napisany w języku C/C++ jest kompilowany do pliku .wasm. Plik ten jest modułem WASM który dopiero za pomocą JavaSctiptu dołączony zostanie do strony i przesłany do przeglądarki.
 
-Skompilujmy zatem jeszcze raz nasz program - ale teraz użyjmy nazwy counter.js jako pliku wynikowego.
+Skompilujmy zatem jeszcze raz nasz program - ale teraz użyjmy nazwy diceroll.js jako pliku wynikowego.
 
-emcc counter.c -01 -s WASM=1 -o counter.js
+emcc diceroll.c -O1 -o diceroll.js -s WASM=1
 
-Kompilator utworzy pliki counter.wasm i counter.js. Counter.wasm jest modułem WebAssembly a counter.js plikiem który pozwoli nam załadować ten moduł do przeglądarki.
+Gdzie:
+
+emcc - Kompilator Emscripten
+diceroll.c - Plik z kodem źródłowym napisanym w C (input)
+-s WASM=1 - Ustawiamy flagę kompilatora na WASM=1, w innym razie zostanie wygenerowany kod asm.js
+-o diceroll.wasm - plik wynikowy (output)
+
+Kompilator utworzy pliki diceroll.wasm i diceroll.js. Plik z rozszerzeniem .wasm jest modułem WebAssembly a diceroll.js plikiem, który pozwoli nam załadować ten moduł do przeglądarki.
 
 5. Załadujmy moduł do przeglądarki
 
@@ -107,47 +122,52 @@ Utwórz plik index.html o następującej treści.
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WebAssembly Counter</title>
+    <title>WebAssembly</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <script src="counter.js"></script>
+    <script src="diceroll.js"></script>
   </body>
 </html>
 
-6. Web server
-Możemy posłuzyć się web serverem dostarczonym wraz z Emscripten SDK.
+6. Uruchom Web server
+
+Możemy posłużyć się web serwerem dostarczonym wraz z Emscripten SDK. W tym celu, będąc w katalogu roboczym uruchom z poziomu terminala:
+
 emrun --no_browser --port 8080 .
-i otwórzmy stronę localhost:8080/index.html
 
-/// jak dopisze /// W konsoli powinna pojawić się informacja: WebAssembly module loaded.
-
-
-Otwórzmy przegladarke internetową i zajrzyjmy do konsoli. Powinien pojawić sie komunikat:
-WebAssembly module loaded. 
-Firefox 52+ oraz Chrome 67+ mają domyślnie włączoną obsługę Webassembly, jeśli jednak używasz wcześniejszej wersji może byc konieczne ręczne właczenie obsługi Webassembly.
+Otwórz stronę localhost:8080/index.html i zajrzyjmy do konsoli. Powinien pojawić sie komunikat:
+Wczytano moduł WebAssmebly.
+Firefox 52+ oraz Chrome 67+ mają domyślnie włączoną obsługę Webassembly, jeśli jednak używasz wcześniejszej wersji może być konieczne ręczne właczenie obsługi Webassembly.
 
 7. Ostatnią rzeczą jaka została nam do zrobienia to wykorzystanie modułu WebAssembly z poziomu JavaScript.
 
-var result = Module.ccall(
-    'count',     // nazwa funkcji napisanej w C 
-    'number'    // zwracany typ
-);
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>WebAssembly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="dice dice-6"></div>
+    <span>kliknij aby rzucić kostką</span>  
+  
+    <script src="diceroll.js"></script>
 
+    <script>
+      var dice = document.querySelector('.dice');
+      dice.addEventListener('click', function() {
 
+	//w tym miejscu odwołujemy się do funkcji napisanej w C
+        var result = _roll_dice();
 
-
-
- https://tutorialzine.com/2017/06/getting-started-with-web-assembly
-https://blog.openbloc.fr/webassembly-first-steps/
-
-----------dalszy opis działania jesli cos sie uda wymysleć - OBEJRZEC WYKŁDY tam napewno bedzie jakiś pomysł
-
-
-
-
-
-
+        dice.className = "dice dice-" + result;                   
+      });
+    </script>
+  </body>
+</html> 
 
 
 
