@@ -3,24 +3,20 @@ sf4_logo1.jpg
 Symfony 4 - Nowy sposób tworzenia aplikacji internetowych.
 
 
-30 listopad 2017 w świecie PHP obfitował w nowości. Uaktualniono wersję języka PHP do 7.2.0. wprowadzając nowe funkcjonalności oraz poprawiając wykryte błędy. Szczegółowy wykaz można znaleźć tutaj: http://www.php.net/ChangeLog-7.php#7.2.0.
-SesioLabs wypusiło natomiast całkowicie nową wersję Symfony o numerze 4 oraz uaktualniło poprzednią wersję frameworka do wersji 3.4 nadając jej status LTS (Long Term Support) z wsparciem do listopada 2020r., tym samym zamykając rozwój frameworka w wersji trzeciej.
+30 listopad 2017 r. w świecie PHP obfitował w nowości. Uaktualniono wersję języka PHP do 7.2.0. wprowadzając nowe funkcjonalności oraz poprawiono wykryte błędy. Szczegółowy wykaz zmian można znaleźć tutaj: http://www.php.net/ChangeLog-7.php#7.2.0.
+SesioLabs natomiast wypusiło całkowicie nową wersję Symfony o numerze 4 oraz uaktualniło poprzednią wersję frameworka do wersji 3.4 nadając jej status LTS (Long Term Support) z wsparciem do listopada 2020r, tym samym zamykając rozwój frameworka w wersji trzeciej.
 
 Skupmy się jednak na Symfony 4, zapowiadanej przez Fabiena Potencier na swoim blogu (link: http://fabien.potencier.org/) jako "Nowy sposób tworzenia aplikacji internetowych".
 
-* Co nowego w Symfony4
-
-
+* Co nowego w Symfony 4
 
 ** Koniec z Bundlami. 
-Symfony 4 jest aplikacją "bundle-less" co oznacza że od tej wersji frameworka zrywamy z ideą "bundli" znaną z poprzednich wersji. Jako "best practise" zelaca się użycie App\ jako "namespace" dla każdej klasy w katalogu src/. Co z bundlami od dostawców zewnętrznych? Domyślnie zarządzanie bundlami jest teraz obsługiwane przez Symfony Flex o którm powiem więcej w dalszej części artykułu. W wersji 4 oraz 3.4 Symfony wymaga aby "bundle" posiadały odpowiednią strukturę katalogów i plików w celu automatycznej konfiguracji podczas instalacji. Jeśli jednak Twój bundle wymaga specyficznej konfiguracji post-instalacyjnej należy utworzyć Symfony Flex recipe (https://github.com/symfony/recipes).
-
-
-** Mikro by default
-
+Symfony 4 jest aplikacją "bundle-less" co oznacza że od tej wersji frameworka zrywamy z ideą "bundli" znaną z poprzednich wersji. Jako "best practise" zalaca się użycie App\ jako "namespace" dla każdej klasy w katalogu src/. 
+Co z bundlami od dostawców zewnętrznych? 
+Domyślnie zarządzanie bundlami jest teraz obsługiwane przez Symfony Flex o którm powiem więcej w dalszej części artykułu. W wersji 4 oraz 3.4 Symfony wymaga aby "bundle" posiadały odpowiednią strukturę katalogów i plików w celu automatycznej konfiguracji podczas instalacji. Jeśli jednak Twój bundle wymaga specyficznej konfiguracji post-instalacyjnej należy utworzyć Symfony Flex Recipe (https://github.com/symfony/recipes).
 
 ** Symfony Flex
-Symfony Flex to nowy sposób na zarządzanie aplikacjami zbudowanymi na bazie Symfony. Flex automatyzuje większość zadań podczas pracy z Symfony 4, jak na przykład: instalację i usuwanie bundli oraz zarządzanie zależnościami Composera. Symfony Flex to plugin do Composera który modyfikuje zachowanie komend "require", "update" i "remove".
+Symfony Flex to nowy sposób na zarządzanie aplikacjami zbudowanymi na bazie Symfony. Flex automatyzuje większość zadań podczas pracy z Symfony 4, jak na przykład: instalację i usuwanie bundli oraz zarządzanie zależnościami Composera. Symfony Flex to plugin do Composera który modyfikuje zachowanie komend "require", "update" i "remove" oraz dodaje własne komendy
 
 Prześledzmy poniższy przykład aby zobaczyć jak działa Flex.
 
@@ -36,9 +32,10 @@ Flex w pierwszej kolejności wysyła żądanie do Symfony Flex Server, jeśli ni
 Jeśli jednak znajdzie żądany pakiet na serwerze, Flex zwróci plik zwany "recipe" (ang. przepis), bazując na nim przeprowadzi instalację oraz automatyczną konfigurację.
 Podobnie jak Composer trzyma informację o zainstalowanych zależnościach w pliku composer.json tak Symfony Flex trzyma informację o zależnościach w pliku symfony.loc który wraz z kodem powinien być trzymany w repozytorium.
 
-
-
-
+** Mikroframework
+Symfony 4 zaraz po instalcji przypomina bardziej Silex'a niż jakąkolwiek z poprzednich wersji frameworka.
+Domyślnie Symfony 4 ma tylko dwie zależności symfony/flex i symfony/framework-bundle. Wszytsko inne jest opcjonalne i zarządzane z poziomu Symfony Flex co pozwala na rozbudowę frameworka w dowolny sposób.
+Możemy zatem stworzyć REST API dla aplikacji mobilnej bez konieczności usuwania komponentów które w poprzednich wersjach były domyślnie włączone jak np. Twig czy Web Profiler. Jeśli jednak chcemy stworzyć aplikację typu "monolit" nic nie stoi na drodze aby doinstalować potrzebne komponenty. 
 
 ** Zmieniona struktura katalogów.
 Już wersja 3 frameworka Symfony wprowadziła strukturę katalogów wzorowaną na systemach z rodziny Unix, minimalizując przy tym liczbę podkatalogów. I tak w Symfony 3 pojawiły się katalogi bin/, src/ czy też var/. Symfony 4 podąża tą ścieżką wprowadzając katalogi config/ zamiast app/config/, public/ zamiast web/.
@@ -46,124 +43,16 @@ Wiele katalogów w symfony 4 jest opcjonalnych i pojawiają się dopiero w momen
 str_kat.jpg
 Struktura katalogów dla symfony-skeleton.
 
-
 ** Koniec wsparcia dla HHVM.
-Prace nad wspraciem dla HHVM prowadzone były od 2013 r. W lipcu 2015 r Symfony 2 oraz wszystkie komponenty posiadały pełne wsparcie dla HHVM. W tamtych czasach wsparcie dla HHVM było kluczowe. HHVM było o wiele szybsze niż PHP. To się jednak zmieniło z wydaniem PHP w wersji 7, różnica wydajności HHVM w stosunku do PHP 7 nie była już tak znaczna, a faktyczna ilość aplikacji symfony wykorzystujących wsparcie dla HHVM była bardzo mała i nie przekraczała 4%. Te czynniki oraz brak pełnej kompatabilności pomiędzy HHVM i PHP 7 spowodowały decyzję o zawieszeniu wsparcia dla HHVM.
-
-
+Prace nad wspraciem dla HHVM prowadzone były od 2013 r. W lipcu 2015 r. Symfony 2 oraz wszystkie komponenty posiadały pełne wsparcie dla HHVM. W tamtych czasach wsparcie dla HHVM było kluczowe. HHVM było o wiele szybsze niż PHP. To się jednak zmieniło z wydaniem PHP w wersji 7, różnica wydajności HHVM w stosunku do PHP 7 nie była już tak znaczna, a faktyczna ilość aplikacji symfony wykorzystujących wsparcie dla HHVM była bardzo mała i nie przekraczała 4%. Te czynniki oraz brak pełnej kompatabilności pomiędzy HHVM i PHP 7 spowodowały decyzję o zawieszeniu wsparcia dla HHVM.
 
 
 *Benchmark
-
+https://twitter.com/nicolasgrekas/status/891307598040977408
 
 
 *Migracja z Symfony 3 do Symfony 4
 Symfony wymaga PHP w wersji 7.1 +
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Parametrami konfiguracyjnymi są zmienne środowiskowe
-Nie ma zależności od symfony/symofny
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Benchmarki:
-https://twitter.com/nicolasgrekas/status/891307598040977408
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-https://symfony.com/4
-
-Symfony 4 represents a rethinking of its ideas and features from the ground up to match the industry practices: application bundles are gone, config parameters are now environment variables, the application directory structure is easier to navigate and hundreds of other small improvements that will make you love Symfony.
-
- - opsiać symfony flex
-
-
-Symfony 4 integrates seamlessly with Symfony Flex to automate the most common tasks performed on applications. Forget about enabling bundles or creating their initial config: Symfony Flex does that for you.
-
-The automation leverages the Symfony Recipes, which contain instructions to integrate hundreds of third-party bundles and packages into Symfony applications.
-
-
-
-
- - struktura katalogów:
-
-zwrócić uawę na zmianę etc/ na config 
-i web na public
-
-
-
-
-New applications created with Symfony 4 are based on a micro-kernel and contain 70% less code and files than new Symfony 3 apps! We worked tirelessly to optimize Symfony and remove any non-essential dependencies. The result is the leanest Symfony version ever created and the smallest footprint across all PHP frameworks.
-
-Start small and grow your Symfony app as your project scales. Symfony is now ideal for any type of project: microservices, APIs, monolithic web applications, console applications or backends for JavaScript applications.
-
-
-
-
-
-
-
-
-
-
-
-
-Symfony 4.0 to be the first release to use something known as "Symfony Flex" by default, instead of the classic Symfony Full Stack Framework. But what are these releases and what differences are there?
-
-The Symfony project is first and foremost a collection of general purpose components for PHP that do very specifict things. To tie these components into a single, coherent framework the project has also formed a full stack framework, known as Symfony Standard Edition.
-
-
-
-
-
-Smooth Upgrade
-
-Thanks to our unrivaled Backward Compatibility Promise, upgrading your existing applications to Symfony 4 will be a smooth experience. First, upgrade to Symfony 3.4, which provides total compatibility with any Symfony 3.x version. Then fix any reported deprecation and you are ready to upgrade instantly to Symfony 4.
-
-
-
-
-
-
-
 
 
 
