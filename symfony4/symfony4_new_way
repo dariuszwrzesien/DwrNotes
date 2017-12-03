@@ -2,7 +2,6 @@ sf4_logo1.jpg
 
 Symfony 4 - Nowy sposób tworzenia aplikacji internetowych.
 
-
 30 listopad 2017 r. w świecie PHP obfitował w nowości. Uaktualniono wersję języka PHP do 7.2.0. wprowadzając nowe funkcjonalności oraz poprawiono wykryte błędy. Szczegółowy wykaz zmian można znaleźć tutaj: http://www.php.net/ChangeLog-7.php#7.2.0.
 SesioLabs natomiast wypusiło całkowicie nową wersję Symfony o numerze 4 oraz uaktualniło poprzednią wersję frameworka do wersji 3.4 nadając jej status LTS (Long Term Support) z wsparciem do listopada 2020r, tym samym zamykając rozwój frameworka w wersji trzeciej.
 
@@ -16,7 +15,7 @@ Co z bundlami od dostawców zewnętrznych?
 Domyślnie zarządzanie bundlami jest teraz obsługiwane przez Symfony Flex o którm powiem więcej w dalszej części artykułu. W wersji 4 oraz 3.4 Symfony wymaga aby "bundle" posiadały odpowiednią strukturę katalogów i plików w celu automatycznej konfiguracji podczas instalacji. Jeśli jednak Twój bundle wymaga specyficznej konfiguracji post-instalacyjnej należy utworzyć Symfony Flex Recipe (https://github.com/symfony/recipes).
 
 ** Symfony Flex
-Symfony Flex to nowy sposób na zarządzanie aplikacjami zbudowanymi na bazie Symfony. Flex automatyzuje większość zadań podczas pracy z Symfony 4, jak na przykład: instalację i usuwanie bundli oraz zarządzanie zależnościami Composera. Symfony Flex to plugin do Composera który modyfikuje zachowanie komend "require", "update" i "remove" oraz dodaje własne komendy
+Symfony Flex to nowy sposób na zarządzanie aplikacjami zbudowanymi na bazie Symfony. Flex automatyzuje większość zadań podczas pracy z Symfony 4, jak na przykład: instalację i usuwanie bundli oraz zarządzanie zależnościami Composera. Symfony Flex to plugin do Composera który modyfikuje zachowanie komend "require", "update" i "remove".
 
 Prześledzmy poniższy przykład aby zobaczyć jak działa Flex.
 
@@ -34,7 +33,7 @@ Podobnie jak Composer trzyma informację o zainstalowanych zależnościach w pli
 
 ** Mikroframework
 Symfony 4 zaraz po instalcji przypomina bardziej Silex'a niż jakąkolwiek z poprzednich wersji frameworka.
-Domyślnie Symfony 4 ma tylko dwie zależności symfony/flex i symfony/framework-bundle. Wszytsko inne jest opcjonalne i zarządzane z poziomu Symfony Flex co pozwala na rozbudowę frameworka w dowolny sposób.
+Domyślnie Symfony 4 ma tylko dwie zależności symfony/flex i symfony/framework-bundle. Wszystko inne jest opcjonalne i zarządzane z poziomu Symfony Flex co pozwala na rozbudowę frameworka w dowolny sposób.
 Możemy zatem stworzyć REST API dla aplikacji mobilnej bez konieczności usuwania komponentów które w poprzednich wersjach były domyślnie włączone jak np. Twig czy Web Profiler. Jeśli jednak chcemy stworzyć aplikację typu "monolit" nic nie stoi na drodze aby doinstalować potrzebne komponenty. 
 
 ** Zmieniona struktura katalogów.
@@ -46,17 +45,50 @@ Struktura katalogów dla symfony-skeleton.
 ** Koniec wsparcia dla HHVM.
 Prace nad wspraciem dla HHVM prowadzone były od 2013 r. W lipcu 2015 r. Symfony 2 oraz wszystkie komponenty posiadały pełne wsparcie dla HHVM. W tamtych czasach wsparcie dla HHVM było kluczowe. HHVM było o wiele szybsze niż PHP. To się jednak zmieniło z wydaniem PHP w wersji 7, różnica wydajności HHVM w stosunku do PHP 7 nie była już tak znaczna, a faktyczna ilość aplikacji symfony wykorzystujących wsparcie dla HHVM była bardzo mała i nie przekraczała 4%. Te czynniki oraz brak pełnej kompatabilności pomiędzy HHVM i PHP 7 spowodowały decyzję o zawieszeniu wsparcia dla HHVM.
 
-
-*Benchmark
-https://twitter.com/nicolasgrekas/status/891307598040977408
-
-
 *Migracja z Symfony 3 do Symfony 4
-Symfony wymaga PHP w wersji 7.1 +
+
+Symfony 4 wymaga PHP przynajmniej w wersji 7.1, więc przed przystąpieniem do migracji najpierw musimy spełnić ten podstawowy warunek. Następnie uaktualniamy naszą aplikację do wersji Symfony 3.4. Każdą aplikację Symfony w wersji 3 bez poroblemu powinniśmy móc podnieść do najnowszej wersji w obrębie tzw. Major release, zapewnia nam to Obietnica Wstecznej Kompatabilności o której więcej można poczytać tutaj: (https://symfony.com/doc/current/contributing/code/bc.html). Gdy nasza aplikacja zostanie podniesiona do wersji 3.4, kolejnym krokiem jest poprawienie przestarzałych funkcji. Aby pomóc w ich wykryciu otwórz Symfony Profiler będąc w trybie DEV.
+ 
+deprecations-in-profiler.png
+
+Czasami otrzeżenia mogą pochodzić od dostawców zewnętrznych bibliotek lub bundli. Jeśli tak jest, sprawdź najpierw czy została wydane poprawka do tej biblioteki.
+
+Podczas uruchamiania testów jednostkowych nie mamy niestety komfortu skorzystania z Profilera, w tym miejscu z pomocą przychodzi nam symfony/phpunit-bridge. Po zainstalowaniu "phpunit-bridge" za pomocą komendy:
+
+composer require --dev symfony/phpunit-bridge
+
+i uruchmieniu testów powinniśmy otrzymać informację o przestarzałych metodach użytych w testach jednostkowych. Czasami zdarza się że nie możemy usunąć wszystkich przestarzałych zależności, w takim przypadku możemy użyć SYMFONY_DEPRECATIONS_HELPER ustawiając jego wartość na "weak".
+
+Gdy już uporaliśmy się z poprawkami możemy uaktualnić wersję symfony za pomocą composer.json.
+
+{
+ "require": {
+        "symfony/symfony": "^4.0",
+    },
+}
+
+$ composer update symfony/symfony
+
+Jeśli podczas aktualizacji otrzymamy błędy mówiące o konieczności aktualizacji komponentów symfony/symfony należy wtedy użyć następującej komendy:
+
+composer update symfony/symfony --with-dependencies
+
+Jeśli aktualizacja przebiegła pomyślnie zostały jeszcze dwa kroki do wykonania by w pełni móc korzystać z Symfony 4.
+
+Pierwszy z nich to przejrzenie pliku https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md.
+Sprawdź czy wymienione w nim zmiany dotyczą Twojej aplikacji.
+
+Kolejny i ostatni krok to zmiana struktury katalogów.
+Jak pisałem wcześniej Symfony 4 domyślinie korzysta z Flexa w celu zarządzania zależnościami. Flex do poprawnego działania wymaga konkretnej struktury katalogów, niestety nie ma narzędzia które zautomatyzowało by ten proces. Najlepiej jest podążać za instrukcją zawartą w dokumentacji: https://symfony.com/doc/current/setup/flex.html#upgrade-to-flex
+
+
+Podsumowanie.
+TODO
 
 
 
-źródła:
 
+Źródła:
+https://symfony.com/blog/symfony-4-a-new-way-to-develop-applications
 https://symfony.fi/page/symfony-3-vs-symfony-4-and-flex
-https://symfony.fi/entry/porting-a-symfony-3-application-to-flex
+
