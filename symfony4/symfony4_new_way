@@ -42,6 +42,10 @@ Wiele katalogów w symfony 4 jest opcjonalnych i pojawiają się dopiero w momen
 str_kat.jpg
 Struktura katalogów dla symfony-skeleton.
 
+#### Konfiguracja oparta na zmiennych środowiskowych
+W Symfony 4 zrezygnowano z pliku konfiguracyjnego "parameters.yml" na rzecz zmiennych środowiskowych.
+Ten sposób konfigurowania aplikacji jest rekomendowany przez Application Manifesto (https://12factor.net/config) oraz przez wiele platform hostingowych. Takie podejście ma na celu oddzielenie parametrów konfiguracyjnych od kodu a tym samym ułatwić wdrażanie aplikacji na produkcję.
+
 ** Koniec wsparcia dla HHVM.
 Prace nad wspraciem dla HHVM prowadzone były od 2013 r. W lipcu 2015 r. Symfony 2 oraz wszystkie komponenty posiadały pełne wsparcie dla HHVM. W tamtych czasach wsparcie dla HHVM było kluczowe. HHVM było o wiele szybsze niż PHP. To się jednak zmieniło z wydaniem PHP w wersji 7, różnica wydajności HHVM w stosunku do PHP 7 nie była już tak znaczna, a faktyczna ilość aplikacji symfony wykorzystujących wsparcie dla HHVM była bardzo mała i nie przekraczała 4%. Te czynniki oraz brak pełnej kompatabilności pomiędzy HHVM i PHP 7 spowodowały decyzję o zawieszeniu wsparcia dla HHVM.
 
@@ -83,7 +87,7 @@ Jak pisałem wcześniej Symfony 4 domyślinie korzysta z Flexa w celu zarządzan
 
 
 Podsumowanie.
-TODO
+Symfony 4 podobnie jak poprzednie wersje wyznacza pewne standardy w jakich będzie się pisać aplikację w najbliższym czasie w oparciu oczywiście o PHP.
 
 
 
