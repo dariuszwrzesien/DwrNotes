@@ -1,15 +1,73 @@
-﻿PWA_progressive_web_aplication_titile.png
+﻿PWA_progressive_web_apps_wprowadzenie.png
+
 Progressive Web Application
 
 Wprowadzenie.
 
-Czym jest PWA
+Progressive Web App to rozwiązanie pozwalające na zbudowanie strony internetowej, która po otwarciu na smartfonie będzie wyglądała i działała podobnie do natywnej aplikacji mobilnej.
+
+Termin Progressive Web Apps został wymyślony przez Frances Berrimana i Alexa Russella inżyniera odpowiedzialnego za Google Chrome. Mianem progresywnej aplikacji webowej określili oni w 2015 roku stronę internetową, która używała najnowszych funkcji wpieranych przez nowoczesne przeglądarki internetowe. Mowa tutaj między innymi o service workerach (sublink) i web app manifest (subliink).
+
+
+PWA opiera się o trzy podstawowe założenia:
+
+1. solidność – strona ładuje się natychmiastowo i działa nawet w przypadku braku połączenia z internetem.
+2. szybkość – strona reaguje szybko na interakcję z użytkownikiem
+3. wrażenie „natywności” – strona daje pełne wrażenie pracy z aplikacją natywną zainstalowaną na telefonie, do tego stopnia że można ją zainstalować a jej ikona będzie pokazywana w ten sam sposób na ekranie telefonu co aplikacji natywnych. Ponadto po otwarciu strona pracuje w trybie pełnoekranowym i umożliwia odbieranie notyfikacji „push”.
 
 
 
 
 
-Pierwsza aplikacja w PWA
+
+
+
+
+
+
+Service worker:
+https://poznajprogramowanie.pl/progressive-web-apps-pwa-intro/
+
+
+Web App Manifest
+
+
+
+
+
+
+Jak wynika z raportu przeprowadzonego przez comScore (https://www.comscore.com/Insights/Presentations-and-Whitepapers/2017/The-2017-US-Mobile-App-Report) w 2017 roku 66% czasu spędzonego w sieci pochodzi z urządzeń mobilnych z czego 50% to aplikacje przeznaczone na smartfony.
+Jednocześnie ponad połowa spędzonego czasu w sieci za pomocą aplikacji mobilnych pochodzi zazwyczaj z jednej aplikacji. Dodatkowo ponad połowa ankietowanych deklaruje że nie zainstalowała żadnej nowej aplikacji w ostatnim miesiącu.
+
+comeScore_download_new_app_per_month.png
+
+To pokazuje jak ciężko jest przekonać użytkownika aby zainstalował kolejną aplikację na swoim telefonie.
+
+
+
+
+
+
+
+
+
+
+ZALETY
+
+
+Dla programistów niewątpliwym plusem będzie wspólny code-base. Przy PWA tworzymy rzeczywiście jedną aplikację, która uruchamia się na wszystkich platformach (Desktop, iOS, Android etc.) Czego nie można jednak powiedzieć o innych technologiach jak React Native, Ionic czy Cordova. Tam owszem piszemy jeden code-base, ale na platformy mobilne. Często bywa też tak, że różnice architektoniczne pomiędzy platformami nie pozwalają na współdzielenie kodu. W przypadku PWA możemy mówić o jednej platformie jakiej jest WEB – pod nią piszemy jeden, współdzielony kod.
+Dla wydawców aplikacji zaletą Progressive Web App są aktualizacje. Żeby wypuścić na rynek nową wersję aplikacji mobilnej trzeba się zwykle nieźle natrudzić, oczywiście w zależności od platformy. Zgłoszenie do sklepu, przejście review… Następnie użytkownik po otrzymaniu notyfikacji oraz zaakceptowaniu aktualizacji musi zaktualizować aplikację
+W przypadku PWA jedyne co musimy zrobić to wgrać nowe pliki na nasz serwer. To wszystko! Przy kolejnym uruchomieniu aplikacji użytkownik dostanie najnowszą wersję kodu. Proste, prawda? 
+Dla biznesu PWA będzie zapewne źródłem oszczędności. Skoro wszystko można napisać przy pomocy technologii webowych, to po co zatrudniać Android i iOS developerów?  PWA nie jest jeszcze jednak w pełni gotowe zastąpić aplikacje natywne, zatem developerzy mogą spać spokojnie, nie martwiąc się o swój dalszy los.
+
+
+
+
+
+
+
+
+
 
 
 
