@@ -6,15 +6,27 @@ Wprowadzenie.
 
 Progressive Web App to rozwiązanie pozwalające na zbudowanie strony internetowej, która po otwarciu na smartfonie będzie wyglądała i działała podobnie do natywnej aplikacji mobilnej.
 
-Termin Progressive Web Apps został wymyślony przez Frances Berrimana i Alexa Russella inżyniera odpowiedzialnego za Google Chrome. Mianem progresywnej aplikacji webowej określili oni w 2015 roku stronę internetową, która używała najnowszych funkcji wpieranych przez nowoczesne przeglądarki internetowe. Mowa tutaj między innymi o service workerach (sublink) i web app manifest (subliink).
+Termin Progressive Web Apps został wymyślony przez Frances Berrimana i Alexa Russella inżyniera odpowiedzialnego za Google Chrome. Mianem progresywnej aplikacji webowej określili oni w 2015 roku stronę internetową, która używała nowych funkcji wprowadzonych do nowoczesnych przeglądarek internetowch. Mowa tutaj między innymi o service workerach (sublink) i web app manifest (subliink).
 
 
-PWA opiera się o trzy podstawowe założenia:
+PWA opiera się na trzrch podstawowych założeniach:
 
 1. solidność – strona ładuje się natychmiastowo i działa nawet w przypadku braku połączenia z internetem.
 2. szybkość – strona reaguje szybko na interakcję z użytkownikiem
-3. wrażenie „natywności” – strona daje pełne wrażenie pracy z aplikacją natywną zainstalowaną na telefonie, do tego stopnia że można ją zainstalować a jej ikona będzie pokazywana w ten sam sposób na ekranie telefonu co aplikacji natywnych. Ponadto po otwarciu strona pracuje w trybie pełnoekranowym i umożliwia odbieranie notyfikacji „push”.
+3. wrażenie „natywności” – strona daje pełne wrażenie pracy z aplikacją natywną zainstalowaną na telefonie, do tego stopnia że można ją zainstalować a jej ikona będzie pokazywana w ten sam sposób na ekranie telefonu co aplikacji natywnych. Ponadto po otwarciu strona pracuje w trybie pełnoekranowym i umożliwia wysyłanie notyfikacji „push”.
 
+Aby strona można uznać za PWA musi ona spełnia następujące założenia :
+
+
+
+
+
+
+Jeśli chcesz sprawdzić ile z powyższych założeń spełnia Twoja strona to  :
+zanstaluj Lux….
+
+
+https://nowymarketing.pl/a/15650,progressive-web-apps-co-to-dlaczego-jak
 
 
 
@@ -75,7 +87,8 @@ Podsumowanie
 
 
 
-
+Jest też druga strona medalu, po której możemy postawić takie wartości jak dobry look&feel aplikacji, jej wysoki współczynnik płynności i wrażenia użytkownika pojawiające się w trakcie korzystania z niej. Tutaj zdecydowanym numerem jeden wciąż są rozwiązania natywne - najlepiej współpracujące z architekturą systemów mobilnych. Rozwiązania webowe, nawet te najwyższej jakości, wciąż mają pewne braki. Nie zmienia to jednak faktu, że są doskonałym rozwiązaniem przejściowym (w niektórych branżach wydaje się że nawet docelowym), szczególnie jeśli biznes opiera się głównie o konsumpcję treści za pośrednictwem web/mobile-web i nie wymaga obsługi zaawansowanych rozwiązań, czy wykorzystania niedostępnych dla przeglądarki funkcji urządzeń mobilnych.
+Jak np. bluetotth czy wgląd do kalendarza lub listy kontaktów.
 
 
 
