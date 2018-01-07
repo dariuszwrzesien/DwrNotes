@@ -6,24 +6,78 @@ Wprowadzenie.
 
 Progressive Web App to rozwiązanie pozwalające na zbudowanie strony internetowej, która po otwarciu na smartfonie będzie wyglądała i działała podobnie do natywnej aplikacji mobilnej.
 
-Termin Progressive Web Apps został wymyślony przez Frances Berrimana i Alexa Russella inżyniera odpowiedzialnego za Google Chrome. Mianem progresywnej aplikacji webowej określili oni w 2015 roku stronę internetową, która używała nowych funkcji wprowadzonych do nowoczesnych przeglądarek internetowch. Mowa tutaj między innymi o service workerach (sublink) i web app manifest (subliink).
+Termin Progressive Web Apps został wymyślony przez Frances Berrimana i Alexa Russella inżyniera odpowiedzialnego za Google Chrome. Mianem progresywnej aplikacji webowej określili oni w 2015 roku stronę internetową, która używała nowych funkcji wprowadzonych do nowoczesnych przeglądarek internetowych. Mowa tutaj między innymi o service workerach (sublink) i web app manifest (subliink).
 
-
-PWA opiera się na trzrch podstawowych założeniach:
+PWA opiera się na trzech podstawowych założeniach:
 
 1. solidność – strona ładuje się natychmiastowo i działa nawet w przypadku braku połączenia z internetem.
-2. szybkość – strona reaguje szybko na interakcję z użytkownikiem
+2. szybkość – strona reaguje błyskawicznie na interakcję z użytkownikiem
 3. wrażenie „natywności” – strona daje pełne wrażenie pracy z aplikacją natywną zainstalowaną na telefonie, do tego stopnia że można ją zainstalować a jej ikona będzie pokazywana w ten sam sposób na ekranie telefonu co aplikacji natywnych. Ponadto po otwarciu strona pracuje w trybie pełnoekranowym i umożliwia wysyłanie notyfikacji „push”.
 
-Aby strona można uznać za PWA musi ona spełnia następujące założenia :
+
+Service worker:
+https://poznajprogramowanie.pl/progressive-web-apps-pwa-intro/
+https://mickl.net/2016/10/24/czym-sa-progressive-web-apps-i-do-czego-mozna-uzyc-service-worker-ow/
+
+
+
+Web App Manifest
 
 
 
 
 
 
-Jeśli chcesz sprawdzić ile z powyższych założeń spełnia Twoja strona to  :
-zanstaluj Lux….
+Zalety Progressive Web Apps
+
+Dużą zaletą PWA jest wspólny 
+
+Dla programistów niewątpliwym plusem będzie wspólny code-base. Przy PWA tworzymy rzeczywiście jedną aplikację, która uruchamia się na wszystkich platformach (Desktop, iOS, Android etc.) Czego nie można jednak powiedzieć o innych technologiach jak React Native, Ionic czy Cordova. Tam owszem piszemy jeden code-base, ale na platformy mobilne. Często bywa też tak, że różnice architektoniczne pomiędzy platformami nie pozwalają na współdzielenie kodu. W przypadku PWA możemy mówić o jednej platformie jakiej jest WEB – pod nią piszemy jeden, współdzielony kod.
+Dla wydawców aplikacji zaletą Progressive Web App są aktualizacje. Żeby wypuścić na rynek nową wersję aplikacji mobilnej trzeba się zwykle nieźle natrudzić, oczywiście w zależności od platformy. Zgłoszenie do sklepu, przejście review… Następnie użytkownik po otrzymaniu notyfikacji oraz zaakceptowaniu aktualizacji musi zaktualizować aplikację
+W przypadku PWA jedyne co musimy zrobić to wgrać nowe pliki na nasz serwer. To wszystko! Przy kolejnym uruchomieniu aplikacji użytkownik dostanie najnowszą wersję kodu. Proste, prawda? 
+Dla biznesu PWA będzie zapewne źródłem oszczędności. Skoro wszystko można napisać przy pomocy technologii webowych, to po co zatrudniać Android i iOS developerów?  PWA nie jest jeszcze jednak w pełni gotowe zastąpić aplikacje natywne, zatem developerzy mogą spać spokojnie, nie martwiąc się o swój dalszy los.
+
+
+
+
+
+
+
+Ograniczenia Progressive Web Apps
+
+PWA nie są w stanie w pełni zastąpić aplikacji natywnych ponieważ nie mają dostępu do danych na telefonie użytkownika to znaczy do naszego numeru telefonu, książki kontaktów, kalendarza i innych. Także PWA nie będzie w stanie skorzystać ze wszystkich modułów telefonu tj, modułu komunikacji NFC lub Bluetooth.
+
+Ponadto należy też wspomnieć o braku wsparcia dla PWA w systemie iOS. Safari nie obsługuje Service Workerów oraz nie pozwala na obsługę notyfikacji „push”.
+
+safari_brak_wsparcia_sw.png
+
+
+Do jakich rozwiązań najlepiej użyć PWA:
+
+Progressive Web App sprawdzi się świetnie wszędzie tam gdzie głównym elementem aplikacji jest konsumpcja treści dostarczonej z zewnątrz a sama aplikacja nie wymaga obsługi niedostępnych dla przeglądarki funkcji urządzeń mobilnych.
+
+PWA będzie świetnym rozwiązaniem dla sklepów internetowych, tutaj za przykład może posłużyć serwis Alibaba który po wprowadzeniu aplikacji progresywnej zwiększył wskaźnik celów konwersji o 76% a ilość aktywnych użytkowników zrosła o 14% na iOs i 30% na Androidzie. Link do casestudy.
+
+Aplikacja progresywna to bardzo dobre rozwiązanie dla różnego rodzaju wydawnictw internetowych. Washington Post i Forbes zanotowały duży wzrost prędkosci ładowania treści przechodząc na PWA w stosunku do tradycyjnej strony mobilnej.
+
+Wiele raportów z przejścia na PWA jest dostępnych w sieci, jeśli jesteś zainteresowy tematem polecam kilka z nich.
+
+
+Pinterest
+https://medium.com/dev-channel/a-pinterest-progressive-web-app-performance-case-study-3bd6ed2e6154
+
+Tinder 
+https://medium.com/@addyosmani/a-tinder-progressive-web-app-performance-case-study-78919d98ece0
+
+
+Starbucks:
+https://formidable.com/static/Formidable-Case_Starbucks_PWA.864ef9d5.pdf
+
+
+
+
+
+
 
 
 https://nowymarketing.pl/a/15650,progressive-web-apps-co-to-dlaczego-jak
@@ -37,13 +91,23 @@ https://nowymarketing.pl/a/15650,progressive-web-apps-co-to-dlaczego-jak
 
 
 
-Service worker:
-https://poznajprogramowanie.pl/progressive-web-apps-pwa-intro/
 
 
-Web App Manifest
 
 
+
+
+
+
+
+Jak przerobić swoją strone na Progressive Web App.
+Aby strona można uznać za PWA musi ona spełnia następujące założenia :
+
+https://developers.google.com/web/progressive-web-apps/checklist
+
+
+Jeśli chcesz sprawdzić ile z powyższych założeń spełnia Twoja strona to  :
+zanstaluj Lighthouse
 
 
 
@@ -54,6 +118,8 @@ Jednocześnie ponad połowa spędzonego czasu w sieci za pomocą aplikacji mobil
 comeScore_download_new_app_per_month.png
 
 To pokazuje jak ciężko jest przekonać użytkownika aby zainstalował kolejną aplikację na swoim telefonie.
+
+
 
 
 
@@ -84,18 +150,6 @@ Dla biznesu PWA będzie zapewne źródłem oszczędności. Skoro wszystko można
 
 
 Podsumowanie
-
-
-
-Jest też druga strona medalu, po której możemy postawić takie wartości jak dobry look&feel aplikacji, jej wysoki współczynnik płynności i wrażenia użytkownika pojawiające się w trakcie korzystania z niej. Tutaj zdecydowanym numerem jeden wciąż są rozwiązania natywne - najlepiej współpracujące z architekturą systemów mobilnych. Rozwiązania webowe, nawet te najwyższej jakości, wciąż mają pewne braki. Nie zmienia to jednak faktu, że są doskonałym rozwiązaniem przejściowym (w niektórych branżach wydaje się że nawet docelowym), szczególnie jeśli biznes opiera się głównie o konsumpcję treści za pośrednictwem web/mobile-web i nie wymaga obsługi zaawansowanych rozwiązań, czy wykorzystania niedostępnych dla przeglądarki funkcji urządzeń mobilnych.
-Jak np. bluetotth czy wgląd do kalendarza lub listy kontaktów.
-
-
-
-
-
-
-
 
 
 
