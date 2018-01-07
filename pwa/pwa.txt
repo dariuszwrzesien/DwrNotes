@@ -4,7 +4,7 @@ Progressive Web Application
 
 Wprowadzenie.
 
-Progressive Web Apps (PWA) to rozwiązanie pozwalające na zbudowanie strony internetowej, która po otwarciu na smartfonie będzie wyglądała i działała podobnie do natywnej aplikacji mobilnej.
+Progressive Web Apps (PWA) to rozwiązanie pozwalające na zainstalowanie aplikacji internetowej na ekranie głównym smartfona bez konieczności korzystania z App Store. Tego typu aplikację wyglądają i działają podobnie do natywnych aplikacji mobilnych, posiadają jednak ograniczenia wynikające z tego że ich środowiskiem uruchomieniowym jest przeglądarka internetowa.
 
 Termin Progressive Web Apps został wymyślony przez Frances Berrimana i Alexa Russella inżyniera odpowiedzialnego za Google Chrome. Mianem progresywnej aplikacji webowej określili oni w 2015 roku stronę internetową, która używała nowych funkcji wprowadzonych do nowoczesnych przeglądarek internetowych. Mowa tutaj między innymi o service workerach (sublink) i web app manifest (subliink).
 
@@ -19,7 +19,7 @@ Aby móc spełnić powyższe założenia konieczna jest implementacja dwóch now
 
 1. Service Worker (SW) jest skryptem uruchomionym w tle i działa niezależnie od skryptów zamieszczonych na stronie. Jego działanie podobne jest do serwera proxy. Przechwytuje on zapytania wysyłane z aplikacji do serwera, potrafi zapisać je w pamięci cache, synchronizuje stan aplikacji ze stanem serwera i wysyła użytkownikowi powiadomienia push.
 
-W przypadku barku połączenia z internetem, dzięki treścią zapisanym w pamięci cache nadal będziemy w stanie prezentować zawartość strony.
+W przypadku braku połączenia z internetem, dzięki treścią zapisanym w pamięci cache nadal będziemy w stanie prezentować zawartość strony.
 
 Schemat działania SW:
 
@@ -38,15 +38,14 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-Pierwsza linia kodu sprawdza czy service worker jest wspierany przez przeglądarkę.
-Następnie rejestrujemy nasz service worker za pomocą ServiceWorkerContainer.register() [https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register]. Parametr scope jest opcjonalny i używamy go do wskazania zakresu kontrolowanego przez Service Worker.
+Pierwsza linia kodu sprawdza czy service worker jest wspierany przez przeglądarkę.Następnie rejestrujemy nasz service worker za pomocą ServiceWorkerContainer.register() [https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register]. Parametr scope jest opcjonalny i używamy go do wskazania zakresu kontrolowanego przez Service Worker.
+
 
 Aktywacja cache.
 
 Aby nasza aplikacja była dostępna w trybie offline musimy skorzystać z Cache API [https://developer.mozilla.org/en-US/docs/Web/API/Cache] i wskazać które elementy strony chcemy przechowywać w cache.
 
 W naszym pliku sw.js dokonujemy następującego wpisu.
-
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -69,7 +68,7 @@ self.addEventListener('install', function(event) {
 
 Dodajemy install event listener i dołączamy metodę ExtendableEvent.waitUntil(). Dzięki temu mamy pewność że service worker nie dokona instalacji dopóki kod zawarty w waitUntil() nie zakończy działania. Wewnątrz waitUntil() używamy metody caches.open() [https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/open] do stworzenia nowego cache o nazwie v1 i za mpomocą addAll() dodajemy relatywne URL do naszych zasobów.
 
-Teraz aby móc korzystać z cachowanych zasobów musimy jeszcze zwrócić je do lokalnego cache’a. W tym celu dodamy event listenter na zdarzenie fetch.
+Teraz aby móc korzystać z scachowanych zasobów musimy jeszcze zwrócić je do lokalnego cache’a. W tym celu dodamy event listenter na zdarzenie fetch.
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
@@ -79,7 +78,7 @@ self.addEventListener('fetch', function(event) {
   );
 });
 
-W powyższym przypadku sprawdzamy czy zapytanie wysyłane do serwera nie znajduje się w naszym cach’u, jeśli tak jest, to zwrócimy zcachowaną odpowiedź.
+W powyższym przypadku sprawdzamy czy zapytanie wysyłane do serwera nie znajduje się w naszym cach’u, jeśli tak jest, to zwrócimy scachowaną odpowiedź.
 
 Dobrze by było aby w przypadku pojawienia się na serwerze nowych zasobów były one w momencie połączenia dodawane do naszego cache’a. W tym celu możemy posłużyć się następującym przykładem.
 
@@ -102,29 +101,60 @@ Klonowanie odpowiedzi jest konieczne ponieważ żądanie (request) i odpowiedź 
 
 Powyższy przykład Service Workera jest jednym z najprostszych. Jeśli chcesz bardziej rozbudować swój SW polecam zapoznać się z dokumentacją nas stronie Using Service Workers [https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers].
 
-Jeśli z jakiś przyczyn Twój Service Worker nie działa sprawdź czy obsługa Servcice Workerów jest włączonona w Twojej przeglądarce. 
+Jeśli z jakiś przyczyn Twój Service Worker nie działa sprawdź czy obsługa Service Workerów jest włączonona w Twojej przeglądarce. 
 
 Firefox: Przejdz do about:config i ustaw dom.serviceWorkers.enabled na true.
 Chrome: Przejdz do chrome://flags i włącz experimental-web-platform-feature.
 Opera: Przejdź do opera://flags i włącz Support for ServiceWorker.
-Edge: Przejdź do about://flags i zaznacz Enable service workers.
-
-
-
-
-
-
-
-
-
-
-
-https://poznajprogramowanie.pl/progressive-web-apps-pwa-intro/
-https://mickl.net/2016/10/24/czym-sa-progressive-web-apps-i-do-czego-mozna-uzyc-service-worker-ow/
-
-
+Microsoft Edge: Przejdź do about://flags i zaznacz Enable service workers.
 
 2. Web App Manifest
+
+Kolejną funkcjonalnością do zaimplementowania jest Web App Manifest.
+Jest to zwykły plik w formacie JSON w którym opisujemy  podstawowe elementy naszej aplikacji które wykorzystane zostaną do instalacji naszej aplikacji na ekranie głównym użytkownika. W manifeście deklarujemy nazwę aplikację, ikony, sposób wyświetlania aplikacji i wiele innych. 
+
+Poniżej zamieszczono przykładowy manifest.
+
+{
+  "name": "Start Wars App",
+  "short_name": "Star Wars",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#000",
+  "description": "A simply readable Star Wars news",
+  "icons": [{
+    "src": "images/touch/homescreen48.png",
+    "sizes": "48x48",
+    "type": "image/png"
+  }, {
+    "src": "images/touch/homescreen72.png",
+    "sizes": "72x72",
+    "type": "image/png"
+  }, {
+    "src": "images/touch/homescreen96.png",
+    "sizes": "96x96",
+    "type": "image/png"
+  },  {
+    "src": "images/touch/homescreen168.png",
+    "sizes": "168x168",
+    "type": "image/png"
+  }, {
+    "src": "images/touch/homescreen192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }]
+}
+
+Szczegółowe informacje odnośnie poszczególnych elementów można znależć w domumentacji. [https://developer.mozilla.org/en-US/docs/Web/Manifest]
+
+
+
+Manifest osadzamy na stronie HTML używając taga link :
+
+<link rel="manifest" href="/manifest.webmanifest">
+
+
+
 
 
 
