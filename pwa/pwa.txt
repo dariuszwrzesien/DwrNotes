@@ -4,7 +4,7 @@ Progressive Web Application
 
 Wprowadzenie.
 
-Progressive Web App to rozwiązanie pozwalające na zbudowanie strony internetowej, która po otwarciu na smartfonie będzie wyglądała i działała podobnie do natywnej aplikacji mobilnej.
+Progressive Web Apps (PWA) to rozwiązanie pozwalające na zbudowanie strony internetowej, która po otwarciu na smartfonie będzie wyglądała i działała podobnie do natywnej aplikacji mobilnej.
 
 Termin Progressive Web Apps został wymyślony przez Frances Berrimana i Alexa Russella inżyniera odpowiedzialnego za Google Chrome. Mianem progresywnej aplikacji webowej określili oni w 2015 roku stronę internetową, która używała nowych funkcji wprowadzonych do nowoczesnych przeglądarek internetowych. Mowa tutaj między innymi o service workerach (sublink) i web app manifest (subliink).
 
@@ -15,13 +15,117 @@ PWA opiera się na trzech podstawowych założeniach:
 3. wrażenie „natywności” – strona daje pełne wrażenie pracy z aplikacją natywną zainstalowaną na telefonie, do tego stopnia że można ją zainstalować a jej ikona będzie pokazywana w ten sam sposób na ekranie telefonu co aplikacji natywnych. Ponadto po otwarciu strona pracuje w trybie pełnoekranowym i umożliwia wysyłanie notyfikacji „push”.
 
 
-Service worker:
+Aby móc spełnić powyższe założenia konieczna jest implementacja dwóch nowych funkcjonalności.
+
+1. Service Worker (SW) jest skryptem uruchomionym w tle i działa niezależnie od skryptów zamieszczonych na stronie. Jego działanie podobne jest do serwera proxy. Przechwytuje on zapytania wysyłane z aplikacji do serwera, potrafi zapisać je w pamięci cache, synchronizuje stan aplikacji ze stanem serwera i wysyła użytkownikowi powiadomienia push.
+
+W przypadku barku połączenia z internetem, dzięki treścią zapisanym w pamięci cache nadal będziemy w stanie prezentować zawartość strony.
+
+Schemat działania SW:
+
+ Rysunek ze schematem działania ……………….
+
+Rejestracja SW.
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw-test/sw.js', {scope: '/sw-test/'})
+  .then(function(reg) {
+    // registration worked
+    console.log('Registration succeeded. Scope is ' + reg.scope);
+  }).catch(function(error) {
+    // registration failed
+    console.log('Registration failed with ' + error);
+  });
+}
+
+Pierwsza linia kodu sprawdza czy service worker jest wspierany przez przeglądarkę.
+Następnie rejestrujemy nasz service worker za pomocą ServiceWorkerContainer.register() [https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register]. Parametr scope jest opcjonalny i używamy go do wskazania zakresu kontrolowanego przez Service Worker.
+
+Aktywacja cache.
+
+Aby nasza aplikacja była dostępna w trybie offline musimy skorzystać z Cache API [https://developer.mozilla.org/en-US/docs/Web/API/Cache] i wskazać które elementy strony chcemy przechowywać w cache.
+
+W naszym pliku sw.js dokonujemy następującego wpisu.
+
+
+self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open('v1').then(function(cache) {
+      return cache.addAll([
+        '/sw-test/',
+        '/sw-test/index.html',
+        '/sw-test/style.css',
+        '/sw-test/app.js',
+        '/sw-test/image-list.js',
+        '/sw-test/star-wars-logo.jpg',
+        '/sw-test/gallery/',
+        '/sw-test/gallery/bountyHunters.jpg',
+        '/sw-test/gallery/myLittleVader.jpg',
+        '/sw-test/gallery/snowTroopers.jpg'
+      ]);
+    })
+  );
+});
+
+Dodajemy install event listener i dołączamy metodę ExtendableEvent.waitUntil(). Dzięki temu mamy pewność że service worker nie dokona instalacji dopóki kod zawarty w waitUntil() nie zakończy działania. Wewnątrz waitUntil() używamy metody caches.open() [https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/open] do stworzenia nowego cache o nazwie v1 i za mpomocą addAll() dodajemy relatywne URL do naszych zasobów.
+
+Teraz aby móc korzystać z cachowanych zasobów musimy jeszcze zwrócić je do lokalnego cache’a. W tym celu dodamy event listenter na zdarzenie fetch.
+
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      return response || fetch(event.request);
+    })
+  );
+});
+
+W powyższym przypadku sprawdzamy czy zapytanie wysyłane do serwera nie znajduje się w naszym cach’u, jeśli tak jest, to zwrócimy zcachowaną odpowiedź.
+
+Dobrze by było aby w przypadku pojawienia się na serwerze nowych zasobów były one w momencie połączenia dodawane do naszego cache’a. W tym celu możemy posłużyć się następującym przykładem.
+
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request).then(function(resp) {
+      return resp || fetch(event.request).then(function(response) {
+        return caches.open('v1').then(function(cache) {
+          cache.put(event.request, response.clone());
+          return response;
+        });  
+      });
+    })
+  );
+});
+
+W powyższym przykładzie return fetch(event.request) zwróci promise, gdy zostanie on spełniony metoda caches.open('v1') także zwróci promise i skoleji gdy on zostanie spełniony użyjemy metody cache.put() aby dodać zasoby do cache’a. Zasoby w tym przypadku są brane z event.request odpowiedź jest natomiast klonowana i zapisana do cache’a. Oryginalna odpowiedź zostaje zwrócona do przeglądarki.
+
+Klonowanie odpowiedzi jest konieczne ponieważ żądanie (request) i odpowiedź (response) mogą być odczytywane tylko raz. Aby zachować odpowiedź oraz zwrócić ją do przeglądarki należy ją sklonować.
+
+Powyższy przykład Service Workera jest jednym z najprostszych. Jeśli chcesz bardziej rozbudować swój SW polecam zapoznać się z dokumentacją nas stronie Using Service Workers [https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers].
+
+Jeśli z jakiś przyczyn Twój Service Worker nie działa sprawdź czy obsługa Servcice Workerów jest włączonona w Twojej przeglądarce. 
+
+Firefox: Przejdz do about:config i ustaw dom.serviceWorkers.enabled na true.
+Chrome: Przejdz do chrome://flags i włącz experimental-web-platform-feature.
+Opera: Przejdź do opera://flags i włącz Support for ServiceWorker.
+Edge: Przejdź do about://flags i zaznacz Enable service workers.
+
+
+
+
+
+
+
+
+
+
+
 https://poznajprogramowanie.pl/progressive-web-apps-pwa-intro/
 https://mickl.net/2016/10/24/czym-sa-progressive-web-apps-i-do-czego-mozna-uzyc-service-worker-ow/
 
 
 
-Web App Manifest
+2. Web App Manifest
+
 
 
 
@@ -69,6 +173,9 @@ https://medium.com/dev-channel/a-pinterest-progressive-web-app-performance-case-
 Tinder 
 https://medium.com/@addyosmani/a-tinder-progressive-web-app-performance-case-study-78919d98ece0
 
+Twitter
+https://developers.google.com/web/showcase/2017/twitter
+
 
 Starbucks:
 https://formidable.com/static/Formidable-Case_Starbucks_PWA.864ef9d5.pdf
@@ -104,6 +211,24 @@ Jak przerobić swoją strone na Progressive Web App.
 Aby strona można uznać za PWA musi ona spełnia następujące założenia :
 
 https://developers.google.com/web/progressive-web-apps/checklist
+
+
+
+
+Realizacja trzech głównych założeń PWA opiera się na spełnieniu przez daną stronę listy wymagań, takich jak:
+    • serwowanie danych za pomocą bezpiecznego protokołu HTTPS (bezpieczeństwo)
+    • responsywny, dostosowujący się do urządzenia layout (wrażenia użytkownika)
+    • wsparcie dla trybu offline (niezawodność)
+    • możliwość dodania aplikacji do ekranu głównego (wrażenia użytkownika)
+    • mniej niż 10 sek. do bycia interaktywną na sieci 3G (niezawodność, szybkość)
+    • działanie na różnych platformach (uniwersalność)
+    • zminimalizowanie poczucia “co się dzieje” w trakcie oczekiwania na załadowanie (wrażenia użytkownika)
+    • każdy zasób na stronie dostępny poprzez URL (łatwe udostępnianie treści)
+Lista wymagań zawiera jeszcze kilkanaście innych “dobrych praktyk” które mają na celu optymalizację wrażeń z korzystania z danej strony, jednak na dobry początek należy zadbać na zrealizowanie tych podanych wyżej.
+Po poznaniu teorii czas na praktykę – zobaczymy teraz ile wysiłku należy włożyć w realizację tych założeń i co właściwie dzięki nim zyskamy.
+
+
+
 
 
 Jeśli chcesz sprawdzić ile z powyższych założeń spełnia Twoja strona to  :
