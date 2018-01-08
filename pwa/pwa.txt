@@ -1,19 +1,15 @@
 ﻿PWA_progressive_web_apps_wprowadzenie.png
 
-Progressive Web Application
 
-Wprowadzenie.
+Progressive Web Apps (PWA) to rozwiązanie pozwalające na zainstalowanie aplikacji webowej na ekranie głównym smartfona bez konieczności korzystania z App Store. Tego typu aplikacje wyglądają i działają podobnie do natywnych aplikacji mobilnych, posiadają jednak ograniczenia wynikające z tego że ich środowiskiem uruchomieniowym jest przeglądarka internetowa.
 
-Progressive Web Apps (PWA) to rozwiązanie pozwalające na zainstalowanie aplikacji internetowej na ekranie głównym smartfona bez konieczności korzystania z App Store. Tego typu aplikację wyglądają i działają podobnie do natywnych aplikacji mobilnych, posiadają jednak ograniczenia wynikające z tego że ich środowiskiem uruchomieniowym jest przeglądarka internetowa.
-
-Termin Progressive Web Apps został wymyślony przez Frances Berrimana i Alexa Russella inżyniera odpowiedzialnego za Google Chrome. Mianem progresywnej aplikacji webowej określili oni w 2015 roku stronę internetową, która używała nowych funkcji wprowadzonych do nowoczesnych przeglądarek internetowych. Mowa tutaj między innymi o service workerach (sublink) i web app manifest (subliink).
+Termin Progressive Web Apps został wymyślony przez Frances Berrimana i Alexa Russella inżyniera odpowiedzialnego za Google Chrome. Mianem progresywnej aplikacji webowej określili oni w 2015 roku stronę internetową, która używała nowych funkcjonalności wprowadzonych do nowoczesnych przeglądarek internetowych. Mowa tutaj między innymi o Service Workerach (sublink) i Web App Manifest (subliink).
 
 PWA opiera się na trzech podstawowych założeniach:
 
-1. solidność – strona ładuje się natychmiastowo i działa nawet w przypadku braku połączenia z internetem.
+1. solidność – strona ładuje się niemal natychmiastowo i działa nawet w przypadku braku połączenia z internetem.
 2. szybkość – strona reaguje błyskawicznie na interakcję z użytkownikiem
-3. wrażenie „natywności” – strona daje pełne wrażenie pracy z aplikacją natywną zainstalowaną na telefonie, do tego stopnia że można ją zainstalować a jej ikona będzie pokazywana w ten sam sposób na ekranie telefonu co aplikacji natywnych. Ponadto po otwarciu strona pracuje w trybie pełnoekranowym i umożliwia wysyłanie notyfikacji „push”.
-
+3. wrażenie „natywności” – strona daje pełne wrażenie pracy z aplikacją natywną, do tego stopnia że można ją zainstalować a jej ikona będzie pokazywana w ten sam sposób na ekranie telefonu co aplikacji natywnych. Ponadto po otwarciu strona pracuje w trybie pełnoekranowym i umożliwia wysyłanie notyfikacji „push”.
 
 Aby móc spełnić powyższe założenia konieczna jest implementacja dwóch nowych funkcjonalności.
 
@@ -21,9 +17,7 @@ Aby móc spełnić powyższe założenia konieczna jest implementacja dwóch now
 
 W przypadku braku połączenia z internetem, dzięki treścią zapisanym w pamięci cache nadal będziemy w stanie prezentować zawartość strony.
 
-Schemat działania SW:
-
- Rysunek ze schematem działania ……………….
+zasada_dzialania_service_workera.png
 
 Rejestracja SW.
 
@@ -38,8 +32,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-Pierwsza linia kodu sprawdza czy service worker jest wspierany przez przeglądarkę.Następnie rejestrujemy nasz service worker za pomocą ServiceWorkerContainer.register() [https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register]. Parametr scope jest opcjonalny i używamy go do wskazania zakresu kontrolowanego przez Service Worker.
-
+Pierwsza linia kodu sprawdza czy Service Worker jest wspierany przez przeglądarkę. Następnie rejestrujemy nasz Service Worker za pomocą ServiceWorkerContainer.register() [https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register]. Parametr scope jest opcjonalny i używamy go do wskazania zakresu kontrolowanego przez Service Worker’a.
 
 Aktywacja cache.
 
@@ -66,9 +59,9 @@ self.addEventListener('install', function(event) {
   );
 });
 
-Dodajemy install event listener i dołączamy metodę ExtendableEvent.waitUntil(). Dzięki temu mamy pewność że service worker nie dokona instalacji dopóki kod zawarty w waitUntil() nie zakończy działania. Wewnątrz waitUntil() używamy metody caches.open() [https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/open] do stworzenia nowego cache o nazwie v1 i za mpomocą addAll() dodajemy relatywne URL do naszych zasobów.
+Dodajemy install event listener i dołączamy metodę ExtendableEvent.waitUntil(). Dzięki temu mamy pewność że Service Worker nie dokona instalacji dopóki kod zawarty w waitUntil() nie zakończy działania. Wewnątrz waitUntil() używamy metody caches.open() [https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/open] do stworzenia nowego cache o nazwie v1 i za pomocą addAll() dodajemy relatywne URL do naszych zasobów.
 
-Teraz aby móc korzystać z scachowanych zasobów musimy jeszcze zwrócić je do lokalnego cache’a. W tym celu dodamy event listenter na zdarzenie fetch.
+Teraz aby móc korzystać z cachowanych zasobów musimy jeszcze zwrócić je do lokalnego cache’a. W tym celu dodamy event listenter na zdarzenie fetch.
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
@@ -78,7 +71,7 @@ self.addEventListener('fetch', function(event) {
   );
 });
 
-W powyższym przypadku sprawdzamy czy zapytanie wysyłane do serwera nie znajduje się w naszym cach’u, jeśli tak jest, to zwrócimy scachowaną odpowiedź.
+W powyższym przypadku sprawdzamy czy zapytanie wysyłane do serwera nie znajduje się w naszym cache’u, jeśli tak jest, to zwrócimy scachowaną odpowiedź.
 
 Dobrze by było aby w przypadku pojawienia się na serwerze nowych zasobów były one w momencie połączenia dodawane do naszego cache’a. W tym celu możemy posłużyć się następującym przykładem.
 
@@ -99,19 +92,19 @@ W powyższym przykładzie return fetch(event.request) zwróci promise, gdy zosta
 
 Klonowanie odpowiedzi jest konieczne ponieważ żądanie (request) i odpowiedź (response) mogą być odczytywane tylko raz. Aby zachować odpowiedź oraz zwrócić ją do przeglądarki należy ją sklonować.
 
-Powyższy przykład Service Workera jest jednym z najprostszych. Jeśli chcesz bardziej rozbudować swój SW polecam zapoznać się z dokumentacją nas stronie Using Service Workers [https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers].
+Powyższy przykład Service Workera jest jednym z prostszych. Jeśli chcesz bardziej rozbudować swój SW polecam zapoznać się z dokumentacją na stronie Using Service Workers [https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers] lub użyć generatora Service Workerów [http://www.pwabuilder.com/generator]
 
-Jeśli z jakiś przyczyn Twój Service Worker nie działa sprawdź czy obsługa Service Workerów jest włączonona w Twojej przeglądarce. 
+Jeśli z jakiś przyczyn Twój Service Worker nie działa, sprawdź czy obsługa Service Workerów jest włączona w Twojej przeglądarce. 
 
-Firefox: Przejdz do about:config i ustaw dom.serviceWorkers.enabled na true.
-Chrome: Przejdz do chrome://flags i włącz experimental-web-platform-feature.
+Firefox: Przejdź do about:config i ustaw dom.serviceWorkers.enabled na true.
+Chrome: Przejdź do chrome://flags i włącz experimental-web-platform-feature.
 Opera: Przejdź do opera://flags i włącz Support for ServiceWorker.
 Microsoft Edge: Przejdź do about://flags i zaznacz Enable service workers.
 
 2. Web App Manifest
 
 Kolejną funkcjonalnością do zaimplementowania jest Web App Manifest.
-Jest to zwykły plik w formacie JSON w którym opisujemy  podstawowe elementy naszej aplikacji które wykorzystane zostaną do instalacji naszej aplikacji na ekranie głównym użytkownika. W manifeście deklarujemy nazwę aplikację, ikony, sposób wyświetlania aplikacji i wiele innych. 
+Jest to zwykły plik w formacie JSON opisujący podstawowe elementy aplikacji które wykorzystane zostaną do instalacji naszej aplikacji na ekranie głównym telefonu użytkownika. W manifeście deklarujemy nazwę aplikacji, ikony, sposób wyświetlania aplikacji i wiele innych. 
 
 Poniżej zamieszczono przykładowy manifest.
 
@@ -121,7 +114,7 @@ Poniżej zamieszczono przykładowy manifest.
   "start_url": ".",
   "display": "standalone",
   "background_color": "#000",
-  "description": "A simply readable Star Wars news",
+  "description": "A simply Star Wars App",
   "icons": [{
     "src": "images/touch/homescreen48.png",
     "sizes": "48x48",
@@ -145,57 +138,52 @@ Poniżej zamieszczono przykładowy manifest.
   }]
 }
 
-Szczegółowe informacje odnośnie poszczególnych elementów można znależć w domumentacji. [https://developer.mozilla.org/en-US/docs/Web/Manifest]
-
-
-
-Manifest osadzamy na stronie HTML używając taga link :
+Powyższy manifest osadzamy na stronie HTML używając taga link :
 
 <link rel="manifest" href="/manifest.webmanifest">
 
+Szczegółowe informacje odnośnie poszczególnych elementów manifestu można znaleźć w dokumentacji. [https://developer.mozilla.org/en-US/docs/Web/Manifest]
 
 
+Aby strona internetowa była w pełni uznana za PWA nie wystarczy tylko implementacja manifestu oraz Service Workerów. Google przygotowało szczegółową checklistę definiującą wymagania stawiane stroną aspirującym do miana PWA.
+
+    • Strona PWA musi być obsługiwana poprzez protokół HTTPS.
+      Odpowiedni certyfikat można wykupić u swojego dostawcy hostingowego lub skorzystać z darmowego certyfikatu letsencrypt.org [https://letsencrypt.org/]
+    • Strony muszą być responsywne i dobrze się prezentować na urządzeniach mobilnych. Tutaj z pomocą mogą nam przyjść dedykowane narzędzia do sprawdzania responsywności stron np. Test Mobile Friendly https://search.google.com/test/mobile-friendly.
+    • Wszystkie URLe dostępne nawet w przypadku braku połączenia internetowego.
+      W tym celu używamy wcześniej opisanego Service Workera.
+    • Zaimplementowany Web App Manifest.
+
+Checklista jest o wiele dłuższa a pełną jej wersję można znaleźć tutaj. 
+[https://developers.google.com/web/progressive-web-apps/checklist]
+
+Jeśli chcesz sprawdzić na ile Twoja obecna strona spełnia wyżej wymienione wymagania użyj narzędzia Lighthouse. [https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk]
+
+Lighthouse to narzędzie do generowania raportu o stanie kompatybilności z PWA.
+Dla strony devenv.pl która nie była tworzona z myślą o PWA raport ten przedstawia się następująco.
+
+devenv_lighthouse_audyt.png
 
 
+Podsumowanie.
 
+Progressive Web Apps to ciekawy kierunek rozwoju stron internetowych. Programiści na pewno docenią łatwość wdrożenia aplikacji na wszystkie platformy. Dotychczasowe rozwiązania takie jak Cordova czy Ionic również wspierały multiplatformowość ale tworzone za ich pomocą aplikację można było uruchamiać tylko na urządzeniach mobilnych. Niewątpliwą zaletą aplikacji progresywnych są aktualizacje. Gdy chcemy zaktualizować aplikację mobilną najczęściej oprócz przygotowania kodu aktualizacji, musimy ją zgłosić do App Store, przejść review a następnie użytkownik telefonu po otrzymaniu notyfikacji o aktualizacji musi wyrazić na nią zgodę. W przypadku PWA wgrywamy nowe pliki na serwer a aplikacja zostanie zaktualizowana przy kolejnej wizycie użytkownika.
 
-
-
-
-Zalety Progressive Web Apps
-
-Dużą zaletą PWA jest wspólny 
-
-Dla programistów niewątpliwym plusem będzie wspólny code-base. Przy PWA tworzymy rzeczywiście jedną aplikację, która uruchamia się na wszystkich platformach (Desktop, iOS, Android etc.) Czego nie można jednak powiedzieć o innych technologiach jak React Native, Ionic czy Cordova. Tam owszem piszemy jeden code-base, ale na platformy mobilne. Często bywa też tak, że różnice architektoniczne pomiędzy platformami nie pozwalają na współdzielenie kodu. W przypadku PWA możemy mówić o jednej platformie jakiej jest WEB – pod nią piszemy jeden, współdzielony kod.
-Dla wydawców aplikacji zaletą Progressive Web App są aktualizacje. Żeby wypuścić na rynek nową wersję aplikacji mobilnej trzeba się zwykle nieźle natrudzić, oczywiście w zależności od platformy. Zgłoszenie do sklepu, przejście review… Następnie użytkownik po otrzymaniu notyfikacji oraz zaakceptowaniu aktualizacji musi zaktualizować aplikację
-W przypadku PWA jedyne co musimy zrobić to wgrać nowe pliki na nasz serwer. To wszystko! Przy kolejnym uruchomieniu aplikacji użytkownik dostanie najnowszą wersję kodu. Proste, prawda? 
-Dla biznesu PWA będzie zapewne źródłem oszczędności. Skoro wszystko można napisać przy pomocy technologii webowych, to po co zatrudniać Android i iOS developerów?  PWA nie jest jeszcze jednak w pełni gotowe zastąpić aplikacje natywne, zatem developerzy mogą spać spokojnie, nie martwiąc się o swój dalszy los.
-
-
-
-
-
-
-
-Ograniczenia Progressive Web Apps
-
-PWA nie są w stanie w pełni zastąpić aplikacji natywnych ponieważ nie mają dostępu do danych na telefonie użytkownika to znaczy do naszego numeru telefonu, książki kontaktów, kalendarza i innych. Także PWA nie będzie w stanie skorzystać ze wszystkich modułów telefonu tj, modułu komunikacji NFC lub Bluetooth.
+PWA ma również swoje ograniczenia. Progressive Web Apps nie są w stanie w pełni zastąpić aplikacji natywnych ponieważ nie mają dostępu do danych na telefonie użytkownika to znaczy do naszego numeru telefonu, książki kontaktów, kalendarza i innych. Także PWA nie będzie w stanie skorzystać ze wszystkich modułów telefonu tj, modułu komunikacji NFC lub Bluetooth.
 
 Ponadto należy też wspomnieć o braku wsparcia dla PWA w systemie iOS. Safari nie obsługuje Service Workerów oraz nie pozwala na obsługę notyfikacji „push”.
 
 safari_brak_wsparcia_sw.png
 
-
 Do jakich rozwiązań najlepiej użyć PWA:
 
 Progressive Web App sprawdzi się świetnie wszędzie tam gdzie głównym elementem aplikacji jest konsumpcja treści dostarczonej z zewnątrz a sama aplikacja nie wymaga obsługi niedostępnych dla przeglądarki funkcji urządzeń mobilnych.
 
-PWA będzie świetnym rozwiązaniem dla sklepów internetowych, tutaj za przykład może posłużyć serwis Alibaba który po wprowadzeniu aplikacji progresywnej zwiększył wskaźnik celów konwersji o 76% a ilość aktywnych użytkowników zrosła o 14% na iOs i 30% na Androidzie. Link do casestudy.
+PWA będzie świetnym rozwiązaniem dla sklepów internetowych, tutaj za przykład może posłużyć serwis Alibaba który po wprowadzeniu aplikacji progresywnej zwiększył wskaźnik celów konwersji o 76% a ilość aktywnych użytkowników zrosła o 14% na iOs i 30% na Androidzie. Link do casestudy. [https://developers.google.com/web/showcase/2016/alibaba]
 
-Aplikacja progresywna to bardzo dobre rozwiązanie dla różnego rodzaju wydawnictw internetowych. Washington Post i Forbes zanotowały duży wzrost prędkosci ładowania treści przechodząc na PWA w stosunku do tradycyjnej strony mobilnej.
+Aplikacja progresywna to bardzo dobre rozwiązanie dla różnego rodzaju wydawnictw internetowych. Washington Post i Forbes zanotowały duży wzrost prędkości ładowania treści przechodząc na PWA w stosunku do tradycyjnej strony mobilnej.
 
-Wiele raportów z przejścia na PWA jest dostępnych w sieci, jeśli jesteś zainteresowy tematem polecam kilka z nich.
-
+Wiele raportów z przejścia na PWA jest dostępnych w sieci, jeśli jesteś zainteresowany tematem polecam kilka z nich.
 
 Pinterest
 https://medium.com/dev-channel/a-pinterest-progressive-web-app-performance-case-study-3bd6ed2e6154
@@ -209,145 +197,3 @@ https://developers.google.com/web/showcase/2017/twitter
 
 Starbucks:
 https://formidable.com/static/Formidable-Case_Starbucks_PWA.864ef9d5.pdf
-
-
-
-
-
-
-
-
-https://nowymarketing.pl/a/15650,progressive-web-apps-co-to-dlaczego-jak
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jak przerobić swoją strone na Progressive Web App.
-Aby strona można uznać za PWA musi ona spełnia następujące założenia :
-
-https://developers.google.com/web/progressive-web-apps/checklist
-
-
-
-
-Realizacja trzech głównych założeń PWA opiera się na spełnieniu przez daną stronę listy wymagań, takich jak:
-    • serwowanie danych za pomocą bezpiecznego protokołu HTTPS (bezpieczeństwo)
-    • responsywny, dostosowujący się do urządzenia layout (wrażenia użytkownika)
-    • wsparcie dla trybu offline (niezawodność)
-    • możliwość dodania aplikacji do ekranu głównego (wrażenia użytkownika)
-    • mniej niż 10 sek. do bycia interaktywną na sieci 3G (niezawodność, szybkość)
-    • działanie na różnych platformach (uniwersalność)
-    • zminimalizowanie poczucia “co się dzieje” w trakcie oczekiwania na załadowanie (wrażenia użytkownika)
-    • każdy zasób na stronie dostępny poprzez URL (łatwe udostępnianie treści)
-Lista wymagań zawiera jeszcze kilkanaście innych “dobrych praktyk” które mają na celu optymalizację wrażeń z korzystania z danej strony, jednak na dobry początek należy zadbać na zrealizowanie tych podanych wyżej.
-Po poznaniu teorii czas na praktykę – zobaczymy teraz ile wysiłku należy włożyć w realizację tych założeń i co właściwie dzięki nim zyskamy.
-
-
-
-
-
-Jeśli chcesz sprawdzić ile z powyższych założeń spełnia Twoja strona to  :
-zanstaluj Lighthouse
-
-
-
-
-Jak wynika z raportu przeprowadzonego przez comScore (https://www.comscore.com/Insights/Presentations-and-Whitepapers/2017/The-2017-US-Mobile-App-Report) w 2017 roku 66% czasu spędzonego w sieci pochodzi z urządzeń mobilnych z czego 50% to aplikacje przeznaczone na smartfony.
-Jednocześnie ponad połowa spędzonego czasu w sieci za pomocą aplikacji mobilnych pochodzi zazwyczaj z jednej aplikacji. Dodatkowo ponad połowa ankietowanych deklaruje że nie zainstalowała żadnej nowej aplikacji w ostatnim miesiącu.
-
-comeScore_download_new_app_per_month.png
-
-To pokazuje jak ciężko jest przekonać użytkownika aby zainstalował kolejną aplikację na swoim telefonie.
-
-
-
-
-
-
-
-
-
-
-
-
-ZALETY
-
-
-Dla programistów niewątpliwym plusem będzie wspólny code-base. Przy PWA tworzymy rzeczywiście jedną aplikację, która uruchamia się na wszystkich platformach (Desktop, iOS, Android etc.) Czego nie można jednak powiedzieć o innych technologiach jak React Native, Ionic czy Cordova. Tam owszem piszemy jeden code-base, ale na platformy mobilne. Często bywa też tak, że różnice architektoniczne pomiędzy platformami nie pozwalają na współdzielenie kodu. W przypadku PWA możemy mówić o jednej platformie jakiej jest WEB – pod nią piszemy jeden, współdzielony kod.
-Dla wydawców aplikacji zaletą Progressive Web App są aktualizacje. Żeby wypuścić na rynek nową wersję aplikacji mobilnej trzeba się zwykle nieźle natrudzić, oczywiście w zależności od platformy. Zgłoszenie do sklepu, przejście review… Następnie użytkownik po otrzymaniu notyfikacji oraz zaakceptowaniu aktualizacji musi zaktualizować aplikację
-W przypadku PWA jedyne co musimy zrobić to wgrać nowe pliki na nasz serwer. To wszystko! Przy kolejnym uruchomieniu aplikacji użytkownik dostanie najnowszą wersję kodu. Proste, prawda? 
-Dla biznesu PWA będzie zapewne źródłem oszczędności. Skoro wszystko można napisać przy pomocy technologii webowych, to po co zatrudniać Android i iOS developerów?  PWA nie jest jeszcze jednak w pełni gotowe zastąpić aplikacje natywne, zatem developerzy mogą spać spokojnie, nie martwiąc się o swój dalszy los.
-
-
-
-
-
-
-
-
-
-
-
-
-Podsumowanie
-
-
-
-
-
-
-
-
-Linki:
-https://mickl.net/2016/10/24/czym-sa-progressive-web-apps-i-do-czego-mozna-uzyc-service-worker-ow/
-
-https://sunscrapers.com/blog/pwa-pierwsze-kroki/
-
-https://piecioshka.pl/blog/2017/05/07/jak-przerobic-strone-na-pwa.html
-
-https://developers.google.com/web/fundamentals/codelabs/your-first-pwapp/
-
-https://medium.com/samsung-internet-dev/6-myths-of-progressive-web-apps-81e28ca9d2b1
-
-https://www.smashingmagazine.com/2016/08/a-beginners-guide-to-progressive-web-apps/
-
-https://medium.com/samsung-internet-dev/a-beginners-guide-to-making-progressive-web-apps-beb56224948e
-
-https://scotch.io/tutorials/the-ultimate-guide-to-progressive-web-applications
-
-Angular
-
-https://developer.okta.com/blog/2017/05/09/progressive-web-applications-with-angular-and-spring-boot?utm_source=syndicate&utm_medium=post&utm_campaign=scotch-jun172510
-
-https://moduscreate.com/blog/creating-progressive-web-apps-using-angular/
-
-https://www.webdesignerdepot.com/2017/08/7-tools-for-developing-your-first-progressive-web-app/
-
-
-REACT
-https://engineering.musefind.com/build-your-first-progressive-web-app-with-react-8e1449c575cd
-
-
-VUE
-
-https://blog.sicara.com/a-progressive-web-application-with-vue-js-webpack-material-design-part-1-c243e2e6e402
-
-
-
-
-https://www.youtube.com/watch?v=M_gWF8Cw6KY
