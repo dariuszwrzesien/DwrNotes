@@ -2,70 +2,14 @@
 
 W poprzednim wpisie na temat Progressive Web Apps (link !!!) przedstawiłem ogólne pojęcia dotyczące aplikacji progresywnych oraz przedstawiłem narzędzia z których możemy korzystać podczas przygotowania aplikacji PWA. Dzisiaj chciałbym rozszerzyć pokazaną wcześniej implementację service workera oraz manifestu oraz użyć ich w przygotowanej aplikacji.
 
-Zanim jednak zaczniemy implementację Service Workera chciałbym opisać działanie obietnic (Promise) dla tych którzy nie mieli jeszcze okazji się z nimi zapoznać. Jesli jednak znasz już Obietnice to spokojnie możesz opuścić ten podrozdział. 
+Zanim jednak zaczniemy implementację Service Workera chciałbym abyście zapoznali się/ przypomnieli siobie sposób działania obietnic (Promise (link)) oraz Fetch Api (link). Opisywany we wczesniejszych artykułach
+Zrozumienie zasady ich działania będzie konieczne w pracy z Service Workerami
 
 
-Obietnice. (ang. Promises).
-
-Ponieważ JavaScript jest jednowątkowy to w momencie wykonywania zapytania do API program nie będzie czekał na zakończenie połączenia i otrzymanie danych z API, poprostu przejdzie do kolejnej lini kodu.
-
-Potrzebujemy zatem jakiegoś mechanizmu, który pozwoli nam na obsługę tego typu zdarzeń. W przeszłości używaliśmy w tym celu funkcji zwanej "callback". Dla przypomnienia, funkcja "callback" to funkcja przekazana jako parametr innej funkcji. Dzięki takiemu mechanizmowi, możliwe jest wskazanie działania, które ma nastąpić w zależności od wyników działania poprzedniej funkcji. Niestety tego typu podejście ma swoje wady. W wyniku wielokrotnego zagnieżdzania funkcji "callback", powstały w ten sposób kod jest trudny w utrzymaniu i mało czytelny. 
-
-Obietnice powstały z myślą o usprawnieniu pracy z kodem asynchronicznym, ich podstawowymi zaletami są:
-lepsza kontrola w zakresie synchronizacji (brak wyścigów), obsługa błędów oraz lepsza czytelność.
-
-Poniżej przykład działania obietnic. (https://jsfiddle.net/9z2frum7/)
+opisać sposób działania obietnic (Promise) dla tych którzy nie mieli jeszcze okazji się z nimi zapoznać. Zrozumienie zasady ich działania będzie konieczne w pracy z Service Workerami. Jesli jednak znasz już Obietnice to spokojnie możesz opuścić ten podrozdział. 
 
 
-function myAsync() {
-  const imCool = true;
-  return new Promise((resolve, reject) => {
-    // w tym miejscu moglibyśmy wstawić 
-    // metodę ajaxową za pomocą której 
-    // pobieralibyśmy dane z zewnętrzengo API
-    if (imCool) {
-        resolve('Success!');
-    } else {
-        reject('Something went wrong')
-    }
-  });
-}
-
-function init() {
-  myAsync().then((response) => {
-    alert(response);
-  })
-  .catch((err) => {
-    alert(err);
-  });
-}
-
-init();
-
-Metoda myAsync() tworzy obietnicę że asynchronicznie zrealizuje połączenie i zwróci rezultat.
-Obietnica może znajdować się w jedym z trzech stanów:
-- spełniona (resolved) - gdy powiązane z nią zadania zwraca żądaną wartość,
-- odrzucona (rejected) - gdy zadanie nie zwraca wartości, np. z powodu wyjątku, lub zwrócona wartość jest nieprawidłowa,
-- oczekująca (pending) - to stan od rozpączęcia żądania do otrzymania wyniku.
-
-W naszym przypadku ustawiłem wartość true dla stałej imCool co spełnia/rozwiązuje naszą obietnice i zwraca obiekt Promise do funkcji wywołującej.
-
-Zatem przebieg całego skryptu wygląda następująco. Metoda init() wywołuje myAsync() i następnie (then) wywołana zostaje funckja która zgłasza alert z otrzymanym komunikatem. W przypadku gdy zmienimy wartość stałej dla imCool na false, obietnica zostanie odrzucona i wywołanie zostanie pominięte. Bład będziemy mogli przechwycić używając metody catch().
-
-Opierając się na powyższym przykładzie może być trudno dostrzec korzyści płynące z użycia obietnic zamiast standardowych wywołań zwrotnych. Zazwyczaj jednak obietnic będziemy używać w kontekście tworzenia łańcuchów wywołań gdzie jedna obietnica będzie konsumować kolejną. Przyjrzyjmy się zatem bardziej rozbudowanemu przykładowi. (https://jsfiddle.net/0xrffx6a/)
-
-
-// W poniższym przykładzie upieczemy kawałek ciasta.
-// Aby dokonać tego będziemy potrzebować trzech kroków.
-
-let doShopping = () => {return new Promise((resolve, reject) => resolve ('Got ingredients'))}
-let mixIngredients = () => {return new Promise((resolve, reject) => resolve ('Made dough'))}
-let bakeCake = () => {return new Promise((resolve, reject) => resolve ('Baked cake'))}
-
-doShopping()
-.then((response) => { alert(response); return mixIngredients() })
-.then((response) => { alert(response); return bakeCake() })
-.then((response) => { alert(response); alert('Bon appetit') });
+LINK do Artykułu obietnice !!!
 
 (Znajdziesz tam wszystko co niezbędne na temat obietnic aby rozpocząć pracę z SerwiceWorkerami)
 Na tę chwilę to wszystko co musimy wiedzieć na temat obietnic aby móc zacząć pracę z ServiceWorkerami.
@@ -91,5 +35,33 @@ https://jsfiddle.net/96na06jh/
 })();
 
 Widzimy że metoda fetch() zwraca nam obiekt Promise, który następnie parsujemy z wykorzystaniem medoty json() (https://developer.mozilla.org/en-US/docs/Web/API/Body/json). Na końcu w oknie alert wyświetlamy id użytkownika a całość danych prezentujemy w konsoli przeglądarki.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VUE todo app
+https://scotch.io/tutorials/build-a-to-do-app-with-vue-js-2#prerequisites
+
+
+
+PLAN:
+1. Promise
+2. Fetch API
+3. Cache API
+4. Tutorial VUE2 - (Appka TODO ?)
+5. Notyfikacje - web Notyfikacje + push notyfikacje
+6. Http2 - implementacja w nodejs i Server push - no tutaj to oprócz tytułu to nic nie wiem - wiec zebranie materiału zajmie mi pewnie troche
+7. Implementacja PWA do apki stworzonej na VUE2
+
 
 
