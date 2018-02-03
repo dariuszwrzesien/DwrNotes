@@ -1,12 +1,45 @@
 Obietnice. (ang. Promises).
 
-Ponieważ JavaScript jest jednowątkowy to w momencie wykonywania zapytania do API program nie będzie czekał na zakończenie połączenia i otrzymanie danych z API, poprostu przejdzie do kolejnej lini kodu.
 
-Potrzebujemy zatem jakiegoś mechanizmu, który pozwoli nam na obsługę tego typu zdarzeń. W przeszłości używaliśmy w tym celu funkcji zwanej "callback". Dla przypomnienia, funkcja "callback" to funkcja przekazana jako parametr innej funkcji. Dzięki takiemu mechanizmowi, możliwe jest wskazanie działania, które ma nastąpić w zależności od wyników działania poprzedniej funkcji. Niestety tego typu podejście ma swoje wady. W wyniku wielokrotnego zagnieżdzania funkcji "callback", powstały w ten sposób kod jest trudny w utrzymaniu i mało czytelny. 
+Podstawową informacją od której chciałbym zacząć jest jednowątkowość w JavaScript. Jednowątkowość oznacza że w trakcie działania, program potrafi wykonać tylko jedną czynność na raz według zadanej kolejności. Działa to mniej więcej tak:
+
+fs = require('fs');
+
+console.log(fs.readFileSync('file1.txt', 'utf8'));
+console.log(fs.readFileSync('file2.txt', 'utf8'));
+console.log(fs.readFileSync('file3.txt', 'utf8'));
+
+W każdym kolejnym kroku, metoda readFileSync() z biblioteki fs odczytuje z dysku plik, przechodząc od pierwszej do ostatniej linii programu, wypisuje do konsoli zawartości kolejno wczytanych plików.
+
+Co jeśli plik jest wyjątkowo duży? Wtedy wczytywanie pliku będzię trwało dłużej, ale dopiero bo wczytaniu całej jego zawartości program przejdzie do kolejnej linii kodu.
+
+Dobrze było by wiec mieć mechanizm pozwalający na wykonanie pewnych zadań w "tle" bez blokowania innych zadań. W tym miejscu z pomocą przychodzi nam asynchroniczność. Jeśli chcemy aby pobranie danych z zewnętrznego API nie blokowało nam działania programu, posłużyć się możemy technologią Ajax, która to asynchronicznie wykona zapytanie do API i zwróci wynik zapytania.
+
+var data = ajax('https://jsonplaceholder.typicode.com/posts/1');
+console.log(data);
+
+Jeśli spodziwałeś się że powyższy kod wypisze dane otrzymane z żądania wysłanego przez metodę ajax()* to niestety muszę Cię zmartwić. Zmienna data nie będzie zawierać żadnych danych.
+Przebieg programu w wyżej opisanej sytuacji wygląda następująco.
+
+Javasctipt tworzy zmienną data. Następnie uruchamiana jest metoda asynchroniczna ajax() i bez czekania na jej rezultat program stara się wyświetlić zawartość zmiennej data.
+
+
+---
+* metoda ajax() jest metodą poglądową, mającą na celu pokazanie, że zapytanie odbywa się w technologii AJAX.
 
 
 
-ilustracja callback hell
+Zapewnie domyślasz się że w takim razie należy użyć innego podejścia gdy pracujemy z metodami asynchronicznymi. Tak jest! Sposobów na pracę z kodem asynchronicznym jest kilka. Zacznijmy zatem od klasycznego podejścia z użyciem wywołań zwrotnych (ang. callback).
+
+
+
+Callback
+
+Potrzebujemy zatem jakiegoś mechanizmu, który pozwoli nam na obsługę tego typu zdarzeń. W przeszłości używaliśmy w tym celu funkcji zwanej "callback". Dla przypomnienia, funkcja "callback" to funkcja przekazana jako parametr innej funkcji. Dzięki takiemu mechanizmowi, możliwe jest wskazanie działania, które ma nastąpić w zależności od wyników działania poprzedniej funkcji. Niestety tego typu podejście ma swoje wady. W wyniku wielokrotnego zagnieżdzania funkcji "callback", powstały w ten sposób kod jest trudny w utrzymaniu i mało czytelny a użycie  Tego typu podejście nazywane jest nazywany mianem callback hell lub piramid of doom,
+
+
+
+ilustracja callback hell, piramid of doom
 
 
 

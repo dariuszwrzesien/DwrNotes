@@ -1,0 +1,10 @@
+Jak widać, callbacki można łatwo sobie przyswoić i są nawet przyjemne, prawda? Błąd! To, że nie istnieje sensowny sposób na wyjęcie potrzebnych nam danych poza callback, oznacza, że wszystkie operacje od nich zależne należy wykonać w jego wnętrzu. I choć zaczyna się niewinnie, bardzo łatwo skończyć z kodem w postaci:
+
+AJAX.get( 'strona.html', function( result ) {
+	AJAX.get( 'innastrona.html', function( nextResult ) {
+		AJAX.get( 'jeszczeinnastrona.html', function( alsoResult ) {
+			weNeedToGoDeeper();
+		} );
+	} );
+} );
+Zaczyna się robić bardzo nieprzyjemnie, prawda? W przypadku bardziej skomplikowanych aplikacji grzęźniemy w callbackach powsadzanych w callbacki, które z kolei są odpalane w callbackach innych callbacków. Po kilku godzinach pracy z takim kodem słowo „callback” staje się uosobieniem wszelkich koszmarów a kod nimi usiany wygląda jak pismo szatana. Nic zatem dziwnego, że postanowiono poszukać sensowniejszego rozwiązania problemu asynchroniczności.
