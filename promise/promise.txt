@@ -161,15 +161,27 @@ Promise.all([promise1, promise2, promise3]).then(function(values) {
 Wynikiem działania powyższego skryptu będzie wypisanie do konsoli słowa 'error'. 
 
 
+Promise.race()
+
+W odróżnieniu od metody Promise.all() która czekała do momentu rozwiązania wszytskich obietnic, metoda Promise.race() zwróci pierwszą zakończoną obietnicę.
+
+var promise1 = new Promise(function(resolve, reject) {
+    setTimeout(resolve, 5000, 'first');
+});
+
+var promise2 = new Promise(function(resolve, reject) {
+    setTimeout(resolve, 1000, 'second');
+});
+
+Promise.race([promise1, promise2]).then(function(value) {
+  console.log(value);
+});
+
+W powyższym przykładzie obie obietnice zostaną rozwiązanie ale ponieważ pierwszą rozwiązaną będzie promise2, tak wiec wartość wypisana do konsoli to 'second'.
 
 
 
-
-
-
-
-
-
+Podsumowanie.
 
 Bądz czujny.
 
@@ -189,8 +201,6 @@ getData().
 
 
 
-
-Podsumowanie
 
 
 
