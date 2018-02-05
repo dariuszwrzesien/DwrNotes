@@ -1,6 +1,6 @@
 obietnice_podstawy_javascript.png
 
-Obietnice. (ang. Promises).
+Obietnice (ang. Promises)
 
 Podstawową informacją od której chciałbym zacząć jest jednowątkowość w JavaScript. Jednowątkowość oznacza, że w trakcie działania, program potrafi wykonać tylko jedną czynność na raz według zadanej kolejności. Działa to mniej więcej tak:
 
@@ -14,7 +14,7 @@ W każdym kolejnym kroku, metoda readFileSync() odczytuje z dysku plik, przechod
 
 Co jeśli plik jest wyjątkowo duży? Wtedy wczytywanie pliku będzię trwało dłużej, ale dopiero po wczytaniu całej jego zawartości program przejdzie do kolejnej linii kodu.
 
-Dobrze było by wiec mieć mechanizm pozwalający na wykonanie pewnych zadań w "tle" bez blokowania innych zadań. W tym miejscu z pomocą przychodzi nam asynchroniczność. Jeśli chcemy aby pobranie danych z zewnętrznego API nie blokowało nam działania programu, posłużyć się możemy technologią Ajax, która to asynchronicznie wykona zapytanie do API i zwróci wynik zapytania.
+Dobrze było by wiec mieć mechanizm pozwalający na wykonanie pewnych zadań w "tle", bez blokowania innych zadań. W tym miejscu z pomocą przychodzi nam asynchroniczność. Jeśli chcemy aby pobranie danych z zewnętrznego API nie blokowało nam działania programu, posłużyć się możemy technologią Ajax, która to asynchronicznie wykona zapytanie do API i zwróci wynik zapytania.
 
 var data = getAsync('https://jsonplaceholder.typicode.com/posts/1');
 console.log(data);
@@ -22,37 +22,34 @@ console.log(data);
 Jeśli spodziwałeś się że powyższy kod wypisze dane otrzymane z żądania wysłanego przez metodę getAsync()* to niestety muszę Cię zmartwić. Zmienna data nie będzie zawierać żadnych danych.
 Przebieg programu w wyżej opisanej sytuacji wygląda następująco.
 
-Javasctipt tworzy zmienną data. Następnie uruchamiana jest metoda asynchroniczna getAsync() i bez czekania na jej rezultat program stara się wyświetlić zawartość zmiennej data.
+JavaScript tworzy zmienną data. Następnie uruchamiana jest metoda asynchroniczna getAsync() i bez czekania na jej rezultat program stara się wyświetlić zawartość zmiennej data.
 
 ---
 * metoda getAsync() jest metodą poglądową, mającą na celu pokazanie, że zapytanie odbywa się asynchronicznie, najprawdopodobniej wykorzystywała by ona w tym celu technologię Ajax.
-
 
 Domyślasz się już zapewnie, że w takim razie należy użyć innego podejścia gdy pracujemy z metodami asynchronicznymi. Tak jest! Sposobów na pracę z kodem asynchronicznym jest kilka. Zacznijmy zatem od klasycznego podejścia z użyciem wywołań zwrotnych (ang. callback).
 
 Callback i piekło wywołań zwrotnych.
 
-Funkcja callback to funkcja przekazana jako parametr innej funkcji. Dzięki takiemu mechanizmowi, możliwe jest wskazanie działania, które ma nastąpić w zależności od wyników działania poprzedniej funkcji.
+Funkcja callback to funkcja przekazana jako parametr innej funkcji. Dzięki takiemu podejściu, możliwe jest wskazanie działania, które ma nastąpić w zależności od wyników działania poprzedniej funkcji.
 
 getAsync('https://jsonplaceholder.typicode.com/posts/1', function callback(data) {
 	console.log(data);
 });
 
-W powyższym przykładzie metoda getAsync(), wyśle zapytanie pod wskazany adres URL a odpowiedź zostanie przekierowana do funckji callback(). W ten sposób, dopiero gdy nadejdzie odpowiedź z zewnętrznego API dane zostaną wyświetlone w konsoli.
+W powyższym przykładzie metoda getAsync(), wyśle zapytanie pod wskazany adres URL a odpowiedź zostanie przekierowana do funckji callback(). W ten sposób, dopiero gdy nadejdzie odpowiedź z zewnętrznego API, dane zostaną wyświetlone w konsoli.
 
 No dobrze, to skoro to działa to dlaczego potrzebujemy innych sposobów na pracę z asynchronicznością? 
 
-Bardzo często aby sprostać wymaganiom biznesowym, będziemy potrzebowali wielokrotnego zagnieżdzania wywołań zwrotnych. Powstały w ten sposób kod jest trudny w utrzymaniu i mało czytelny. Często zdarza się też, że kolejne funkcje zwrotne porozrzucane są w różnych miejscach kodu czy nawet różnych plikach co dodatkowo utrudnia pracę. Tego typu sytuację nazywamy piekłem wywołań zwrotnych (ang. callback hell).
+Bardzo często, aby sprostać wymaganiom biznesowym, będziemy potrzebowali wielokrotnego zagnieżdzania wywołań zwrotnych. Powstały w ten sposób kod jest trudny w utrzymaniu i mało czytelny. Często zdarza się też, że kolejne funkcje zwrotne porozrzucane są w różnych miejscach kodu czy nawet różnych plikach, co dodatkowo utrudnia pracę. Tego typu sytuację nazywamy piekłem wywołań zwrotnych (ang. callback hell).
 
 callback_hell_podstawy_javascript.png
-
 
 Obietnice
 
 Czas więc na tytułowe Obietnice (ang. Promises).
 Obietnice powstały z myślą o usprawnieniu pracy z kodem asynchronicznym, ich podstawowymi zaletami są:
 lepsza kontrola w zakresie synchronizacji wywołań (brak wyścigów), obsługa błędów oraz lepsza czytelność.
-
 
 function getAsync(url) {
    return new Promise((resolve, reject) => {
@@ -62,7 +59,7 @@ function getAsync(url) {
             if (httpReq.status === 200) {
                resolve(JSON.parse(httpReq.responseText));
             } else {
-               reject('Something went wrong');
+               reject(new Error(httpReq.statusText));
             }
          }
       };
@@ -78,7 +75,7 @@ getAsync('https://jsonplaceholder.typicode.com/posts/1').then((data) => {
     alert(err);
 });
 
-Kod dostępny również na https://jsfiddle.net/has49xj8/
+https://jsfiddle.net/has49xj8/
 
 
 Metoda getAsync() tworzy obietnicę że zrealizuje asynchroniczne połączenie z podanym adresem URL.
@@ -142,15 +139,19 @@ Promise.all([promise1, promise2, promise3]).then(function(values) {
   alert(values);
 }).catch((err) => {console.log(err)});
 
-Do metody Promise.all() trafiają dwa obiekty Promise i literał całkowity równy 42. Bez znaczenia który z tych obiektów zostanie rozwiązany jako pierwszy, rezultatem wykonania będzie metoda alert z tablicą o zawartościach ['foo',42,42].
+Do metody Promise.all() trafiają dwa obiekty Promise i literał liczbowy równy 42. Bez znaczenia który z tych obiektów zostanie rozwiązany jako pierwszy, rezultatem wykonania będzie metoda alert z tablicą o zawartości ['foo',42,42].
 
-Jeśli któraś z obietnic zostanie odrzucona to metoda Promise.all() także zostanie odrzucona i straci wszystkie wartości, które udało się jej uzyskać w wyniku roziwiązania innych obietnic.
+Jeżeli którakolwiek z obietnic zostanie odrzucona, to Promise.all() również zostanie odrzucone (tracąc wszystkie wartości, które udało się jej uzyskać w wyniku rozwiązania pozostałych obietnic). Wartością zwróconą będzie wartość z odzucenia pierwszej z obietnic.
+
+https://jsfiddle.net/ow7wjaka/
 
 var promise1 = new Promise(function(resolve, reject) {
-  setTimeout(reject, 1000, 'error');
+  setTimeout(reject, 1500, 'error1');
   setTimeout(resolve, 2000, 'foo');
 });
-var promise2 = 42;
+var promise2 = new Promise(function(resolve, reject) {
+  setTimeout(reject, 1000, 'error2');
+});
 var promise3 = Promise.resolve(2*21);
 
 
@@ -158,12 +159,11 @@ Promise.all([promise1, promise2, promise3]).then(function(values) {
   alert(values);
 }).catch((err) => {console.log(err)});
 
-Wynikiem działania powyższego skryptu będzie wypisanie do konsoli słowa 'error'. 
-
+Wynikiem działania powyższego skryptu będzie wypisanie do konsoli słowa 'error2' ponieważ jest to najwcześniej odrzucona obietnica.
 
 Promise.race()
 
-W odróżnieniu od metody Promise.all() która czekała do momentu rozwiązania wszytskich obietnic, metoda Promise.race() zwróci pierwszą zakończoną obietnicę.
+W odróżnieniu od metody Promise.all(), która czekała do momentu rozwiązania wszytskich obietnic, metoda Promise.race() zwróci pierwszą zakończoną obietnicę.
 
 var promise1 = new Promise(function(resolve, reject) {
     setTimeout(resolve, 5000, 'first');
@@ -180,10 +180,9 @@ Promise.race([promise1, promise2]).then(function(value) {
 W powyższym przykładzie obie obietnice zostaną rozwiązanie ale ponieważ pierwszą rozwiązaną będzie promise2, tak wiec wartość wypisana do konsoli to 'second'.
 
 
-
 Podsumowanie.
 
-Bądz czujny.
+Obietnice w JavaScript to żadna nowość, pojawiły się one w czerwcu 2015 roku w specyfikacji ES6, ale były znane już wcześniej we frameworkach JavaScriptowych na przykład Deferred() (https://api.jquery.com/jquery.deferred/) z biblioteki Jquery. Obietnice wprowadzono aby ułatwić pracę z kodem asynchronicznym, zapobiec tworzeniu piekła wywołań zwrotnych oraz uczynić kod bardziej czytelnym i łatwiejszym w utrzymaniu.
 
 Ale i w przypadku użycia Obietnic należy być czujnym. Niewłaściwa ich implementacja może spowodować te same problemy co wywołania zwrotne, w efekcie których, skończymy w piekle obietnic (ang. promise hell).
 
@@ -197,6 +196,13 @@ getData().
 		    });
     	    });
      });
+
+
+Obietnice są wspierane we wszystkich nowoczesnych przeglądarkach internetowych. Chociaż na uwagę zasługuję brak wsparcia ze strony "starego" Interner Explorera, więc wszędzie tam gdzie wymagania klienta mówią o dostępności oprogramowania na systemy z zainstalowanym Internet Explorerem trzeba się wstrzymać od używania obietnic.
+
+can_i_use_promise.png
+
+
 
 
 
