@@ -1,0 +1,17 @@
+async_await
+
+
+jak wykonać  w jednym asyn function dwa strzały jednoczesnie
+
+
+async fybctuib run() {
+
+const w = fetch()
+const e = fetch()
+
+
+await
+await
+
+}
+
