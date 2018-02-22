@@ -1,7 +1,20 @@
 async_await
 
 
-jak wykonać  w jednym asyn function dwa strzały jednoczesnie
+https://medium.freecodecamp.org/javascript-from-callbacks-to-async-await-1cc090ddad99
+https://www.toptal.com/javascript/asynchronous-javascript-async-await-tutorial
+https://tutorialzine.com/2017/07/javascript-async-await-explained
+
+dobry opis
+https://javascript.info/async-await
+
+
+
+
+
+
+
+jak wykonać  w jednym asyn function dwa strzały jednoczesnie (opisać i zrobić screeny z consoli)
 
 
 async fybctuib run() {
