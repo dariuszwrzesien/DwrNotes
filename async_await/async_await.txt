@@ -1,5 +1,42 @@
 async_await
 
+Niniejszy artykuł jest kontynuacją wpisu na temat obietnic (http://devenv.pl/obietnice-promises-podstawy-jezyka-javascript/) zachęcam do zapoznania się z tematem ponieważ w tym wpisie zakładam że czytelnik zna zasadę działania obietnic w JavaScript.
+
+Zanim jednak przejdę do omawiania składni async/await chciałbym na wstępie omówic generatory wprowadzone do języka JavaScript od wersji ES6? (ECMAScript2015).
+
+W skrócie, generator to specjalny rodzaj funkcji, której przebieg może być zatrzymywany i wznawiany z zachowaniem konteksu (variable bindings). Wywołanie generatora nie wykonyje od razu poleceń w nich zawartych.
+Zwraca natomiast obiekt iteratora. Następnie za pomocą metody next() wykonywany jest kod wewnątrz funkcji.
+
+Najprostrza implementacja generatora mogłaby wyglądać następująco:
+
+function* foo(x) {
+    yield x + 1;
+
+    var y = yield null;
+    return x + y;
+}
+
+a oto sposób jego użycia:
+
+var gen = foo(5);
+gen.next(); // { value: 6, done: false }
+gen.next(); // { value: null, done: false }
+gen.send(8); // { value: 13, done: true }
+
+
+
+
+Niechciałbym jednak skupiac się w tym miejscu na szczegółowym opisie możliwości generatorów. W konteksice opisywanych async/await chciałbym pokazać zastosowanie generatorów w pracy z kodem asynchronicznym.
+
+
+
+
+
+
+https://jlongster.com/A-Study-on-Solving-Callbacks-with-JavaScript-Generators
+
+https://davidwalsh.name/async-generators
+
 
 https://medium.freecodecamp.org/javascript-from-callbacks-to-async-await-1cc090ddad99
 https://www.toptal.com/javascript/asynchronous-javascript-async-await-tutorial
