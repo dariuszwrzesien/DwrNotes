@@ -2,8 +2,7 @@ async_await
 
 W poprzednim artykule z cyklu podstaw języka JavaScript pokazałem jak zastosowanie obietnic pozytywnie wpłyneło na pracę z kodem asynchronicznym i pozbycie się piekła wywołań zwrotnych (callback hell). Okazuje się jednak że istnienje możliwość zapisu kodu asynchronicznego w taki sposób że czyta się go tak jakby był synchroniczny.
 
-
-Załóżmy że chcemy napisać program który połączy się z zewnętrznym API w celu pobrania nazyw miasta i na jej podstawie z innego zewnętrznego API pobierze dane pogodowe.
+Załóżmy że chcemy napisać program, który połączy się z zewnętrznym API w celu pobrania nazyw miasta i na jej podstawie z innego zewnętrznego API pobierze dane pogodowe.
 
 W uproszczeniu, kod taki realizować będzie następujące operacje.
 
@@ -11,7 +10,7 @@ const city = asyncGetCity();
 const weather = asyncGetWeather(city);
 console.log(weather.temp);
 
-Jednakże ponieważ pracujemy z kodem asynchronicznym to w takim przypadku użyjemy obietnic, aby uzyskac następujący rezultat:
+Jednakże, ponieważ pracujemy z kodem asynchronicznym to w takim przypadku użyjemy obietnic, aby uzyskac następujący rezultat:
 
 
 return asyncGetCity()
@@ -22,12 +21,15 @@ return asyncGetCity()
         console.log(weather.temp);
     })
 
-Mamy tutaj do czynienia z typowym asynchronicznym łańcuchem zależności. Potrzebujemy posiadać nazwę miasta aby na jego podstawie pobrać infornache pogodowe. Użycie obietnic w porówaniu z pierwszym "synchronicznym" kodem niesie za sobą jednak pewne ograniczenia. Jeśli chcielimyśmy wypisać w konsoli oprócz temperatury również nazwę miasta, musielibyśmy zapisywac ją w dodatkowej zmiennej.
 
-let City;
+Mamy tutaj do czynienia z typowym asynchronicznym łańcuchem zależności. Potrzebujemy posiadać nazwę miasta aby na jego podstawie pobrać infornache pogodowe.
+Użycie obietnic w porówaniu z pierwszym zapisem niesie za sobą jednak pewne ograniczenia. Jeśli chcielimyśmy wypisać w konsoli oprócz temperatury również nazwę miasta, musielibyśmy zapisywac ją w dodatkowej zmiennej.
+
+
+let City; //podkreslic
 return asyncGetCity()
     .then(function(city) {
-        City = city;
+        City = city; //podkreslic
         return asyncGetWeather(city);
     })
     .then(function(weather) {
@@ -35,39 +37,33 @@ return asyncGetCity()
         console.log(weather.temp);
     })
 
+Generatory
 
-
-
-
-
-
-
-
-
-Zanim jednak przejdę do omawiania składni async/await chciałbym na wstępie omówic generatory wprowadzone do języka JavaScript od wersji ES6? (ECMAScript2015). (wiedza ta będzie pomocna podczas omawiania async/await)
-
-W skrócie, generator to specjalny rodzaj funkcji, której przebieg może być zatrzymywany i wznawiany z zachowaniem konteksu (variable bindings). Wywołanie generatora nie wykonuje od razu poleceń w nich zawartych.
-Zwraca natomiast obiekt iteratora. Następnie za pomocą metody next() wykonywany jest kod wewnątrz funkcji.
+Jedną z możliwości poprawy zapisu jest użycie generatorów wprowadzonych do języka JavaScript od wersji ES6. W skrócie, generator to specjalny rodzaj funkcji (oznaczamy go za pomoca * za słowem kluczowym function), której przebieg może być zatrzymywany i wznawiany z zachowaniem konteksu (variable bindings). Wywołanie generatora nie wykonuje od razu poleceń w nich zawartych, zwraca natomiast obiekt iteratora. Następnie za pomocą metody next() wykonywany jest kod wewnątrz funkcji.
 
 Najprostrza implementacja generatora mogłaby wyglądać następująco:
-
 
 function *foo(x) {
     yield x + 1;
 
-    let y = yield; 
+    let y = yield 'Hello'; 
 
     return x + y;
 }
 
 var gen = foo(5);
 console.log(gen.next()); // { value: 6, done: false }
-console.log(gen.next()); // { value: undefined, done: false }
+console.log(gen.next()); // { value: 'Hello', done: false }
 console.log(gen.next(8)); // { value: 13, done: true }
 
+Przebieg powyżsego kodu jest następujący.
+1. Podczas var gen = foo(5) zwracany jest obiekt iteratora.
+2. Pierwsze wywołanie metody next() na obiekcie iteratora powoduje przypisanie wartości 5 do zmiennej x, zatrzymaniu wykonywania funkcji na słowie kluczowym yield oraz zwrócenie wartości {value: 6, done: false}.
+3. Drugie wywołanie metody next() powoduje zatrzymanie wykonywania kodu na drugim słowie kluczowym yield i zwrócenie komunikatu 'Hello' w postaci {value: "Hello", done: false}.
+4. Kolejne wykonanie metody next() tym razem z przekazaną wartością 8 przypisuje przekazaną wartość w miejscu zatrzymania funkcji czyli let y = yield oraz zwraca wynik z obliczeń x + y (czyli 5 + 8) oraz informację o zakończeniu działania iteratora done: true {value: 13, done: true}.
 
 
-Niechciałbym jednak skupiac się w tym miejscu na szczegółowym opisie możliwości generatorów. W konteksice opisywanych async/await chciałbym pokazać zastosowanie generatorów w pracy z kodem asynchronicznym.
+Niechciałbym jednak skupiać się w tym miejscu na szczegółowym opisie możliwości generatorów. W konteksice opisywanych async/await chciałbym pokazać zastosowanie generatorów w pracy z kodem asynchronicznym.
 
 
 
