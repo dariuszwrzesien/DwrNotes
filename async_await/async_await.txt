@@ -57,7 +57,7 @@ Czy nie było by idealnie, gdybyśmy mieli możliwość zapisu kodu asychroniczn
 
 Generatory
 
-Jedną z możliwości poprawy zapisu jest użycie generatorów wprowadzonych do języka JavaScript od wersji ES6. W skrócie, generator to specjalny rodzaj funkcji (oznaczamy go za pomoca * za słowem kluczowym function), której przebieg może być zatrzymywany i wznawiany z zachowaniem konteksu (variable bindings). Wywołanie generatora nie wykonuje od razu poleceń w nich zawartych, zwraca natomiast obiekt iteratora. Następnie za pomocą metody next() wykonywany jest kod wewnątrz funkcji.
+Jedną z możliwości poprawy czytelności jest zapis z użyciem generatorów, wprowadzonych do języka JavaScript od wersji ES6. W skrócie, generator to specjalny rodzaj funkcji (oznaczamy go za pomoca * za słowem kluczowym function), której przebieg może być zatrzymywany i wznawiany z zachowaniem konteksu (variable bindings). Wywołanie generatora nie wykonuje od razu poleceń w nich zawartych, zwraca natomiast obiekt iteratora. Następnie za pomocą metody next() wykonywany jest kod wewnątrz funkcji.
 
 Zobaczmy na przykładzie w jaki sposób działa generator w JavaScript.
 
@@ -80,8 +80,7 @@ Przebieg powyższego skryptu jest następujący.
 1. Podczas przypisania funkcji do zmiennej var gen = foo(5) zwracany jest obiekt iteratora.
 2. Pierwsze wywołanie metody next() na obiekcie iteratora powoduje przypisanie wartości 5 do zmiennej x, zatrzymaniu wykonywania funkcji na słowie kluczowym yield oraz zwróceniu wartości {value: 6, done: false}.
 3. Drugie wywołanie metody next() powoduje zatrzymanie wykonywania kodu na drugim słowie kluczowym yield i zwrócenie komunikatu 'Hello' w postaci {value: "Hello", done: false}.
-4. Kolejne wykonanie metody next() tym razem z przekazaną wartością 8 przypisuje przekazaną wartość w miejscu zatrzymania funkcji czyli let y = yield 'Hello' (let y = 8) oraz zwraca wynik z obliczeń x + y ( 5 + 8) oraz informację o zakończeniu działania iteratora done: true {value: 13, done: true}.
-
+4. Kolejne wykonanie metody next() tym razem z przekazaną wartością 8 przypisuje przekazaną wartość w miejscu zatrzymania funkcji czyli let y = yield 'Hello' (let y = 8), zwraca wynik z obliczeń return x + y (5 + 8) oraz informację o zakończeniu działania iteratora done: true - {value: 13, done: true}.
 
 Niechciałbym jednak skupiać się w tym miejscu na szczegółowym opisie możliwości generatorów, a bardziej na ich połączeniu z obietnicami i zastosowaniu w pracy z kodem asynchronicznym. 
 Tak więc powracając do przykładu z początku artykułu użyjmy generatora aby pobrać informacje pogodowe dla danego miasta.
