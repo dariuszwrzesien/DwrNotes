@@ -70,9 +70,9 @@ function *foo(x) {
 }
 
 var gen = foo(5);
-console.log(gen.next()); // { value: 6, done: false }
-console.log(gen.next()); // { value: 'Hello', done: false }
-console.log(gen.next(8)); // { value: 13, done: true }
+console.log(gen.next()); //{ value: 6, done: false }
+console.log(gen.next()); //{ value: 'Hello', done: false }
+console.log(gen.next(8)); //{ value: 13, done: true }
 
 https://jsfiddle.net/hu6f72Le/
 
@@ -80,22 +80,59 @@ Przebieg powyższego skryptu jest następujący.
 1. Podczas przypisania funkcji do zmiennej var gen = foo(5) zwracany jest obiekt iteratora.
 2. Pierwsze wywołanie metody next() na obiekcie iteratora powoduje przypisanie wartości 5 do zmiennej x, zatrzymaniu wykonywania funkcji na słowie kluczowym yield oraz zwróceniu wartości {value: 6, done: false}.
 3. Drugie wywołanie metody next() powoduje zatrzymanie wykonywania kodu na drugim słowie kluczowym yield i zwrócenie komunikatu 'Hello' w postaci {value: "Hello", done: false}.
-4. Kolejne wykonanie metody next() tym razem z przekazaną wartością 8 przypisuje przekazaną wartość w miejscu zatrzymania funkcji czyli let y = yield 'Hello' (let y = 8), zwraca wynik z obliczeń return x + y (5 + 8) oraz informację o zakończeniu działania iteratora done: true - {value: 13, done: true}.
+4. Kolejne wykonanie metody next(), tym razem z przekazaną wartością 8, przypisuje przekazaną wartość w miejscu zatrzymania funkcji, czyli let y = yield 'Hello' (let y = 8), zwraca wynik z obliczeń return x + y (5 + 8) oraz informację o zakończeniu działania iteratora done: true. W konsoli ukazuje się nam wpis: {value: 13, done: true}.
 
 Niechciałbym jednak skupiać się w tym miejscu na szczegółowym opisie możliwości generatorów, a bardziej na ich połączeniu z obietnicami i zastosowaniu w pracy z kodem asynchronicznym. 
-Tak więc powracając do przykładu z początku artykułu użyjmy generatora aby pobrać informacje pogodowe dla danego miasta.
+Tak więc, powracając do przykładu z początku artykułu użyjmy generatora aby pobrać informacje pogodowe dla danego miasta.
+
+const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
+const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
+
+function *app(){
+    const city = yield fetch(cityAPI).then(r => r.json());
+    const weather = yield fetch(weatherAPI+city).then(r => r.json());
+    console.log(city.name);
+    console.log(weather.temp + weather.unit);
+}
+
+const generator = app();
+start(generator);
+
+
+function start(generator) {
+   remind();
+   function remind(wait){
+       const next = generator.next(wait);
+       const promise = next.value;
+
+       if (next.done) {
+          return;
+       }
+
+       promise.then(result => remind(result))
+   }
+}
+
+https://jsfiddle.net/soompm9r/
+
+
+Funkcja *app() pokazuje siłę generatorów w pracy z kodem asynchronicznym. Porównując kod zawarty w tej funkcji z kodem synchronicznym z początku artykułu zauważysz że jest on niemal identyczny. To wielka zaleta stosowania generatorów w połączeniu z obietnicami,
+
+Jęśli chodzi o metodę start() na tę chwilę nie zaprzątajmy sobie nią głowy. Jest ona szczegółem implementacyjnym do którego wrócimy w dalszej części.
+
+Async/await
+
+Po tym obszernym wstępie przejdzmy wkońcu do omówienia async/await. Z wiedzą jaką posiadamy na temat generatorów będzie to niezwykle proste.
+
+
+Pokazać zamiane * na async i yeield na await oraz wyrzucic metodę start.
+
+
+Wyrzucamy metąde start() ponieważ jej zadanie przejeła implementacja async/await w silniku JavaScript. ??
 
 
 
-
-
-
-
-
-
-
-
-
+Obsługa błędów (try catch) - ale to już chyba w async await
 
 
 
