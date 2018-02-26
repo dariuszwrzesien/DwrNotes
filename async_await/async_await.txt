@@ -22,7 +22,7 @@ return asyncGetCity()
         console.log(weather.temp);
     })
 
-Mamy tutaj do czynienia z typowym asynchronicznym łańcuchem zależności. Potrzebujemy posiadać nazwę miasta aby na jego podstawie pobrać infornache pogodowe. Użycie obietnic w porówaniu z pierwszym "pseudo" kodem niesie za sobą jednak pewne ograniczenia. Jeśli chcielimyśmy wypisać w konsoli oprócz temperatury również nazwę miasta, musielibyśmy zapisywac ją w dodatkowej zmiennej.
+Mamy tutaj do czynienia z typowym asynchronicznym łańcuchem zależności. Potrzebujemy posiadać nazwę miasta aby na jego podstawie pobrać infornache pogodowe. Użycie obietnic w porówaniu z pierwszym "synchronicznym" kodem niesie za sobą jednak pewne ograniczenia. Jeśli chcielimyśmy wypisać w konsoli oprócz temperatury również nazwę miasta, musielibyśmy zapisywac ją w dodatkowej zmiennej.
 
 let City;
 return asyncGetCity()
