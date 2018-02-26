@@ -11,19 +11,19 @@ const weatherAPI = 'https://api?q=weather&cityName=';
 
 const city = fetch(cityAPI);
 const weather = fetch(weatherAPI+city.name);
-console.log(weather.temp);
+console.log(weather.temp + weather.unit);
 
 Jednakże, ponieważ pracujemy z kodem asynchronicznym to w takim przypadku użyjemy obietnic i uzyskamy następujący zapis:
 
 const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
-const weatherAPI = 'http://www.mocky.io/v2/5a947dfa35000072009b0eb9';
+const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
 
 function asyncGetCity() {
     return fetch(cityAPI).then(response => response.json());
 }
 
 function asyncGetWeather(city) {
-    return fetch(weatherAPI).then(response => response.json());
+    return fetch(weatherAPI+city).then(response => response.json());
 }
 
 return asyncGetCity()
@@ -31,24 +31,27 @@ return asyncGetCity()
         return asyncGetWeather(city.name);
     })
     .then(function(weather) {
-        console.log(weather.temp);
+        console.log(weather.temp + weather.unit);
     })
 
+https://jsfiddle.net/f80ny7ke/
 
 Mamy tutaj do czynienia z typowym asynchronicznym łańcuchem zależności. Potrzebujemy posiadać nazwę miasta aby na jego podstawie pobrać informacje pogodowe.
 
-Jak widać użycie obietnic w porównaniu z pierwszym zapisem niesie ze sobą pewną nadmiarowość ale także i ograniczenia. Jeśli chcielimyśmy wypisać w konsoli oprócz temperatury również nazwę miasta, musielibyśmy zapisać ją w dodatkowej zmiennej.
+Jak widać użycie obietnic w porównaniu z pierwszym zapisem niesie ze sobą pewną nadmiarowość ale także i ograniczenia. Jeśli chcielimyśmy wypisać w ostatnim wywołaniu oprócz temperatury również nazwę miasta, musielibyśmy zapisać ją w dodatkowej zmiennej.
 
-let City; //podkreslic
+let cityName;
 return asyncGetCity()
     .then(function(city) {
-        City = city; //podkreslic
-        return asyncGetWeather(city);
+        cityName = city.name;
+        return asyncGetWeather(cityName);
     })
     .then(function(weather) {
-        console.log(City);
-        console.log(weather.temp);
+        console.log(cityName)
+        console.log(weather.temp + weather.unit);
     })
+
+https://jsfiddle.net/f80ny7ke/1/
 
 Czy nie było by idealnie, gdybyśmy mieli możliwość zapisu kodu asychronicznego w taki sposób aby był on tak czytelny jak kod synchroniczny ?
 
