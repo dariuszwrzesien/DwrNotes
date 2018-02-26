@@ -51,7 +51,7 @@ function *foo(x) {
 
 var gen = foo(5);
 console.log(gen.next()); // { value: 6, done: false }
-console.log(gen.next()); // { value: undefined, done: false }
+console.log(gen.next()); // { value: 'Hello', done: false }
 console.log(gen.next(8)); // { value: 13, done: true }
 
 Przebieg powyżsego kodu jest następujący.
@@ -61,45 +61,7 @@ Przebieg powyżsego kodu jest następujący.
 4. Kolejne wykonanie metody next() tym razem z przekazaną wartością 8 przypisuje przekazaną wartość w miejscu zatrzymania funkcji czyli let y = yield oraz zwraca wynik z obliczeń x + y (czyli 5 + 8) oraz informację o zakończeniu działania iteratora done: true {value: 13, done: true}.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Zanim jednak przejdę do omawiania składni async/await chciałbym na wstępie omówic generatory wprowadzone do języka JavaScript od wersji ES6? (ECMAScript2015). (wiedza ta będzie pomocna podczas omawiania async/await)
-
-
-
-Najprostrza implementacja generatora mogłaby wyglądać następująco:
-
-
-function *foo(x) {
-    yield x + 1;
-
-    let y = yield; 
-
-    return x + y;
-}
-
-var gen = foo(5);
-console.log(gen.next()); // { value: 6, done: false }
-console.log(gen.next()); // { value: undefined, done: false }
-console.log(gen.next(8)); // { value: 13, done: true }
-
-
-
-Niechciałbym jednak skupiac się w tym miejscu na szczegółowym opisie możliwości generatorów. W konteksice opisywanych async/await chciałbym pokazać zastosowanie generatorów w pracy z kodem asynchronicznym.
+Niechciałbym jednak skupiać się w tym miejscu na szczegółowym opisie możliwości generatorów. W konteksice opisywanych async/await chciałbym pokazać zastosowanie generatorów w pracy z kodem asynchronicznym.
 
 
 
