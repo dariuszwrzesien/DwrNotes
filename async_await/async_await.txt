@@ -105,9 +105,11 @@ function start(generator) {
        const next = generator.next(resume);
        const promise = next.value;
        if (next.done) { return; }
-       promise.then(result => call(result))
+       promise.then(result => runner(result))
    }
 }
+
+https://jsfiddle.net/t3vkypha
 
 Funkcja *app() pokazuje siłę generatorów w pracy z kodem asynchronicznym. Porównując kod zawarty w tej funkcji z kodem synchronicznym z początku artykułu zauważysz że jest on niemal identyczny. To wielka zaleta stosowania generatorów w połączeniu z obietnicami. Jeśli chodzi o metodę start() na tę chwilę nie zaprzątajmy sobie nią głowy. Jest ona szczegółem implementacyjnym do którego wrócimy w dalszej części.
 
@@ -128,62 +130,138 @@ async function app() {
 
 app();
 
-https://jsfiddle.net/xb197ysf/
+https://jsfiddle.net/xb197ysf
 
-Tak, to wszystko. Rezultat działania będzie ten sam co w przypadku generatora, zauważ jednak że nie mamy tutaj potrzeby użycia funkcji pomocniczej start(). Zamiast tego JavaScript używa wbudowanych mechanizmów do obsługi tego typu wyrażenia.
+Tak, to wszystko. Rezultat działania będzie ten sam co w przypadku generatora, zauważ jednak że nie mamy tutaj potrzeby użycia funkcji pomocniczej start(). Zamiast tego, JavaScript używa wbudowanych mechanizmów do obsługi tego typu wyrażenia. 
+
+Funkcja async zawsze zwraca obiekt Promise. Jeśli wewnątrz funkcji wystąpi bład, obiekt Promise zostanie odzucony (rejected), jeśli Promise zostanie spełniony (resolve), funkcja async zwróci wartość.
+
+Oprócz poprawy czytelności stosowanie async/await daje nam jeszcze kilka dodatkowych korzyści.
+
+1. Obsługa błędów.
+Używając async/await mamy możliwość użcia bloku try/catch w celu przechwytywania błedów w kodzie asynchronicznym.
+
+Aby wpełni obsłużyć możliwość przechwycenia błędów synchroncznych i asynchronicznych w kodzie z użyciem obiektów Promise, musieliśmy zastosować następujące rozwiązanie.
+
+const request = () => {
+  try {
+    getSome()
+      .then(result => {
+        const data = JSON.parse(result)
+        console.log(data)
+      }).catch((err) => {
+         console.log(err)
+      })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+Zobaczmy teraz jak może to wyglądać z użyciem async/await.
+
+const request = async () => {
+  try {
+    const data = JSON.parse(await getSome())
+    console.log(data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+2. Obsługa wyrażeń warunkowych
+Spójrzmy teraz na nieco bardziej skomplikowaną logikę aplikacji. Załóżmy że na podstawie danych otrzymanych z getSome() musimy podjąć decyzję czy wykonać jeszcze jedno zapytanie do API czy zwrócić otrzymaną wartość.
+Kod zapisany za pomocą obietnic wyglądałby następująco:
+
+const request = () => {
+  return getSome()
+    .then(data => {
+      if (data.needsMore) {
+        return anotherRequest(data)
+          .then(moreData => {
+            console.log(moreData)
+            return moreData
+          })
+      } else {
+        console.log(data)
+        return data
+      }
+    })
+}
+
+Znacznie bardziej czytelnie jednak jest użyć async/await.
+
+const request = async () => {
+  const data = await getJSON()
+  if (data.needsMore) {
+    const moreData = await anotherRequest(data);
+    console.log(moreData)
+    return moreData
+  } else {
+    console.log(data)
+    return data    
+  }
+}
 
 
+Współbierzność w async/await
+
+Spójrzmy na następujący przykład.
+
+const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
+const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
+
+async function app(){
+    const city1 = await fetch(cityAPI).then(r => r.json());
+    const weather1 = await fetch(weatherAPI+city1).then(r => r.json());
 
 
+    const city2 = await fetch(cityAPI).then(r => r.json());
+    const weather2 = await fetch(weatherAPI+city2).then(r => r.json());
 
 
+    console.log(city1.name);
+    console.log(weather1.temp + weather1.unit);
 
-Wyrzucamy metodę start() ponieważ jej zadanie przejęła implementacja async/await w silniku JavaScript. ??
+    console.log(city2.name);
+    console.log(weather2.temp + weather2.unit);
+}
 
+app();
 
+Gdy wykonamy powyższy skrypt w konsoli w zakładce Network możemy zobaczyć że requesty do API nie są wykonywane współbierznie. Nie dziwi fakt braku współbierzności w przypadku gdy metoda odpowiedzialna za pobranie informacji pogodowych czeka na pobranie nazwy miasta, ale dlaczego w tym samym czasie nie możnaby uruchomić kolejnego zaytania o city2 ?
 
+Obrazek - brak współbierzności
 
+Zmieńmy zatem nasz kod w taki sposób, aby możliwe do wykonania elementy uruchamiały się w tym samym momencie.
 
+const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
+const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
 
+async function app(){
 
-Obsługa błędów (try catch) - ale to już chyba w async await
-https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9
+    const city1Request = fetch(cityAPI).then(r => r.json());
+    const city2Request = fetch(cityAPI).then(r => r.json());
+    
+    const city1 = await city1Request;
+    const city2 = await city2Request;
 
-Error stacks
-https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9
-
-
-Wyrażenia warunkowe Conditionals
-https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9
-
-
-Promise hell -> . Intermediate values
-
-https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9
-
-
-
-
-
-
-
-
-
-
-
-https://jlongster.com/A-Study-on-Solving-Callbacks-with-JavaScript-Generators
-
-https://davidwalsh.name/async-generators
+    const weather1Request = fetch(weatherAPI+city1).then(r => r.json());
+    const weather2Request = fetch(weatherAPI+city2).then(r => r.json());
+     
+    const weather1 = await weather1Request;
+    const weather2 = await weather2Request;
 
 
-https://medium.freecodecamp.org/javascript-from-callbacks-to-async-await-1cc090ddad99
-https://www.toptal.com/javascript/asynchronous-javascript-async-await-tutorial
-https://tutorialzine.com/2017/07/javascript-async-await-explained
+    console.log(city1.name);
+    console.log(weather1.temp + weather1.unit);
 
-dobry opis
-https://javascript.info/async-await
+    console.log(city2.name);
+    console.log(weather2.temp + weather2.unit);
+}
 
+app();
 
+https://jsfiddle.net/wsLkeqyn/
 
 
 
