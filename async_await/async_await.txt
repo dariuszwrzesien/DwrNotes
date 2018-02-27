@@ -1,10 +1,10 @@
 async_await
 
-W poprzednim artykule z cyklu podstaw języka JavaScript pokazałem jak zastosowanie obietnic pozytywnie wpłyneło na pracę z kodem asynchronicznym i w jaki sposób pozbyć się piekła wywołań zwrotnych (callback hell). Okazuje się jednak że istnienje możliwość zapisu kodu asynchronicznego w sposób jeszcze bardziej czytelny.
+W poprzednim artykule z cyklu podstaw języka JavaScript pokazałem jak zastosowanie obietnic pozytywnie wpłynęło na pracę z kodem asynchronicznym i w jaki sposób pozbyć się piekła wywołań zwrotnych (callback hell). Okazuje się jednak że istnieje możliwość zapisu kodu asynchronicznego w sposób jeszcze bardziej czytelny.
 
-Załóżmy że chcemy napisać program, który połączy się z zewnętrznym API w celu pobrania nazyw miasta i na jej podstawie z innego zewnętrznego API wczyta dane pogodowe.
+Załóżmy że chcemy napisać program, który połączy się z zewnętrznym API w celu pobrania nazwy miasta i na jej podstawie z innego zewnętrznego API wczyta dane pogodowe.
 
-W uproszczeniu, kod taki realizować będzie następujące operacje.
+W uproszczeniu, kod takiego programu mógłby wyglądać następująco:
 
 const cityAPI = 'https://api?q=randomCity';
 const weatherAPI = 'https://api?q=weather&cityName=';
@@ -53,11 +53,11 @@ return asyncGetCity()
 
 https://jsfiddle.net/f80ny7ke/1/
 
-Czy nie było by idealnie, gdybyśmy mieli możliwość zapisu kodu asychronicznego w taki sposób aby był on tak samo czytelny jak kod synchroniczny ?
+Czy nie było by idealnie, gdybyśmy mieli możliwość zapisu kodu asynchronicznego w taki sposób aby był on tak samo czytelny jak kod synchroniczny ?
 
 Generatory
 
-Jedną z możliwości poprawy czytelności jest zapis z użyciem generatorów, wprowadzonych do języka JavaScript od wersji ES6. W skrócie, generator to specjalny rodzaj funkcji (oznaczamy go za pomoca * za słowem kluczowym function), której przebieg może być zatrzymywany i wznawiany z zachowaniem kontekstu (variable bindings). Wywołanie generatora nie wykonuje od razu poleceń w nich zawartych, zwraca natomiast obiekt iteratora. Następnie za pomocą metody next() wykonywany jest kod wewnątrz funkcji.
+Jedną z możliwości poprawy czytelności jest zapis z użyciem generatorów, wprowadzonych do języka JavaScript od wersji ES6. W skrócie, generator to specjalny rodzaj funkcji (oznaczamy go za pomocą * za słowem kluczowym function), której przebieg może być zatrzymywany i wznawiany z zachowaniem kontekstu (variable bindings). Wywołanie generatora nie wykonuje od razu poleceń w nich zawartych, zwraca natomiast obiekt iteratora. Następnie za pomocą metody next() wykonywany jest kod wewnątrz funkcji.
 
 Zobaczmy na przykładzie w jaki sposób działa generator w JavaScript.
 
@@ -82,7 +82,7 @@ Przebieg powyższego skryptu jest następujący.
 3. Drugie wywołanie metody next() powoduje zatrzymanie wykonywania kodu na drugim słowie kluczowym yield i zwrócenie komunikatu 'Hello' w postaci {value: "Hello", done: false}.
 4. Kolejne wykonanie metody next(), tym razem z przekazaną wartością 8, przypisuje przekazaną wartość w miejscu zatrzymania funkcji, czyli let y = yield 'Hello' (let y = 8), zwraca wynik z obliczeń return x + y (5 + 8) oraz informację o zakończeniu działania iteratora done: true. W konsoli ukazuje się nam wpis: {value: 13, done: true}.
 
-Niechciałbym jednak skupiać się w tym miejscu na szczegółowym opisie możliwości generatorów, a bardziej na ich połączeniu z obietnicami i zastosowaniu w pracy z kodem asynchronicznym. 
+Nie chciałbym jednak skupiać się w tym miejscu na szczegółowym opisie możliwości generatorów, a bardziej na ich połączeniu z obietnicami i zastosowaniu w pracy z kodem asynchronicznym. 
 Tak więc, powracając do przykładu z początku artykułu użyjmy generatora aby pobrać informacje pogodowe dla danego miasta.
 
 const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
@@ -115,8 +115,8 @@ Funkcja *app() pokazuje siłę generatorów w pracy z kodem asynchronicznym. Por
 
 Async/await
 
-Po tym obszernym wstępie przejdzmy wkońcu do omówienia async/await. Z wiedzą jaką posiadamy na temat generatorów przesiadka na async/await będzie niezwykle prosta.
-Weżmy funkcję function *app() utworzoną wcześniej i zamieńmy function * na słowo kluczowe async function oraz yield na await.
+Po tym obszernym wstępie przejdźmy w końcu do omówienia async/await. Z wiedzą jaką posiadamy na temat generatorów przesiadka na async/await będzie niezwykle prosta.
+Weźmy funkcję function *app() utworzoną wcześniej i zamieńmy function * na słowo kluczowe async function oraz yield na await.
 
 const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
 const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
@@ -134,15 +134,15 @@ https://jsfiddle.net/xb197ysf
 
 Tak, to wszystko. Rezultat działania będzie ten sam co w przypadku generatora, zauważ jednak że nie mamy tutaj potrzeby użycia funkcji pomocniczej start(). Zamiast tego, JavaScript używa wbudowanych mechanizmów do obsługi tego typu wyrażenia. 
 
-Funkcja async zawsze zwraca obiekt Promise. Jeśli wewnątrz funkcji wystąpi bład, obiekt Promise zostanie odzucony (rejected), jeśli Promise zostanie spełniony (resolve), funkcja async zwróci wartość.
+Funkcja async zawsze zwraca obiekt Promise. Jeśli wewnątrz funkcji wystąpi błąd, obiekt Promise zostanie odrzucony (rejected), jeśli Promise zostanie spełniony (resolve), funkcja async zwróci wartość.
 
 Oprócz poprawy czytelności stosowanie async/await daje nam jeszcze kilka dodatkowych korzyści.
 
 1. Obsługa błędów.
 
-Używając async/await mamy możliwość użcia bloku try/catch w celu przechwytywania błedów w kodzie asynchronicznym.
+Używając async/await mamy możliwość użycia bloku try/catch w celu przechwytywania błędów w kodzie asynchronicznym.
 
-Aby wpełni obsłużyć możliwość przechwycenia błędów synchroncznych i asynchronicznych w kodzie z użyciem obiektów Promise, musieliśmy zastosować następujące rozwiązanie.
+Aby w pełni obsłużyć możliwość przechwycenia błędów synchronicznych i asynchronicznych w kodzie z użyciem obiektów Promise, musimy zastosować następujące rozwiązanie.
 
 const request = () => {
   try {
@@ -226,7 +226,7 @@ Gdy wykonamy powyższy skrypt w konsoli w zakładce Network możemy zobaczyć ż
 
 Obrazek - sekwencyjny
 
-Zmieńmy zatem nasz kod w taki sposób, aby zapytania do API działały współbierznie.
+Zmieńmy zatem nasz kod w taki sposób, aby zapytania do API działały współbieżnie.
 
 const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
 
@@ -246,10 +246,10 @@ app();
 https://jsfiddle.net/vb23xvpm/
 
 W pierwszej części skryptu jednocześnie uruchamiamy zapytania do zewnętrznego API za pomocą metody fetch().
-Mastępnie oczekujemy na poprawne rozwiązanie obietnic z kroku pierwszego. Całość czeka tak długo aż uda się rozwiązać obietnice i zwrócić wynik.
+Następnie oczekujemy na poprawne rozwiązanie obietnic z kroku pierwszego. Całość czeka tak długo aż uda się rozwiązać obietnice i zwrócić wynik.
 
 
-Obrazek współbierzność
+Obrazek współbieżność
 
 Alternatywnie możemy użyć metody Promise.all() podczas oczekiwania na rozwiązanie większej ilości obietnic.
 Wynik skryptu będzie taki sam jak poprzednio.
@@ -273,7 +273,9 @@ https://jsfiddle.net/6agnreme/
 
 
 Podsumowanie
-Async/await is one of the most revolutionary features that have been added to JavaScript in the past few years. It makes you realize what a syntactical mess promises are, and provides an intuitive replacement.
 
-Składnia async/await pojawiła się w wersji ES7 (ECMAScript 2017) (http://exploringjs.com/es2016-es2017/pt_es2017.html) języka JavaScript.
 
+Składnia async/await pojawiła się w wersji ES7 (ECMAScript 2017) (http://exploringjs.com/es2016-es2017/pt_es2017.html) języka JavaScript, nareście wprowadzając intuicyjność do pracy z kodem asynchronicznym.
+
+
+canIuse obrazek
