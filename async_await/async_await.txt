@@ -109,18 +109,23 @@ function start(generator) {
    }
 }
 
-Funkcja *app() pokazuje siłę generatorów w pracy z kodem asynchronicznym. Porównując kod zawarty w tej funkcji z kodem synchronicznym z początku artykułu zauważysz że jest on niemal identyczny. To wielka zaleta stosowania generatorów w połączeniu z obietnicami. Jęśli chodzi o metodę start() na tę chwilę nie zaprzątajmy sobie nią głowy. Jest ona szczegółem implementacyjnym do którego wrócimy w dalszej części.
+Funkcja *app() pokazuje siłę generatorów w pracy z kodem asynchronicznym. Porównując kod zawarty w tej funkcji z kodem synchronicznym z początku artykułu zauważysz że jest on niemal identyczny. To wielka zaleta stosowania generatorów w połączeniu z obietnicami. Jeśli chodzi o metodę start() na tę chwilę nie zaprzątajmy sobie nią głowy. Jest ona szczegółem implementacyjnym do którego wrócimy w dalszej części.
 
 Async/await
 
 Po tym obszernym wstępie przejdzmy wkońcu do omówienia async/await. 
-Składnia async/await pojawiła się w wersji ES7 (ECMAScript 2017) (http://exploringjs.com/es2016-es2017/pt_es2017.html) języka JavaScript
+Składnia async/await pojawiła się w wersji ES7 (ECMAScript 2017) (http://exploringjs.com/es2016-es2017/pt_es2017.html) języka JavaScript.
+Z wiedzą jaką posiadamy na temat generatorów przesiadka na async/await będzie niezwykle prosta.
+Weżmy funkcję *app() utworzoną wcześniej i zamieńmy function * na słowo kluczowe async oraz yield na await.
 
+async app(){
+    const city = await fetch(cityAPI).then(r => r.json());
+    const weather = await fetch(weatherAPI+city).then(r => r.json());
+    console.log(city.name);
+    console.log(weather.temp + weather.unit);
+}
 
-
-Z wiedzą jaką posiadamy na temat generatorów będzie to niezwykle proste.
-
-
+Taadaa, i to wszytko. Nasz kod będzie działał dokładnie w ten sam sposób co w przypadku użycia generatora, zauważ jednak że nie mamy tutaj potrzeby użycia funkcji pomocniczej start(). Zamiast tego JavaScript wi
 
 Pokazać zamiane * na async i yeield na await oraz wyrzucic metodę start.
 
