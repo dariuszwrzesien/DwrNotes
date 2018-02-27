@@ -22,8 +22,8 @@ function asyncGetCity() {
     return fetch(cityAPI).then(response => response.json());
 }
 
-function asyncGetWeather(city) {
-    return fetch(weatherAPI+city).then(response => response.json());
+function asyncGetWeather() {
+    return fetch(weatherAPI+city.name).then(response => response.json());
 }
 
 return asyncGetCity()
@@ -90,7 +90,7 @@ const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
 
 function *app(){
     const city = yield fetch(cityAPI).then(r => r.json());
-    const weather = yield fetch(weatherAPI+city).then(r => r.json());
+    const weather = yield fetch(weatherAPI+city.name).then(r => r.json());
     console.log(city.name);
     console.log(weather.temp + weather.unit);
 }
@@ -123,7 +123,7 @@ const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
 
 async function app() {
     const city = await fetch(cityAPI).then(r => r.json());
-    const weather = await fetch(weatherAPI+city).then(r => r.json());
+    const weather = await fetch(weatherAPI+city.name).then(r => r.json());
     console.log(city.name);
     console.log(weather.temp + weather.unit);
 }
@@ -139,6 +139,7 @@ Funkcja async zawsze zwraca obiekt Promise. Jeśli wewnątrz funkcji wystąpi b�
 Oprócz poprawy czytelności stosowanie async/await daje nam jeszcze kilka dodatkowych korzyści.
 
 1. Obsługa błędów.
+
 Używając async/await mamy możliwość użcia bloku try/catch w celu przechwytywania błedów w kodzie asynchronicznym.
 
 Aby wpełni obsłużyć możliwość przechwycenia błędów synchroncznych i asynchronicznych w kodzie z użyciem obiektów Promise, musieliśmy zastosować następujące rozwiązanie.
@@ -169,6 +170,7 @@ const request = async () => {
 }
 
 2. Obsługa wyrażeń warunkowych
+
 Spójrzmy teraz na nieco bardziej skomplikowaną logikę aplikacji. Załóżmy że na podstawie danych otrzymanych z getSome() musimy podjąć decyzję czy wykonać jeszcze jedno zapytanie do API czy zwrócić otrzymaną wartość.
 Kod zapisany za pomocą obietnic wyglądałby następująco:
 
@@ -202,86 +204,71 @@ const request = async () => {
   }
 }
 
+Współbierzność za pomocą async/await
 
-Współbierzność w async/await
-
-Spójrzmy na następujący przykład.
+Spójrzmy na następujący przykład, w którym pobieramy nazwy miasta z zewnętrznego API.
 
 const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
-const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
 
 async function app(){
     const city1 = await fetch(cityAPI).then(r => r.json());
-    const weather1 = await fetch(weatherAPI+city1).then(r => r.json());
-
-
     const city2 = await fetch(cityAPI).then(r => r.json());
-    const weather2 = await fetch(weatherAPI+city2).then(r => r.json());
-
 
     console.log(city1.name);
-    console.log(weather1.temp + weather1.unit);
-
     console.log(city2.name);
-    console.log(weather2.temp + weather2.unit);
 }
 
 app();
 
-Gdy wykonamy powyższy skrypt w konsoli w zakładce Network możemy zobaczyć że requesty do API nie są wykonywane współbierznie. Nie dziwi fakt braku współbierzności w przypadku gdy metoda odpowiedzialna za pobranie informacji pogodowych czeka na pobranie nazwy miasta, ale dlaczego w tym samym czasie nie możnaby uruchomić kolejnego zaytania o city2 ?
+https://jsfiddle.net/71n9n3tk/
 
-Obrazek - brak współbierzności
+Gdy wykonamy powyższy skrypt w konsoli w zakładce Network możemy zobaczyć że requesty do API wykonywane są w sposób sekwencyjny.
 
-Zmieńmy zatem nasz kod w taki sposób, aby możliwe do wykonania elementy uruchamiały się w tym samym momencie.
+Obrazek - sekwencyjny
+
+Zmieńmy zatem nasz kod w taki sposób, aby zapytania do API działały współbierznie.
 
 const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
-const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
 
 async function app(){
-
     const city1Request = fetch(cityAPI).then(r => r.json());
     const city2Request = fetch(cityAPI).then(r => r.json());
     
     const city1 = await city1Request;
     const city2 = await city2Request;
 
-    const weather1Request = fetch(weatherAPI+city1).then(r => r.json());
-    const weather2Request = fetch(weatherAPI+city2).then(r => r.json());
-     
-    const weather1 = await weather1Request;
-    const weather2 = await weather2Request;
-
-
     console.log(city1.name);
-    console.log(weather1.temp + weather1.unit);
-
     console.log(city2.name);
-    console.log(weather2.temp + weather2.unit);
 }
 
 app();
 
-https://jsfiddle.net/wsLkeqyn/
+https://jsfiddle.net/vb23xvpm/
+
+W pierwszej części skryptu jednocześnie uruchamiamy zapytania do zewnętrznego API za pomocą metody fetch().
+Mastępnie oczekujemy na poprawne rozwiązanie obietnic z kroku pierwszego. Całość czeka tak długo aż uda się rozwiązać obietnice i zwrócić wynik.
 
 
+Obrazek współbierzność
 
+Alternatywnie możemy użyć metody Promise.all() podczas oczekiwania na rozwiązanie większej ilości obietnic.
+Wynik skryptu będzie taki sam jak poprzednio.
 
+const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
 
-jak wykonać  w jednym asyn function dwa strzały jednoczesnie (opisać i zrobić screeny z consoli)
+async function app(){
+    const city1Request = fetch(cityAPI).then(r => r.json());
+    const city2Request = fetch(cityAPI).then(r => r.json());
+    
+    const [city1, city2] = await Promise.all([city1Request, city2Request]);;
 
-
-async fybctuib run() {
-
-const w = fetch()
-const e = fetch()
-
-
-await
-await
-
+    console.log(city1.name);
+    console.log(city2.name);
 }
 
+app();
 
+https://jsfiddle.net/6agnreme/
 
 
 
