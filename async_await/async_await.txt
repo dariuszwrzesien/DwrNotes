@@ -1,6 +1,6 @@
 async_await
 
-W poprzednim artykule z cyklu podstaw języka JavaScript pokazałem jak zastosowanie obietnic pozytywnie wpłyneło na pracę z kodem asynchronicznym i pozbycie się piekła wywołań zwrotnych (callback hell). Okazuje się jednak że istnienje możliwość zapisu kodu asynchronicznego w sposób bardziej czytelny.
+W poprzednim artykule z cyklu podstaw języka JavaScript pokazałem jak zastosowanie obietnic pozytywnie wpłyneło na pracę z kodem asynchronicznym i w jaki sposób pozbyć się piekła wywołań zwrotnych (callback hell). Okazuje się jednak że istnienje możliwość zapisu kodu asynchronicznego w sposób jeszcze bardziej czytelny.
 
 Załóżmy że chcemy napisać program, który połączy się z zewnętrznym API w celu pobrania nazyw miasta i na jej podstawie z innego zewnętrznego API wczyta dane pogodowe.
 
@@ -38,7 +38,7 @@ https://jsfiddle.net/f80ny7ke/
 
 Mamy tutaj do czynienia z typowym asynchronicznym łańcuchem zależności. Potrzebujemy posiadać nazwę miasta aby na jego podstawie pobrać informacje pogodowe.
 
-Jak widać użycie obietnic w porównaniu z pierwszym zapisem niesie ze sobą pewną nadmiarowość ale także i ograniczenia. Jeśli chcielimyśmy wypisać w ostatnim wywołaniu oprócz temperatury również nazwę miasta, musielibyśmy zapisać ją w dodatkowej zmiennej.
+Jak widać użycie obietnic w porównaniu z pierwszym zapisem niesie ze sobą pewną nadmiarowość, ale także i ograniczenia. Jeśli chcielibyśmy wypisać w ostatnim wywołaniu oprócz temperatury również nazwę miasta, musielibyśmy zapisać ją w dodatkowej zmiennej.
 
 let cityName;
 return asyncGetCity()
@@ -53,11 +53,11 @@ return asyncGetCity()
 
 https://jsfiddle.net/f80ny7ke/1/
 
-Czy nie było by idealnie, gdybyśmy mieli możliwość zapisu kodu asychronicznego w taki sposób aby był on tak czytelny jak kod synchroniczny ?
+Czy nie było by idealnie, gdybyśmy mieli możliwość zapisu kodu asychronicznego w taki sposób aby był on tak samo czytelny jak kod synchroniczny ?
 
 Generatory
 
-Jedną z możliwości poprawy czytelności jest zapis z użyciem generatorów, wprowadzonych do języka JavaScript od wersji ES6. W skrócie, generator to specjalny rodzaj funkcji (oznaczamy go za pomoca * za słowem kluczowym function), której przebieg może być zatrzymywany i wznawiany z zachowaniem konteksu (variable bindings). Wywołanie generatora nie wykonuje od razu poleceń w nich zawartych, zwraca natomiast obiekt iteratora. Następnie za pomocą metody next() wykonywany jest kod wewnątrz funkcji.
+Jedną z możliwości poprawy czytelności jest zapis z użyciem generatorów, wprowadzonych do języka JavaScript od wersji ES6. W skrócie, generator to specjalny rodzaj funkcji (oznaczamy go za pomoca * za słowem kluczowym function), której przebieg może być zatrzymywany i wznawiany z zachowaniem kontekstu (variable bindings). Wywołanie generatora nie wykonuje od razu poleceń w nich zawartych, zwraca natomiast obiekt iteratora. Następnie za pomocą metody next() wykonywany jest kod wewnątrz funkcji.
 
 Zobaczmy na przykładzie w jaki sposób działa generator w JavaScript.
 
@@ -78,7 +78,7 @@ https://jsfiddle.net/hu6f72Le/
 
 Przebieg powyższego skryptu jest następujący.
 1. Podczas przypisania funkcji do zmiennej var gen = foo(5) zwracany jest obiekt iteratora.
-2. Pierwsze wywołanie metody next() na obiekcie iteratora powoduje przypisanie wartości 5 do zmiennej x, zatrzymaniu wykonywania funkcji na słowie kluczowym yield oraz zwróceniu wartości {value: 6, done: false}.
+2. Pierwsze wywołanie metody next() na obiekcie iteratora powoduje przypisanie wartości 5 do zmiennej x, zatrzymanie wykonywania funkcji na słowie kluczowym yield oraz zwróceniu wartości {value: 6, done: false}.
 3. Drugie wywołanie metody next() powoduje zatrzymanie wykonywania kodu na drugim słowie kluczowym yield i zwrócenie komunikatu 'Hello' w postaci {value: "Hello", done: false}.
 4. Kolejne wykonanie metody next(), tym razem z przekazaną wartością 8, przypisuje przekazaną wartość w miejscu zatrzymania funkcji, czyli let y = yield 'Hello' (let y = 8), zwraca wynik z obliczeń return x + y (5 + 8) oraz informację o zakończeniu działania iteratora done: true. W konsoli ukazuje się nam wpis: {value: 13, done: true}.
 
@@ -100,29 +100,26 @@ start(generator);
 
 
 function start(generator) {
-   remind();
-   function remind(wait){
-       const next = generator.next(wait);
+   runner();
+   function runner(resume){
+       const next = generator.next(resume);
        const promise = next.value;
-
-       if (next.done) {
-          return;
-       }
-
-       promise.then(result => remind(result))
+       if (next.done) { return; }
+       promise.then(result => call(result))
    }
 }
 
-https://jsfiddle.net/soompm9r/
-
-
-Funkcja *app() pokazuje siłę generatorów w pracy z kodem asynchronicznym. Porównując kod zawarty w tej funkcji z kodem synchronicznym z początku artykułu zauważysz że jest on niemal identyczny. To wielka zaleta stosowania generatorów w połączeniu z obietnicami,
-
-Jęśli chodzi o metodę start() na tę chwilę nie zaprzątajmy sobie nią głowy. Jest ona szczegółem implementacyjnym do którego wrócimy w dalszej części.
+Funkcja *app() pokazuje siłę generatorów w pracy z kodem asynchronicznym. Porównując kod zawarty w tej funkcji z kodem synchronicznym z początku artykułu zauważysz że jest on niemal identyczny. To wielka zaleta stosowania generatorów w połączeniu z obietnicami. Jęśli chodzi o metodę start() na tę chwilę nie zaprzątajmy sobie nią głowy. Jest ona szczegółem implementacyjnym do którego wrócimy w dalszej części.
 
 Async/await
 
-Po tym obszernym wstępie przejdzmy wkońcu do omówienia async/await. Z wiedzą jaką posiadamy na temat generatorów będzie to niezwykle proste.
+Po tym obszernym wstępie przejdzmy wkońcu do omówienia async/await. 
+Składnia async/await pojawiła się w wersji ES7 (ECMAScript 2017) (http://exploringjs.com/es2016-es2017/pt_es2017.html) języka JavaScript
+
+
+
+Z wiedzą jaką posiadamy na temat generatorów będzie to niezwykle proste.
+
 
 
 Pokazać zamiane * na async i yeield na await oraz wyrzucic metodę start.
@@ -132,7 +129,24 @@ Wyrzucamy metąde start() ponieważ jej zadanie przejeła implementacja async/aw
 
 
 
+
+
+
+
 Obsługa błędów (try catch) - ale to już chyba w async await
+https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9
+
+Error stacks
+https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9
+
+
+Wyrażenia warunkowe Conditionals
+https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9
+
+
+Promise hell -> . Intermediate values
+
+https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9
 
 
 
@@ -175,4 +189,13 @@ await
 await
 
 }
+
+
+
+
+
+Podsumowanie
+Async/await is one of the most revolutionary features that have been added to JavaScript in the past few years. It makes you realize what a syntactical mess promises are, and provides an intuitive replacement.
+
+
 
