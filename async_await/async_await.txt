@@ -1,6 +1,6 @@
 async_await
 
-W poprzednim artykule z cyklu podstaw języka JavaScript pokazałem jak zastosowanie obietnic pozytywnie wpłynęło na pracę z kodem asynchronicznym i w jaki sposób pozbyć się piekła wywołań zwrotnych (callback hell). Okazuje się jednak że istnieje możliwość zapisu kodu asynchronicznego w sposób jeszcze bardziej czytelny.
+W poprzednim artykule z cyklu podstaw języka JavaScript pokazałem jak zastosowanie obietnic pozytywnie wpłynęło na pracę z kodem asynchronicznym i w jaki sposób pozbyć się piekła wywołań zwrotnych (callback hell). Istnieje jednak możliwość zapisu kodu asynchronicznego w sposób jeszcze bardziej czytelny.
 
 Załóżmy że chcemy napisać program, który połączy się z zewnętrznym API w celu pobrania nazwy miasta i na jej podstawie z innego zewnętrznego API wczyta dane pogodowe.
 
