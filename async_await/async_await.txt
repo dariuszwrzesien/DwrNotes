@@ -270,12 +270,30 @@ app();
 
 https://jsfiddle.net/6agnreme/
 
-
-
 Podsumowanie
-
-
 Składnia async/await pojawiła się w wersji ES7 (ECMAScript 2017) (http://exploringjs.com/es2016-es2017/pt_es2017.html) języka JavaScript, nareście wprowadzając intuicyjność do pracy z kodem asynchronicznym.
+
+Async/await jest wspierane przez wszystkie nowoczesne przeglądarki. Programiści Node mogą korzystać z nowej składni od wersji 8. Jeśli jednak na liście brakuje wsparcia dla środowiska którego używasz możesz skorzystać z jednego z narzędzi takich jak Babel (https://babeljs.io/docs/plugins/transform-async-to-generator) lub biblioteka asyncawait (https://github.com/yortus/asyncawait)
 
 
 canIuse obrazek
+
+
+
+
+
+NA SHP
+
+Cześć, jakiś czas temu postanowiłem oswoić bestię i nauczyć się w JavaScript. Ponieważ tak mam że lepiej mi się przyswaja wiedzę pisząc na jakis temat artykuł na blogu, stąd też chciałbym się podzielić z Wami dwoma wpisami na temat podstaw języka Javascript.
+
+Pierwszy wpis dotyczy obietnic:
+
+http://devenv.pl/obietnice-promises-podstawy-jezyka-javascript/
+
+
+Kolejny zaś o async/await oraz wspominam też trochę o generatorach w JavaScript.
+
+
+
+Zapraszam serdecznie.
+
