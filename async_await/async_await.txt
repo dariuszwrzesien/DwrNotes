@@ -13,7 +13,7 @@ const city = fetch(cityAPI);
 const weather = fetch(weatherAPI+city.name);
 console.log(weather.temp + weather.unit);
 
-Jednakże, ponieważ pracujemy z kodem asynchronicznym to w takim przypadku użyjemy obietnic i uzyskamy następujący zapis:
+Ponieważ jednak pracujemy z kodem asynchronicznym to w takim przypadku użyjemy obietnic i uzyskamy następujący zapis:
 
 const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
 const weatherAPI = 'https://www.mocky.io/v2/5a947dfa35000072009b0eb9?city=';
