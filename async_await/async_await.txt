@@ -53,7 +53,7 @@ return asyncGetCity()
 
 https://jsfiddle.net/ehboqb8f/
 
-Czy nie było by idealnie, gdybyśmy mieli możliwość zapisu kodu asynchronicznego w taki sposób aby był on tak samo czytelny jak kod synchroniczny ?
+Czy nie było by idealnie, gdybyśmy mieli możliwość zapisu kodu asynchronicznego w taki sposób aby był on tak samo czytelny jak kod synchroniczny z pierwszego przykładu?
 
 Generatory
 
@@ -190,7 +190,7 @@ const request = () => {
     })
 }
 
-Znacznie bardziej czytelnie jednak jest użyć async/await.
+Znacznie bardziej czytelnie jednak jest gdy użyjemy async/await.
 
 const request = async () => {
   const data = await getJSON()
@@ -204,9 +204,9 @@ const request = async () => {
   }
 }
 
-Współbierzność za pomocą async/await
+Współbierzność z użyciem async/await
 
-Spójrzmy na następujący przykład, w którym pobieramy nazwy miasta z zewnętrznego API.
+Spójrzmy na następujący przykład, w którym pobierzemy dwa razy nazwę miasta z zewnętrznego API.
 
 const cityAPI = 'https://www.mocky.io/v2/5a945fa435000074009b0e78';
 
