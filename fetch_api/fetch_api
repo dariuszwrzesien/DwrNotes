@@ -1,0 +1,93 @@
+
+Wstęp
+
+Na początku było:
+
+
+var request;
+if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+  request = new XMLHttpRequest();
+} else if (window.ActiveXObject) { // IE
+  try {
+    request = new ActiveXObject('Msxml2.XMLHTTP');
+  } 
+  catch (e) {
+    try {
+      request = new ActiveXObject('Microsoft.XMLHTTP');
+    } 
+    catch (e) {}
+  }
+}
+
+request.open('GET', 'https://davidwalsh.name/ajax-endpoint', true);
+
+// state changes
+request.onreadystatechange = function() {
+	if(request.readyState === 4) { // done
+		if(request.status === 200) { // complete	
+			console.log(request.responseText)
+		}
+	}
+};
+
+
+Potem jquery wprowadziło ajax()
+
+$.ajax('some-url', {
+  success: (data) => { /* do something with the data */ },
+  error: (err) => { /* do something when an error happens */}
+});
+
+
+FETCH API
+1. GET
+
+<Najprostrze użycie fetch>
+
+Fetch returns a Promise link do artykułu o promisach, which is a way to handle asynchronous operations without the need for a callback.
+
+
+2. POST, put, delete 
+https://alligator.io/js/fetch-api/
+
+Fetch async/await https://alligator.io/js/fetch-api/#fetch--asyncawait -> Calling json() returns a promise so in the above example, when we return data in the async function, we're returning a promise.
+
+3. Handling errors with Fetch
+https://medium.com/@shahata/why-i-wont-be-using-fetch-api-in-my-apps-6900e6c6fe78
+What is a big deal, and what I’m sure many readers missed in the above example (as did I, when I first used fetch), is that actually the two code snippets above do not do the same thing. All of the http toolkits I mentioned above (seriously, each and every one of them) treat a response with error status from the server (i.e. status 404, 500, etc.) as an error. However, fetch (similarly to XMLHttpRequest) rejects the promise only in case of network error (i.e. address could not be resolved, server is unreachable or CORS not permitted).
+This means that when server returns 404, we will print ‘success’ to the console. If we want to do the more intuitive thing for an application developer and return a promise rejection in case server responded with an error, we’ll need to do something like this:
+fetch(url)
+  .then(response => {
+    return response.json().then(data => {
+      if (response.ok) {
+        return data;
+      } else {
+        return Promise.reject({status: response.status, data});
+      }
+    });
+  })
+  .then(result => console.log('success:', result))
+  .catch(error => console.log('error:', error));
+
+
+Podsumowanie.
+Fetch API jest wspierane we wszystkich nowoczesnych przegladarkach
+fetch_api_support.png,
+jeśli jednak istnieje konieczność użycia na niewspieranej platformie - można użyć polify: https://github.com/github/fetch
+
+If you need to support older browsers, like Internet Explorer 11, you’ll need to use a Fetch polyfill like this one from Github.
+If you need to use Fetch in Node.js, two of the most popular options are isomorphic-fetch and node-fetch.
+
+
+
+
+
+
+Linki:
+https://flaviocopes.com/fetch-api/
+
+
+https://medium.com/@shahata/why-i-wont-be-using-fetch-api-in-my-apps-6900e6c6fe78
+https://scotch.io/tutorials/how-to-use-the-javascript-fetch-api-to-get-data
+https://css-tricks.com/using-fetch/
+
