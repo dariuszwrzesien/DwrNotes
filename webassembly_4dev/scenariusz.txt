@@ -10,3 +10,11 @@ Wprowadzenie do webassembly
 https://www.youtube.com/watch?v=6Qw_FDaKwgk
 
 https://www.youtube.com/watch?v=6Y3W94_8scw
+
+
+
+Fajne wykorzystanie obrazka z naiwiązaniem do innego świetnego wykładu na temat WebAssemblyhttps://www.youtube.com/watch?v=_5IjJi74KFA minuta 4.07
+
+Z premedytacją wybrałem ten rysunek aby polecić Wam świetny wykład: Imie Nazisko - dostępny w sieci pod tym adresem.
+Ale co takiego stało się w 2008 roku a dokładniej (data) - czy ktoś może wie,
+Google chrome został wydany a wraz z nim v8?
