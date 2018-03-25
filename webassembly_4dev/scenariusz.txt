@@ -18,3 +18,28 @@ Fajne wykorzystanie obrazka z naiwiązaniem do innego świetnego wykładu na tem
 Z premedytacją wybrałem ten rysunek aby polecić Wam świetny wykład: Imie Nazisko - dostępny w sieci pod tym adresem.
 Ale co takiego stało się w 2008 roku a dokładniej (data) - czy ktoś może wie,
 Google chrome został wydany a wraz z nim v8?
+
+ZObacz minute 30
+
+
+Co z bezpieczeństwem ?
+
+
+
+
+
+
+
+1. Wstęp
+
+- przywitanie
+- pytania: kto NIE słyszał o Webassembly? kto coś kompilował pod Webassembly ?
+
+2. Zanim powstało WebAssmebly
+
+- początki Javascriptu - że był zorbiony w 10 dni, ze nie był pisany z myślą o szybkosci, Netscape
+- zapytać się kto wytwrzał  oprogramowanie w tym roku.
+
+-zadać pytanie o powstanie google chrome i v8 11 grudnia 2008??? pokazać jak ten silnik przyspieszył JSa
+
+- asm.js
