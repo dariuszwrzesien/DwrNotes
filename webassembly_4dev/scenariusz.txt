@@ -77,6 +77,7 @@ Asm.js niestety posiada też swoje wady. Pomimo, że wzrost prędkości jest zna
 
 Mimo to asm.js odniósł spory sukces. Quake, Doom czy Linux przeniesione do przeglądarki internetowej to tylko nieliczne rezultaty zastosowania asm.js.
 
+Webassembly jest sukcesorem asm.js 
 
 https://www.youtube.com/watch?v=6Qw_FDaKwgk
 https://www.youtube.com/watch?v=6Y3W94_8scw
