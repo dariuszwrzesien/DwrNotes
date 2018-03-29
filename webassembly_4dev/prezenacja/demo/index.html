@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <title>WASM test</title>
 <script>
-var importObject = {
+const importObject = {
   env: {
     memoryBase: 0,
     tableBase: 0,
@@ -21,20 +21,6 @@ fetch("fib.wasm")
  .then(results => {
     console.log(results.instance.exports._fib(10));
  });
-
-
-
-// fetch("fib.wasm")
-//     .then(function(response) {
-//         return response.arrayBuffer();
-//     })
-//     .then(buffer => WebAssembly.compile(buffer))
-//     .then(function(module) {
-//       var instance = new WebAssembly.Instance(module, imports);
-//       console.log(instance.exports._fib(10));
-// });
-
-
 
     </script>
   </head>
