@@ -84,3 +84,23 @@ https://www.youtube.com/watch?v=6Y3W94_8scw
 https://www.youtube.com/watch?v=_5IjJi74KFA
 
 
+https://developer.mozilla.org/en-US/docs/WebAssembly/Using_the_JavaScript_API#Loading_our_wasm_module_and_using_it
+https://takahirox.github.io/WebAssembly-benchmark/
+
+
+
+
+DEMO
+emcc counter.c -O1 -o counter.wasm -s WASM=1 -s SIDE_MODULE=1 side_moudule - po co -objaśnić komende
+
+Wyznaczenie wyrazu ciągu fibonacziego, np gdy n=10 to funkcja zwróci 10 wyraz ciągu fibonacziego = 55
+n=15 -> 610
+n=19 -> 4181
+
+int fib(int n) {
+  if (n == 1) return 1;
+  if (n == 2) return 1;
+  return fib(n-1) + fib(n-2);
+}
+
+
