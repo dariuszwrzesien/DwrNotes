@@ -1,0 +1,3 @@
+docker images - obrazy dockerowe
+docker ps - uruchomione kontenery
+docker ps -a - wszytskie kontenery
