@@ -1,3 +1,41 @@
 docker images - obrazy dockerowe
 docker ps - uruchomione kontenery
 docker ps -a - wszytskie kontenery
+
+docker run [image_name] - tworzy kontener z obrazu i uruchamia
+docker run -p 80:80 [image_name] - to samo co wyżej z tym że mapuje port z locala na port dockerowy
+
+docker-machine env default ?
+docker-machine ls
+docker-machine status
+docker-machine start
+docker-machine stop
+
+
+docker rmi - usuwa obraz dockerowy (remove images)
+
+
+
+
+---------------------------------------------------------------------------------------------------
+
+Tworzenie Data Volume
+
+docker run -p 8080:3000 -v $(pwd):/var/www node 
+
+-v - tworzy volume,
+$(pwd):/var/www - host location - nasz obezny folder w którym sie znajdujemy mapujemy do folder /var/www w kontenerze,
+node - to nazwa obrazu dokerowego
+
+
+docker inspect mycontainer - pokazuje jak mapowany jest volume
+
+Mounts:[
+{
+...
+"Source": "/src"
+"Destination": "/var/www"
+...
+"RW": true
+}
+]
