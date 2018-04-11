@@ -28,7 +28,7 @@ $(pwd):/var/www - host location - nasz obezny folder w którym sie znajdujemy ma
 node - to nazwa obrazu dokerowego
 
 
-docker inspect mycontainer - pokazuje jak mapowany jest volume
+docker inspect [container_id/name] - pokazuje jak mapowany jest volume
 
 Mounts:[
 {
@@ -39,3 +39,10 @@ Mounts:[
 "RW": true
 }
 ]
+
+!!!
+Odpalenie dokera wraz z wystarowaniem node
+
+docker run -p 8080:3000 -v $(pwd):/var/www -w"/var/www" node npm start
+
+-w"/var/www" - wskazuje w jakim folderze mamy sie znajdowac na kontenerze, chodzi o to że jeśli nie wskazalibyśmy -w"/var/www" a uruchomilibyśmy "npm start" to komenda ta odpaliła by się w innym folderze niż oczekujemy
