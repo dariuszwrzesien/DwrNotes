@@ -31,9 +31,9 @@ docker run -p 8080:3000 -v $(pwd):/var/www node
 $(pwd):/var/www - host location - nasz obecny folder w którym sie znajdujemy mapujemy do folder /var/www w kontenerze,
 node - to nazwa obrazu dokerowego
 
-
+```
 docker inspect [container_id/name] - pokazuje jak mapowany jest volume
-
+```
 ```
 Mounts:[
 {
@@ -46,8 +46,8 @@ Mounts:[
 ]
 ```
 
-!!!
-Odpalenie dokera wraz z wystarowaniem node
+
+#### Odpalenie dokera wraz z wystarowaniem node
 
 docker run -p 8080:3000 -v $(pwd):/var/www -w"/var/www" node npm start
 
@@ -55,7 +55,7 @@ docker run -p 8080:3000 -v $(pwd):/var/www -w"/var/www" node npm start
 
 ---
 
-Budowanie własnego obrazu dokerowego
+## Budowanie własnego obrazu dokerowego
 
 Przykładowa lista tego co zamieścimy w Dockerfile
 
@@ -82,9 +82,9 @@ Kropka na końcu wskazuje kontekst wywołania - więc np. miejsce w którym dock
 
 ---
 
-Łączenie kilku kontenerów dokerowych
+## Łączenie kilku kontenerów dokerowych
 
-**Łączenie kontenerów metodą LINKOWANIA (legacy) - metoda polecana do zastosowań DEVELOPERSKICH (daje szybkie efekty, jest mało złożona i łatwa w obsłudze)
+### I Łączenie kontenerów metodą LINKOWANIA (legacy) - metoda polecana do zastosowań DEVELOPERSKICH (daje szybkie efekty, jest mało złożona i łatwa w obsłudze)
 
 Załóżmy że mamy do uruchomienia obraz zawierający naszą aplikację i chcemy go zlikowac z obrazem z bazą danych mongo.
 
@@ -130,7 +130,7 @@ Polecenie to uruchamia kontener "dwr/node" jako deamon,  eksponuje port 3000, na
 Rozwijając nieco temat aliasu. Jeśli mamy w naszej aplikacji connection string za pomocą którego łączymy się z bazą, to do tej pory np. używaliśmy tam HOST="localhost", ustawiając alias na mongo, możemy zamiast "localhost", czy np. zamiast podawać IP, użyjemy aliasu HOST="mongodb".
 
 
-**Łaczenie kontenerów dockerowych za pomocą metody Container Network / Brigde Network - metoda polecna do stosowania na STAGE lub PROD.
+### II Łaczenie kontenerów dockerowych za pomocą metody Container Network / Brigde Network - metoda polecna do stosowania na STAGE lub PROD.
 
 1. Zakładamy Container Network, nazywany także Brigde Network
 ```
