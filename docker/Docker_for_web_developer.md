@@ -84,7 +84,7 @@ Kropka na końcu wskazuje kontekst wywołania - więc np. miejsce w którym dock
 
 ## Łączenie kilku kontenerów dokerowych
 
-### I Łączenie kontenerów metodą LINKOWANIA (legacy) - metoda polecana do zastosowań DEVELOPERSKICH (daje szybkie efekty, jest mało złożona i łatwa w obsłudze)
+### Łączenie kontenerów metodą LINKOWANIA (legacy) - metoda polecana do zastosowań DEVELOPERSKICH
 
 Załóżmy że mamy do uruchomienia obraz zawierający naszą aplikację i chcemy go zlikowac z obrazem z bazą danych mongo.
 
@@ -130,7 +130,7 @@ Polecenie to uruchamia kontener "dwr/node" jako deamon,  eksponuje port 3000, na
 Rozwijając nieco temat aliasu. Jeśli mamy w naszej aplikacji connection string za pomocą którego łączymy się z bazą, to do tej pory np. używaliśmy tam HOST="localhost", ustawiając alias na mongo, możemy zamiast "localhost", czy np. zamiast podawać IP, użyjemy aliasu HOST="mongodb".
 
 
-### II Łaczenie kontenerów dockerowych za pomocą metody Container Network / Brigde Network - metoda polecna do stosowania na STAGE lub PROD.
+### Łaczenie kontenerów dockerowych za pomocą metody Container Network / Brigde Network - metoda polecna do stosowania na STAGE lub PROD.
 
 1. Zakładamy Container Network, nazywany także Brigde Network
 ```
@@ -144,13 +144,25 @@ docker run -d --new=isolated_network --name mongodb mongo
 docker run -d --net=isolated_network --name nodeapp -p 3000:3000 dwr/node
 ```
 
+Jak wygląda nasza sieć z przypisanymi do niej kontenerami dokerowymi możemy sprawdzić za pomocą polecenia:
+```
+docker network inspect isolated_network
+```
+Tam też zobaczymy jakie ma nazwy oraz adresy IP.
+
 
 
 Polecenia związane z sieciami dokerowymi
 ```
 docker network ls //listuje dostepne sieci
-docker network inspect [nazwa_sieci]
+docker network inspect [nazwa_sieci] //pokazuje szczegóły zwiazane z konkretną siecią - np jakie ma ona kontenery dołączone, patrz zmienna "Containers"
 ```
+
+---
+
+## Docker compose 
+Docker compose służy do zarządzania kontenerami dokerowymi, szczególnie gdy mamy ich kilka wywoływanie powyższych koment np. do linkowania, może być czasochłonne, w takim przypadku z pomocą przychdzi nam własnie docker compose.
+
 
 
 
