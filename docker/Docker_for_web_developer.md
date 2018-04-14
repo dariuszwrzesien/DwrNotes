@@ -168,23 +168,23 @@ Konfiguracja dla docker compose trzymana jest w docker-compose.yml, następnie z
 
 ```
 version: '2' // w zaleznosci od wersji bedziemy mieli możliwość uzywania róznynch opcji w pliku docker-compose.yml. Na tę chwile zasada jest taka że jeśli gdzieś (w sieci, na githubie) znajdziemy plik bez wersji to prawdopodobnie jest to plik z wersją 1, ponieważ wersjonowanie wprowadzono dopiero od wersji 2.
-
-service: // node, mongodb itd. - w skrócie: jakie obrazy chcemy zbudować
+ 
+services: // node, mongodb itd. - w skrócie: jakie obrazy chcemy zbudować
     node:
       build:
         context: .
 	dockerfile: Dockerfile_nodejs
+      ports:
+        - "3000:3000"
       networks:
-	- nodeapp-network // nazwa Brigde Network w której odpalamy nasze kontenery dokerowe
+	- nodeapp-network //Nazwa sieci w której będzie działał kontener
     mongodb:
-      build:
-        image: mongo
-	networks:
-	  - nodeapp-network
-    
-    networks: //załozenie Bridge Network
-      nodeapp-network
-        driver: bridge
+      image: mongo
+      networks:
+	- nodeapp-network
+networks: //założenie ieci bridge dla kontenerów
+  nodeapp-network:
+    driver: bridge
 ```
 
 ## Komendy
@@ -192,6 +192,7 @@ service: // node, mongodb itd. - w skrócie: jakie obrazy chcemy zbudować
 ```
 docker-compose build //buduje obrazy dokerowe w oparciu o docker-compose.yml
 docker-compose up   //uruchamia kontenery dokerowe na podstawie wczesniej zbudowanych obrazów (z wywołania docker-compose build)
+docker-compose up -d //uruchamia sie jako deamon - nie musimy trzymać otwartej konsoli
 
 docker-compose down
 
@@ -217,9 +218,9 @@ docker-compose build mongo
 
 2. Gdy mamy już stworzone obrazy za pomocą komendy docker-compose build, następnym krokiem jest odpalenie komendy:
 ```
-docker-compose up
+docker-compose up -d
 ```
-która utworzy i uruchomi nam kontenery dokerowe na podstawie wcześniej utworzonych obrazów.
+która utworzy i uruchomi nam kontenery dokerowe na podstawie wcześniej utworzonych obrazów. Flaga -d inforuje ze chcemy aby proces był uruchomiony jako deamon, np aby można było wyłaczyc konsole a proces ma trwać nadal
 
 Przydatną komenda może być także:
 ```
