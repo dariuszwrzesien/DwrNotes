@@ -1,0 +1,17 @@
+version: '2' 
+service:
+    node:
+      build:
+        context: .
+	dockerfile: Dockerfile_nodejs
+      networks:
+	- nodeapp-network 
+    mongodb:
+      build:
+        image: mongo
+	networks:
+	  - nodeapp-network
+    
+    networks:
+      nodeapp-network
+        driver: bridge

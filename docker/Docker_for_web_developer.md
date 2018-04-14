@@ -15,9 +15,7 @@ docker-machine status
 docker-machine start
 docker-machine stop
 
-
 docker rmi - usuwa obraz dockerowy (remove images)
-
 
 docker exec -it [docker_container_name] /bin/bash - dostanie się do działającego kontenera dockerowego za pomocą basha
 
@@ -28,6 +26,7 @@ docker exec -it [docker_container_name] /bin/bash - dostanie się do działając
 docker run -p 8080:3000 -v $(pwd):/var/www node 
 ```
 -v - tworzy volume,
+
 $(pwd):/var/www - host location - nasz obecny folder w którym sie znajdujemy mapujemy do folder /var/www w kontenerze,
 node - to nazwa obrazu dokerowego
 
@@ -151,7 +150,6 @@ docker network inspect isolated_network
 Tam też zobaczymy jakie ma nazwy oraz adresy IP.
 
 
-
 Polecenia związane z sieciami dokerowymi
 ```
 docker network ls //listuje dostepne sieci
@@ -162,6 +160,93 @@ docker network inspect [nazwa_sieci] //pokazuje szczegóły zwiazane z konkretn�
 
 ## Docker compose 
 Docker compose służy do zarządzania kontenerami dokerowymi, szczególnie gdy mamy ich kilka wywoływanie powyższych koment np. do linkowania, może być czasochłonne, w takim przypadku z pomocą przychdzi nam własnie docker compose.
+
+W skrócie, jak działa docker compose?
+Konfiguracja dla docker compose trzymana jest w docker-compose.yml, następnie za pomoca docker-compose build, na podstawie pliku odocker-compose.yml budowane są obrazy dockerowe.
+
+### Jak zbudowany jest docker-compose.yml
+
+```
+version: '2' // w zaleznosci od wersji bedziemy mieli możliwość uzywania róznynch opcji w pliku docker-compose.yml. Na tę chwile zasada jest taka że jeśli gdzieś (w sieci, na githubie) znajdziemy plik bez wersji to prawdopodobnie jest to plik z wersją 1, ponieważ wersjonowanie wprowadzono dopiero od wersji 2.
+
+service: // node, mongodb itd. - w skrócie: jakie obrazy chcemy zbudować
+    node:
+      build:
+        context: .
+	dockerfile: Dockerfile_nodejs
+      networks:
+	- nodeapp-network // nazwa Brigde Network w której odpalamy nasze kontenery dokerowe
+    mongodb:
+      build:
+        image: mongo
+	networks:
+	  - nodeapp-network
+    
+    networks: //załozenie Bridge Network
+      nodeapp-network
+        driver: bridge
+```
+
+## Komendy
+
+```
+docker-compose build //buduje obrazy dokerowe w oparciu o docker-compose.yml
+docker-compose up   //uruchamia kontenery dokerowe na podstawie wczesniej zbudowanych obrazów (z wywołania docker-compose build)
+
+docker-compose down
+
+docker-compose logs
+docker-compose ps
+docker-compose stop
+docker-compose start
+docker-compose rm
+```
+
+## Praca z docker compose
+
+1. Mając już przygotowany docker-compose.yml odpalamy komendę:
+```
+docker-compose build
+```
+która na podstawie docker-compose.yml zbuduje nam obrazy dokerowe.
+
+Jeśli chcielibyśmy przebudować tylko jeden obraz z tych wymienionych w docker-compose.yml to wtedy:
+```
+docker-compose build mongo
+```
+
+2. Gdy mamy już stworzone obrazy za pomocą komendy docker-compose build, następnym krokiem jest odpalenie komendy:
+```
+docker-compose up
+```
+która utworzy i uruchomi nam kontenery dokerowe na podstawie wcześniej utworzonych obrazów.
+
+Przydatną komenda może być także:
+```
+docker-compose up --no-deps node
+```
+--no-deps - informuje żeby komenda nie tworzyła na nowo usług zależnych od node (np. mongo), jedynie przebudowany ma zostać sam node.
+
+3. Na koniec pracy z obrazami dokerowymi (np. koniec dnia pracy) możemy wykonać komendę:
+```
+docker-compose down
+``` 
+Zatrzyma ona wszystkie kontenery i je usunie.
+
+Jeśli jednak nie chcemy usuwać kontenerów możemy uzyć komendy:
+```
+docker-compose stop
+```
+
+Jeśli samo zatrzymanie i usunięcie kontenerów nam nie wystarcza możemy także wykonac komende:
+```
+docker-compose down -- rmi all --volumes
+```
+usunie ona wszystkie zbudowane na podstawie docker-compose.yml obrazy oraz volumy
+
+
+
+
 
 
 
