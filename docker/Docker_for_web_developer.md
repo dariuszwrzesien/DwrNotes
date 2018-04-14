@@ -1,5 +1,5 @@
 
-Komendy
+## Komendy
 
 docker images - obrazy dockerowe
 docker ps - uruchomione kontenery
@@ -23,12 +23,12 @@ docker exec -it [docker_container_name] /bin/bash - dostanie się do działając
 
 ---
 
-Tworzenie Data Volume
-
+## Tworzenie Data Volume
+```
 docker run -p 8080:3000 -v $(pwd):/var/www node 
-
+```
 -v - tworzy volume,
-$(pwd):/var/www - host location - nasz obezny folder w którym sie znajdujemy mapujemy do folder /var/www w kontenerze,
+$(pwd):/var/www - host location - nasz obecny folder w którym sie znajdujemy mapujemy do folder /var/www w kontenerze,
 node - to nazwa obrazu dokerowego
 
 
@@ -146,8 +146,11 @@ docker run -d --net=isolated_network --name nodeapp -p 3000:3000 dwr/node
 
 
 
-
-
+Polecenia związane z sieciami dokerowymi
+```
+docker network ls //listuje dostepne sieci
+docker network inspect [nazwa_sieci]
+```
 
 
 
