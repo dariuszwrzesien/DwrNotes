@@ -245,19 +245,32 @@ docker-compose down -- rmi all --volumes
 ```
 usunie ona wszystkie zbudowane na podstawie docker-compose.yml obrazy oraz volumy
 
+---
 
+##Uruchomienie Dockera w chmurze Azure
 
+Docker Cloud - to narzędzie dostarczone przez dockera ułatwiające prace z chmurami takim jak Azure, Aws, Digital Ocean i inne.
 
+### Link provider
+1. Zalogować się na cloud.docker.com, tym samym hasłem co do dockerhub.
+2. Pierwszym krokiem jest zlinkowanie się z kontem w chmurze. Z listy providerów wybierzmy Azure.
+3. Sciągamy management certificate
+4. Logujemy się do portalu azure i wybieramy w ustawieniach zakładkę Management certificates. Dodajemy tam sciągnięty przed chwilą certyfikat.
+5. Po dodaniu certyfikatu, widzimy przydzielone Subscription ID, które kopiujemy i wklejamy w docker.cloud
 
+### Deploy a node cluster
+6. W docker.cloud kolejnym krokiem jest stworzenie węzła klastra. Nadajemy mu odpowienią nazwę, oraz deply tags - na przykład: production lub stage
 
+### Create a service
+7. Najpierw wyboeramy zakładkę Stacks i tworzymy Stackfile.
+Przykładowy stackfile znajduje się w pliku docker-stackfile.yml
+8. Po utworzeniu Stacka mamy dostęp do naszych obrazów dockerowych z poziomu docker.cloud. Możemy wykonac deploy do azura.
+Możemy także z poziomu docker.cloud zarządzać zmiennymi środowiskowymi czy nawet dostać się do terminala.
+W zakładce Nodes jest też adres IP pod którym jest dostępna nasza aplikacja
 
-
-
-
-
-
-
-
+## Repozytorium
+Repo które było uzywane podczas prezentacji sforkowałem do siebie i jest dostepne pod adresem:
+https://github.com/dariuszwrzesien/CodeWithDanDockerServices
 
 
 
