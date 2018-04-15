@@ -1,6 +1,6 @@
 
 ## Komendy
-
+```
 docker images - obrazy dockerowe
 docker ps - uruchomione kontenery
 docker ps -a - wszytskie kontenery
@@ -18,7 +18,7 @@ docker-machine stop
 docker rmi - usuwa obraz dockerowy (remove images)
 
 docker exec -it [docker_container_name] /bin/bash - dostanie się do działającego kontenera dockerowego za pomocą basha
-
+```
 ---
 
 ## Tworzenie Data Volume
