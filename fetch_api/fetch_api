@@ -1,3 +1,43 @@
+
+
+
+
+
+
+Wstęp
+
+
+
+
+
+
+
+
+
+
+Fetch API jest nowym interfejsem pozwalającym na asynchroniczne pobieranie zasobów.
+
+
+
+
+
+
+ Ale chwila, przecież do tego wykorzystujemy  XMLHttpRequest
+
+
+
+
+
+Abort Signal
+https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+
+
+
+
+
+
+
+
 Wstęp.
 
 Krótka historia ajax
@@ -93,7 +133,9 @@ If you need to support older browsers, like Internet Explorer 11, you’ll need 
 If you need to use Fetch in Node.js, two of the most popular options are isomorphic-fetch and node-fetch.
 
 
+Wady.
 
+Obsługa błędów - porównanie z axios
 
 
 
@@ -105,4 +147,7 @@ https://medium.com/@shahata/why-i-wont-be-using-fetch-api-in-my-apps-6900e6c6fe7
 https://scotch.io/tutorials/how-to-use-the-javascript-fetch-api-to-get-data
 https://css-tricks.com/using-fetch/
 https://www.sitepoint.com/introduction-to-the-fetch-api/
+
+
+https://jakearchibald.com/2015/thats-so-fetch/
 
