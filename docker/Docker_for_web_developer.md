@@ -1,13 +1,13 @@
 
 ## Komendy
 ```
-docker images - obrazy dockerowe
-docker ps - uruchomione kontenery
-docker ps -a - wszytskie kontenery
+docker images - listuje obrazy dockerowe
+docker ps - listuje uruchomione kontenery
+docker ps -a - listuje wszytskie kontenery
 
-docker run [image_name] - tworzy kontener z obrazu i uruchamia
+docker run [image_name] - tworzy kontener z obrazu i uruchamia go
 docker run -p 80:80 [image_name] - to samo co wyżej z tym że mapuje port z locala na port dockerowy
-docker run -d --name my-postgres postgre - uruchamia kontener dokerowy "postgres" jako deamon (-d), ustawia mu nazwę zdefiniowaną przez użytkownika "my-postgres"
+docker run -d --name my-postgres postgre - uruchamia kontener dockerowy "postgres" jako deamon (-d), ustawia mu nazwę zdefiniowaną przez użytkownika "my-postgres"
 
 docker-machine env default ?
 docker-machine ls
@@ -27,7 +27,7 @@ docker run -p 8080:3000 -v $(pwd):/var/www node
 ```
 -v - tworzy volume,
 
-$(pwd):/var/www - host location - nasz obecny folder w którym sie znajdujemy mapujemy do folder /var/www w kontenerze,
+$(pwd):/var/www - host location - nasz obecny folder w którym się znajdujemy, mapujemy do folderu /var/www w kontenerze,
 node - to nazwa obrazu dokerowego
 
 ```
@@ -35,22 +35,23 @@ docker inspect [container_id/name] - pokazuje jak mapowany jest volume
 ```
 ```
 Mounts:[
-{
-...
-"Source": "/src"
-"Destination": "/var/www"
-...
-"RW": true
-}
+	{
+	...
+	"Source": "/src"
+	"Destination": "/var/www"
+	...
+	"RW": true
+	}
 ]
 ```
 
 
 #### Odpalenie dokera wraz z wystarowaniem node
+```
+docker run -p 8080:3000 -v $(pwd):/var/www -w "/var/www" node npm start
+```
 
-docker run -p 8080:3000 -v $(pwd):/var/www -w"/var/www" node npm start
-
--w"/var/www" - wskazuje w jakim folderze mamy sie znajdowac na kontenerze, chodzi o to że jeśli nie wskazalibyśmy -w"/var/www" a uruchomilibyśmy "npm start" to komenda ta odpaliła by się w innym folderze niż oczekujemy
+-w "/var/www" - wskazuje w jakim folderze mamy sie znajdować na kontenerze, chodzi o to że jeśli nie wskazalibyśmy -w "/var/www" a uruchomilibyśmy "npm start" to komenda ta odpaliła by się w innym folderze niż oczekujemy
 
 ---
 
@@ -158,7 +159,8 @@ docker network inspect [nazwa_sieci] //pokazuje szczegóły zwiazane z konkretn�
 
 ---
 
-## Docker compose 
+## Docker compose
+
 Docker compose służy do zarządzania kontenerami dokerowymi, szczególnie gdy mamy ich kilka wywoływanie powyższych koment np. do linkowania, może być czasochłonne, w takim przypadku z pomocą przychdzi nam własnie docker compose.
 
 W skrócie, jak działa docker compose?
@@ -247,7 +249,7 @@ usunie ona wszystkie zbudowane na podstawie docker-compose.yml obrazy oraz volum
 
 ---
 
-##Uruchomienie Dockera w chmurze Azure
+## Uruchomienie Dockera w chmurze Azure
 
 Docker Cloud - to narzędzie dostarczone przez dockera ułatwiające prace z chmurami takim jak Azure, Aws, Digital Ocean i inne.
 
