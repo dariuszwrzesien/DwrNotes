@@ -1,4 +1,4 @@
-Fetch API jest nowym interfejsem pozwalającym na asynchroniczne pobieranie zasobów. Dotychczas aby pobrać zasób z serwera korzystało się z obiektu XMLHttpRequest (XHR). Fetch API uprastrza sposób komunikacji z serwerem, korzysta także z obietnic (link do obietnic) co bardziej odpowiada dzisiejszym standardom programowania i zapobiega wielokrotnym wywołaniom zwrotnym.
+Fetch API jest interfejsem pozwalającym na asynchroniczne pobieranie zasobów. Dotychczas aby pobrać zasób z serwera korzystało się z obiektu XMLHttpRequest (XHR). Fetch API powstało aby upraścić sposób komunikacji z serwerem, korzysta także z obietnic (link do obietnic) co bardziej odpowiada dzisiejszym standardom programowania i zapobiega wielokrotnym wywołaniom zwrotnym.
 
 Zobaczmy jak wyglądała komunikacja z serwerem zanim powstało Fetch API.
 
@@ -35,9 +35,10 @@ request.onreadystatechange = function() {
 
 https://jsfiddle.net/gz5exu5x/
 
-W powyższym przykładzie posłużyliśmy się EventHandlerem o nazwie onreadystatechange, który wywoływany jest za każdym razem gdy zmieni się stan readyState. XMLHttpRequest.readyState może odpowiedzieć jednym z pięciu stanów od 0 do 4. Dzięki temu mogliśmy sprawdzić na jakim etapie jest przetwarzanie naszego żądania. Status 4 (Done) informował że żądanie zostało zakończone i można było przejść do zbadania jakim statusem http odpowiedział serwer. W powyższym przykładzie sprawdzamy czy żądanie zakończyło się statusem 200 (OK) i jeśli tak to przystępujemy do wypisania otrzymanych danych na konsoli.
+W powyższym przykładzie posłużyliśmy się EventHandlerem o nazwie onreadystatechange, który wywoływany jest za każdym razem gdy zmieni się stan readyState. XMLHttpRequest.readyState może odpowiedzieć jednym z pięciu stanów od 0 do 4. Dzięki temu mogliśmy sprawdzić na jakim etapie jest przetwarzanie naszego żądania. Status oznaczony cyfrą 4 (Done) informował że żądanie zostało zakończone i można było przejść do zbadania jakim statusem http odpowiedział serwer. W powyższym przykładzie sprawdzamy czy żądanie zakończyło się statusem 200 (OK) i jeśli tak to przystępujemy do wypisania otrzymanych danych na konsoli.
 
-Ponieważ korzystanie z tak niskopoziomowego API nie należało do najwygodniejszych, powstało wiele bibliotek opakowujących XHR. Do najpopularniejszych należało rozwiązanie zaimplementowane w bibliotece Jquery o nazwie jQuery.ajax()
+Ponieważ korzystanie z tak niskopoziomowego API nie należało do najwygodniejszych, powstało wiele bibliotek opakowujących XHR. Do najpopularniejszych należały rozwiązania a biblioteki Jquery:
+jQuery.ajax(), jQuery.get(), jQuery.post(). 
 
 $.ajax('https://jsonplaceholder.typicode.com/posts/1', {
   success: (data) => {
@@ -47,22 +48,22 @@ $.ajax('https://jsonplaceholder.typicode.com/posts/1', {
 
 https://jsfiddle.net/3g4ww3t2/
 
-Aby polecenie ajax() zadziałało w ten sam sposób co porzednio zaprezentowane wystarczyło wywołać metodę ajax() z odpowiednim parametrem i odpowiednio obsłużyć dane które otrzymaliśmy.
+Aby polecenie ajax() zadziałało w ten sam sposób co porzednio zaprezentowane wystarczyło wywołać metodę ajax() z odpowiednim parametrem i odpowiednio obsłużyć dane, które otrzymaliśmy.
 
 FETCH API
-Przez ponad dekade użycie obiektu XMLHttpRequest było jedynym sposobem na stworzenie asynchroonicznego żądania w JavaScript. Pomimo ogromnej użyteczności, używanie XHR nie należało do najprzyjemniejszych. Podstawowe wady tego rozwiązania to:
+
+Przez ponad dekade użycie obiektu XMLHttpRequest było jedynym sposobem na stworzenie asynchronicznego żądania w JavaScript. Pomimo ogromnej użyteczności, używanie XHR nie należało do najprzyjemniejszych. Podstawowe wady tego rozwiązania to:
  - brak separacji zagadnień (Separation of Concern),
  - stan żądania oraz jego input i output były zarządzane poprzez interakcje z jednym obiektem,
  - użycie Eventów do śledzenia stanu obiektu odstaje od obecnych standardów skupionych wokół Promisów (obietnic link).
+
+Fetch API rozwiązuje większość problemów związanych z używaniem XHR, a ponieważ korzysta z obietnic, tym samym zapobiega wielokrotnym wywołaniom zwrotnym zwanym "callback hell". Fetch API opiera się na tych samych
 
 
 The Fetch API intends to fix most of these problems. It does this by introducing the same primitives to JS that are used in the HTTP protocol. In addition, it introduces a utility function fetch() that succinctly captures the intention of retrieving a resource from the network.
 
 The Fetch specification, which defines the API, nails down the semantics of a user agent fetching a resource. This, combined with ServiceWorkers, is an attempt to:
 
-Improve the offline experience.
-Expose the building blocks of the Web to the platform as part of the extensible web movement.
-As of this writing, the Fetch API is available in Firefox 39 (currently Nightly) and Chrome 42 (currently dev). Github has a Fetch polyfill.
 
 
 
@@ -71,10 +72,6 @@ As of this writing, the Fetch API is available in Firefox 39 (currently Nightly)
 
 Fetch API zbudowane jest na 4 podstawowych koncepcjach:
 Request, Response, Headers, Body
-
-
-
-
 
 
 
@@ -121,7 +118,8 @@ If you need to use Fetch in Node.js, two of the most popular options are isomorp
 
 
 Wady. !!!!!1
-
+https://medium.com/@shahata/why-i-wont-be-using-fetch-api-in-my-apps-6900e6c6fe78
+Jak poradzić sobie z wyżej opisaną wadą: https://css-tricks.com/using-fetch/
 Obsługa błędów - porównanie z axios
 
 Abort Signal
@@ -139,3 +137,5 @@ https://www.sitepoint.com/introduction-to-the-fetch-api/
 
 https://jakearchibald.com/2015/thats-so-fetch/
 
+
+https://medium.com/beginners-guide-to-mobile-web-development/the-fetch-api-2c962591f5c
