@@ -17,6 +17,9 @@ docker-machine stop
 
 docker rmi - usuwa obraz dockerowy (remove images)
 
+docker rmi $(docker images -a -q) - usuwa wszystkie obrazy dockerowe
+docker rm $(docker ps -a -f status=exited -q) - usuwa wszystkie kontenery
+
 docker exec -it [docker_container_name] /bin/bash - dostanie się do działającego kontenera dockerowego za pomocą basha
 ```
 ---
