@@ -1,8 +1,8 @@
-Fetch API jest interfejsem pozwalającym na asynchroniczne pobieranie zasobów. Dotychczas aby pobrać zasób z serwera korzystało się z obiektu XMLHttpRequest (XHR). Fetch API powstało aby upraścić sposób komunikacji z serwerem, korzysta także z obietnic (link do obietnic) co bardziej odpowiada dzisiejszym standardom programowania i zapobiega wielokrotnym wywołaniom zwrotnym.
+Fetch API jest interfejsem pozwalającym na asynchroniczne pobieranie zasobów. Dotychczas aby pobrać zasób z serwera korzystało się z obiektu XMLHttpRequest (XHR). Fetch API powstało aby uprościć sposób komunikacji z serwerem, korzysta także z obietnic (link do obietnic) co bardziej odpowiada dzisiejszym standardom programowania i zapobiega wielokrotnym wywołaniom zwrotnym.
 
 Zobaczmy jak wyglądała komunikacja z serwerem zanim powstało Fetch API.
 
-Większość przeglądarek w tamtych czasach wykorzystywała implementację obiektu XMLHttpRequest w celu pobierania zasobów z serwera. Większość to niestety nie znaczy wszystkie. Microsoft w przeglądarce Internet Explorer zaimplementował ten standard jako ActiveXObject co spowodowało że jeśli chcieliśmy aby nasz program działał zarówno na IE jak też na Safari czy pod Netscape należało wspierać oba te rozwiązania.
+Większość przeglądarek w tamtych czasach wykorzystywała obiekt XMLHttpRequest w celu pobierania zasobów z serwera. Większość to niestety nie znaczy wszystkie. Microsoft w przeglądarce Internet Explorer zaimplementował ten standard jako ActiveXObject co spowodowało że jeśli chcieliśmy aby nasz program działał zarówno na IE jak też na Safari czy pod Netscape należało wspierać oba te rozwiązania.
 
 var request;
 if (window.XMLHttpRequest) { // Mozilla, Safari, ...
@@ -60,7 +60,7 @@ Przez ponad dekadę użycie obiektu XMLHttpRequest było jedynym sposobem na stw
 Fetch API rozwiązuje większość problemów związanych z użyciem XHR, a ponieważ korzysta z obietnic, tym samym zapobiega wielokrotnym wywołaniom zwrotnym zwanym "callback hell". Fetch API wprowadza do języka JavaScript obiekty Headers, Request, Response i Body, których nazwy dobrze znamy z protokołu HTTP.
 
 Podstawą pracy z FetchAPI jest użycie metody fetch() do asynchronicznego pobrania danych z serwera.
-Zobaczmy jak to działa na najprstrzym przykładzie.
+Zobaczmy jak to działa na najprostrzym przykładzie.
 
 fetch('https://jsonplaceholder.typicode.com/posts/1')
   .then(response => response.json())
@@ -70,7 +70,7 @@ W przykładzie powyżej metoda fetch() jako parametr przyjmuje adres URL do zdal
 
 https://jsfiddle.net/j1vs64vx/
 
-Oczywiście oprócz pobierania danych możemy także wysyłać dane za pomocą różnych metod HTTP (POST, PUT, DELETE czy też OPTIONS).
+Oczywiście oprócz pobierania danych za pomocą metody HTTP GET, możemy także komunikować się za pomocą różnych innych metod HTTP (POST, PUT, DELETE czy też OPTIONS). Przykład poniżej pokazuje jak wysłać dane za pomoca metody POST.
 
 const data = {
     title: 'Test title',
@@ -90,8 +90,108 @@ fetch('https://jsonplaceholder.typicode.com/posts', options)
   .then(response => response.json())
   .then(json => console.log(json));
 
+https://jsfiddle.net/6dhqcjop/
 
-2. POST, put, delete 
+Na początku tworzymy obiekt data z danymi które chcemy wysłać, następnie w obiekcie option definujemy rodzaj metody HTTP, w naszym przypadku POST, a do zmiennej body przypisujemy wcześniej utworzony obkiekt data. Podobnie jak w poprzenim przykładzie też jako pierwszy parametr ustawiamy adres URL pod który będziemy wysyłac dane, drugim parametrem będzie nasz obiekt option na podstawie którego metoda fetch określi jaką metode http ma użyć do wysłania danych, z jakimi danymi i jakimi nagłówkami.
+
+W odpowiedzi serwis  jsonplaceholder zwróci nam następujący obiekt który wypiszemy na konsoli.
+
+{
+  "title": "Test title",
+  "body": "Test body",
+  "userId": 42,
+  "id": 101
+}
+
+Fetch + async/await
+
+Ponieważ metoda fetch() zawsze zwróci nam obietnicę, świetnie sie nam to wpisuje w konwencję async/await. (Jeśli temat async/await nie jest Ci dobrze znany zachęcam do zapoznania się z artykułem na ten temat - link !!!)
+
+Dzięki czemu możemy sprawić że nasz kod będzie bardziej czytelny i łatwiejszy do zrozumienia.
+
+Poniżej przykład zastosowania async/await do pobrania listy imion użytkowników z serwisu jsonplaceholder.
+
+async function fetchUsers(url) {
+  const response = await fetch(url);
+  const json = await response.json();
+
+  const listOfusernames = json.map(user => user.username);
+
+  console.log(listOfusernames);
+}
+
+fetchUsers('https://jsonplaceholder.typicode.com/users');
+
+W odpowiedzi na konsoli powinniśmy zobaczyć tablicę z imionami użytkowników
+
+[
+  "Bret",
+  "Antonette",
+  "Samantha",
+  "Karianne",
+  "Kamren",
+  "Leopoldo_Corkery",
+  "Elwyn.Skiles",
+  "Maxime_Nienow",
+  "Delphine",
+  "Moriah.Stanton"
+]
+
+
+Wspomniałem wcześniej że Fetch API oprócz metody fetch() wprowadziło do języka JavasScript obiekty Response, Request i Body. Obiekty te wykorzystywane są głównie podczas pracy z Service Workerami (więcej na temat Service Workerów możesz przeczytać w artykule o Progressive Web Apps http://devenv.pl/progressive-web-apps/).
+Przyjrzyjmy się każdemu z nich z osobna.
+
+Response
+
+Jak możemy zauważyć w przykładzie poniżej, rezultatem jaki zwróci nam metoda fetch() nie są tylko dane wystawione przez serwer ale cały obiekt Response, w którym znajdziemy informację na temat żądania i odpowiedzi.
+
+async function fetchUsers(url) {
+  const response = await fetch(url);
+  console.log(response);
+}
+
+fetchUsers('https://jsonplaceholder.typicode.com/users');
+
+https://jsfiddle.net/nfmoLn8a/
+
+Na konsoli zostanie wypisany następujący obiekt:
+
+Response {
+type: "cors", 
+url: "https://jsonplaceholder.typicode.com/users", 
+redirected: false, 
+status: 200, 
+ok: true, 
+body: ReadableStream, 
+bodyUsed: false, 
+headers: Headers
+}
+
+
+headers
+
+Właściwość headers w obiekcie Response jest obiektem Headers który udostępnia nam między innymi metody has() oraz get() za pomocą których możemy sprawdzić nagłówki otrzymanej odpowiedzi z serwera. 
+
+async function fetchUsers(url) {
+  const response = await fetch(url);
+  console.log(response.headers.has('Content-Type')); //true
+  console.log(response.headers.get('Content-Type')); //application/json; charset=utf-8
+}
+
+fetchUsers('https://jsonplaceholder.typicode.com/users');
+
+https://jsfiddle.net/13oyd340/
+
+status / statusText
+
+Status zwraca nam odpowiedni kod odpowiedzi HTTP a statusText jego reprezentację tekstową. Więcej informacji na ten temat możesz znaleźć w wikipedii https://pl.wikipedia.org/wiki/Kod_odpowiedzi_HTTP
+
+
+
+
+
+
+
 
 
 
@@ -152,4 +252,12 @@ https://jakearchibald.com/2015/thats-so-fetch/
 
 
 https://medium.com/beginners-guide-to-mobile-web-development/the-fetch-api-2c962591f5c
+
+
+
+
+
+
+
+
 https://alligator.io/js/fetch-api/
