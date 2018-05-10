@@ -228,19 +228,13 @@ Wynikiem działania powyższego kodu jest wypisanie na konsoli właściwości bo
 
 type
 
-Obiekt Response może posiadać jeden z 5 typów:
+Obiekt Response może posiadać jeden z następujących typów:
 
-basic - typ podstawowy, spełniający zasadę "same-origin" (https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) z dostępnymi wszystkimi nagłówkami oprócz “Set-Cookie” i “Set-Cookie2”.
-cors - odpowiedź została zwrócona z żądania "cross-origin" z nagłówkami CORS, czyli na przykład strona zażądała danych z serwera, który nie znajduje się w tej samej domenie. Dodatkowo serwer ma możliwość dzielenia się zasobami za pomocą specyfikacji CORS (więcej na ten temat można przeczytać na stronie enable-cors.org (https://enable-cors.org/) lub w specyfikacji w3C (https://www.w3.org/TR/cors/)). Lista dostępnych nagłówków to `Cache-Control`, `Content-Language`, `Content-Type`, `Expires`, `Last-Modified`, and `Pragma`.
-default - 
-error - 
-opaque - 
+basic - typ podstawowy, spełniający zasadę "same-origin" (https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) z dostępnymi wszystkimi nagłówkami oprócz “Set-Cookie” i “Set-Cookie2”,
 
+cors - odpowiedź została zwrócona z żądania "cross-origin" z nagłówkami CORS, czyli na przykład strona zażądała danych z serwera, który nie znajduje się w tej samej domenie. Dodatkowo serwer ma możliwość dzielenia się zasobami za pomocą specyfikacji CORS (więcej na ten temat można przeczytać na stronie enable-cors.org (https://enable-cors.org/) lub w specyfikacji W3C (https://www.w3.org/TR/cors/)). Lista dostępnych nagłówków ograniczona jest do `Cache-Control`, `Content-Language`, `Content-Type`, `Expires`, `Last-Modified`, and `Pragma`,
 
-
-
-
-
+opaque - odpowiedź typu opaque zwracana jest gdy komunikacja odbywa się pomiędzy różnymi domenami lecz bez użycia nagłówków CORS. W takim przypadku nie mamy możliwości sprawdzenia czy żądanie (request) zakończył się sukcesem czy nie.
 
 
 
