@@ -138,12 +138,14 @@ W odpowiedzi na konsoli powinniśmy zobaczyć tablicę z imionami użytkowników
 ]
 
 
-Wspomniałem wcześniej że Fetch API oprócz metody fetch() wprowadziło do języka JavasScript obiekty Response, Request i Body. Obiekty te wykorzystywane są głównie podczas pracy z Service Workerami (więcej na temat Service Workerów możesz przeczytać w artykule o Progressive Web Apps http://devenv.pl/progressive-web-apps/).
-Przyjrzyjmy się każdemu z nich z osobna.
+Wspomniałem wcześniej że Fetch API oprócz metody fetch() wprowadziło do języka JavasScript obiekty Response, Request i Headers oraz.
+Przyjrzyjmy się zatem każdemu z nich z osobna.
 
 Response
 
-Jak możemy zauważyć w przykładzie poniżej, rezultatem jaki zwróci nam metoda fetch() nie są tylko dane wystawione przez serwer ale cały obiekt Response, w którym znajdziemy informację na temat żądania i odpowiedzi.
+Jak możemy zauważyć w przykładzie poniżej, rezultatem jaki zwróci nam metoda fetch() nie są tylko dane wystawione przez serwer ale cały obiekt Response, w którym znajdziemy informację na temat żądania i odpowiedzi. Oprócz tego że obiekt Response jest tworzony przez metodę fetch() mamy też możliwość utworzyć go z poziomu JavaScript, z tej możliwości skorzystamy głównie podczas pracy z Service Workerami (więcej na temat Service Workerów możesz przeczytać w artykule o Progressive Web Apps http://devenv.pl/progressive-web-apps/).
+
+Zobaczmy jak zbudowany jest obiekt Response który otrzymujemy z wywołania metody fetch().
 
 async function fetchUsers(url) {
   const response = await fetch(url);
@@ -170,7 +172,7 @@ headers: Headers
 
 headers
 
-Właściwość headers w obiekcie Response jest obiektem Headers który udostępnia nam między innymi metody has() oraz get() za pomocą których możemy sprawdzić nagłówki otrzymanej odpowiedzi z serwera. 
+Zmienna headers jest obiektem typu Headers (https://developer.mozilla.org/en-US/docs/Web/API/Headers) który udostępnia nam między innymi metody has() oraz get() za pomocą których możemy sprawdzić nagłówki otrzymanej odpowiedzi z serwera. 
 
 async function fetchUsers(url) {
   const response = await fetch(url);
@@ -197,7 +199,7 @@ Aby dostać się do zawartości body możemy użyć jednej z dwóch metod: text(
   console.log(json);
 })();
 
-Wynikiem przykładu powyżej jest wypisanie na konsoli właściwości obiektu JSON
+Wynikiem działania powyższego kodu jest wypisanie na konsoli właściwości body w formacie JSON
 
 {
   "id": 1,
@@ -222,6 +224,23 @@ Wynikiem przykładu powyżej jest wypisanie na konsoli właściwości obiektu JS
     "bs": "harness real-time e-markets"
   }
 }
+
+
+type
+
+Obiekt Response może posiadać jeden z 5 typów:
+
+basic - typ podstawowy, spełniający zasadę "same-origin" (https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) z dostępnymi wszystkimi nagłówkami oprócz “Set-Cookie” i “Set-Cookie2”.
+cors - odpowiedź została zwrócona z żądania "cross-origin" z nagłówkami CORS, czyli na przykład strona zażądała danych z serwera, który nie znajduje się w tej samej domenie. Dodatkowo serwer ma możliwość dzielenia się zasobami za pomocą specyfikacji CORS (więcej na ten temat można przeczytać na stronie enable-cors.org (https://enable-cors.org/) lub w specyfikacji w3C (https://www.w3.org/TR/cors/)). Lista dostępnych nagłówków to `Cache-Control`, `Content-Language`, `Content-Type`, `Expires`, `Last-Modified`, and `Pragma`.
+default - 
+error - 
+opaque - 
+
+
+
+
+
+
 
 
 
