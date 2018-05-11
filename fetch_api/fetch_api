@@ -234,8 +234,7 @@ basic - typ podstawowy, spełniający zasadę "same-origin" (https://developer.m
 
 cors - odpowiedź została zwrócona z żądania "cross-origin" z nagłówkami CORS, czyli na przykład strona zażądała danych z serwera, który nie znajduje się w tej samej domenie. Dodatkowo serwer ma możliwość dzielenia się zasobami za pomocą specyfikacji CORS (więcej na ten temat można przeczytać na stronie enable-cors.org (https://enable-cors.org/) lub w specyfikacji W3C (https://www.w3.org/TR/cors/)). Lista dostępnych nagłówków ograniczona jest do `Cache-Control`, `Content-Language`, `Content-Type`, `Expires`, `Last-Modified`, and `Pragma`,
 
-opaque - odpowiedź typu opaque zwracana jest gdy komunikacja odbywa się pomiędzy różnymi domenami lecz bez użycia nagłówków CORS. W takim przypadku nie mamy możliwości sprawdzenia czy żądanie (request) zakończył się sukcesem czy nie.
-
+opaque - tego typu odpowiedź zwracana jest gdy komunikacja odbywa się pomiędzy różnymi domenami lecz bez użycia nagłówków CORS.
 
 
 
@@ -295,18 +294,8 @@ https://medium.com/@shahata/why-i-wont-be-using-fetch-api-in-my-apps-6900e6c6fe7
 https://scotch.io/tutorials/how-to-use-the-javascript-fetch-api-to-get-data
 https://css-tricks.com/using-fetch/
 https://www.sitepoint.com/introduction-to-the-fetch-api/
-
-
 https://jakearchibald.com/2015/thats-so-fetch/
 
 
 https://medium.com/beginners-guide-to-mobile-web-development/the-fetch-api-2c962591f5c
-
-
-
-
-
-
-
-
 https://alligator.io/js/fetch-api/
