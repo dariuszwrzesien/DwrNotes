@@ -59,6 +59,8 @@ Przez ponad dekadę użycie obiektu XMLHttpRequest było jedynym sposobem na stw
 
 Fetch API rozwiązuje większość problemów związanych z użyciem XHR, a ponieważ korzysta z obietnic, tym samym zapobiega wielokrotnym wywołaniom zwrotnym zwanym "callback hell". Fetch API wprowadza do języka JavaScript obiekty Headers, Request, Response i Body, których nazwy dobrze znamy z protokołu HTTP.
 
+Metoda fetch()
+
 Podstawą pracy z FetchAPI jest użycie metody fetch() do asynchronicznego pobrania danych z serwera.
 Zobaczmy jak to działa na najprostrzym przykładzie.
 
@@ -94,7 +96,7 @@ https://jsfiddle.net/6dhqcjop/
 
 Na początku tworzymy obiekt data z danymi które chcemy wysłać, następnie w obiekcie option definujemy rodzaj metody HTTP, w naszym przypadku POST, a do zmiennej body przypisujemy wcześniej utworzony obkiekt data. Podobnie jak w poprzenim przykładzie też jako pierwszy parametr ustawiamy adres URL pod który będziemy wysyłac dane, drugim parametrem będzie nasz obiekt option na podstawie którego metoda fetch określi jaką metode http ma użyć do wysłania danych, z jakimi danymi i jakimi nagłówkami.
 
-W odpowiedzi serwis  jsonplaceholder zwróci nam następujący obiekt który wypiszemy na konsoli.
+W odpowiedzi serwis jsonplaceholder zwróci nam następujący obiekt który wypiszemy na konsoli.
 
 {
   "title": "Test title",
@@ -107,7 +109,7 @@ Fetch + async/await
 
 Ponieważ metoda fetch() zawsze zwróci nam obietnicę, świetnie sie nam to wpisuje w konwencję async/await. (Jeśli temat async/await nie jest Ci dobrze znany zachęcam do zapoznania się z artykułem na ten temat - link !!!)
 
-Dzięki czemu możemy sprawić że nasz kod będzie bardziej czytelny i łatwiejszy do zrozumienia.
+Dzięki temu możemy sprawić że nasz kod będzie bardziej czytelny i łatwiejszy do zrozumienia.
 
 Poniżej przykład zastosowania async/await do pobrania listy imion użytkowników z serwisu jsonplaceholder.
 
@@ -137,13 +139,70 @@ W odpowiedzi na konsoli powinniśmy zobaczyć tablicę z imionami użytkowników
   "Moriah.Stanton"
 ]
 
-Wady
+Metoda fetch() w praktyce, czyli nie ma ryby bez ości
+
+Zazwyczaj mamy nadzieje że nasza komunikacja z serwerem zakończy się sukcesem i otrzymamy dane których się spodziewaliśmy. Czasami jednak z różnych przyczyn wysłanie żądania do serwera nie zwraca nam zadowalającej odpowiedzi. Przeanalizujmy scenariusz w którym zasób jest nieosiągalny a api zwraca nam status 404.
+
+Na początek stwórzmy zapytanie do api podając błędny adres i spróbujmy wychwycić błąd za pomocą metody catch().
+
+fetch('https://api.github.com/users/dariuszwzresien/repos')
+  .then(data => console.log('dane z serwera: ', data))
+  .catch(error => console.log('błąd: ', error));
+
+https://jsfiddle.net/f5v1cfuL/
+
+Jak się jednak okaże, catch() nie został wywołany, a dane zostały obsłużone w taki sposób jakby całe zapytanie zostało poprawnie wykonane. Zobaczmy więc jakie dane otrzymaliśmy.
+
+Response
+​{
+bodyUsed: false
+headers: Headers {}
+ok: false
+redirected: false
+status: 404
+statusText: "Not Found"
+type: "cors"
+url: "https://api.github.com/users/dariuszwzresien/repos"
+}
+​
+Jak możemy przeczytać w dokumentacji, metoda fetch() zakończy się jako promise.reject() z błędem TypeError w przypadku braku możliwości dostania się do żądanej strony np. z powodu literówki w nazwie domeny lub z przyczyn bezpieczeństwa.
+
+fetch('https://api.guthub.com/users/dariuszwzresien/repos') //literówka w nazwie api.guthub.com
+  .then(response => response.json())
+  .then(data => console.log('dane z serwera: ', data))
+  .catch(error => console.log('błąd: ', error));
+
+https://jsfiddle.net/2dsyyjLm/
+
+W tym przypadku nasze żądanie zostanie obsłużone przez metodę catch() i w konsoli zostanie wypisany komunikat z błedem:
+
+```
+błąd: TypeError: NetworkError when attempting to fetch resource.
+```
+
+Jeśli jednak chcielibyśmy aby metoda fetch() reagowała wywołaniem metody catch() w przypadku otrzymania statusu HTTP 404, możemy posłużyć się następującym rozwiązaniem:
 
 
 
+Najpierw napiszmy metodę, która w odpowiedni sposób zareaguje na otrzymaną odpowiedź z serwera. Metoda handleResponse() na podstawie otrzymanej odpowiedzi z serwera sprawdzi czy status jest równy 404 i jeśli tak, to odrzuci obietnice, powodując tym samym wywołanie metody catch() w łańcuchu wywołań fetch().
+
+```
+function handleResponse(response) {
+  if (response.status === 404) {
+  	return Promise.reject(response);
+  }
+  return response.json();
+}
+
+fetch('https://api.github.com/users/dariuszwzresien/repos')
+  .then(handleResponse)
+  .then(data => console.log('dane z serwera: ', data))
+  .catch(error => console.log('błąd: ', error));
+```
 
 
-Powiązane obiekty Fetch API
+
+Obiekty Fetch API
 
 Wspomniałem wcześniej że Fetch API oprócz metody fetch() wprowadziło do języka JavasScript obiekty Response, Request i Headers.
 Przyjrzyjmy się zatem każdemu z nich z osobna.
@@ -252,11 +311,6 @@ Request
 
 
 
-Wady
-
-
-
-
 
 
 3. Handling errors with Fetch
@@ -305,6 +359,7 @@ https://jakearchibald.com/2015/thats-so-fetch/
 
 
 http://kursjs.pl/kurs/ajax/fetch.php
+https://blog.piotrnalepa.pl/2017/01/15/js-fetch-api-nowy-sposob-na-pobieranie-danych-z-serwera/
 
 
 https://medium.com/beginners-guide-to-mobile-web-development/the-fetch-api-2c962591f5c
