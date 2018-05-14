@@ -107,16 +107,13 @@ W odpowiedzi serwis jsonplaceholder zwróci nam następujący obiekt który wypi
 
 Fetch + async/await
 
-Ponieważ metoda fetch() zawsze zwróci nam obietnicę, świetnie sie nam to wpisuje w konwencję async/await. (Jeśli temat async/await nie jest Ci dobrze znany zachęcam do zapoznania się z artykułem na ten temat - link !!!)
-
-Dzięki temu możemy sprawić że nasz kod będzie bardziej czytelny i łatwiejszy do zrozumienia.
+Ponieważ metoda fetch() zawsze zwróci nam obietnicę, świetnie sie nam to wpisuje w konwencję async/await. (Jeśli temat async/await nie jest Ci dobrze znany zachęcam do zapoznania się z artykułem na ten temat - link !!!). Dzięki temu możemy sprawić że nasz kod będzie bardziej czytelny i łatwiejszy do zrozumienia.
 
 Poniżej przykład zastosowania async/await do pobrania listy imion użytkowników z serwisu jsonplaceholder.
 
 async function fetchUsers(url) {
   const response = await fetch(url);
   const json = await response.json();
-
   const listOfusernames = json.map(user => user.username);
 
   console.log(listOfusernames);
@@ -139,11 +136,13 @@ W odpowiedzi na konsoli powinniśmy zobaczyć tablicę z imionami użytkowników
   "Moriah.Stanton"
 ]
 
+https://jsfiddle.net/9nro6dcr/
+
 Metoda fetch() w praktyce, czyli nie ma ryby bez ości
 
-Zazwyczaj mamy nadzieje że nasza komunikacja z serwerem zakończy się sukcesem i otrzymamy dane których się spodziewaliśmy. Czasami jednak z różnych przyczyn wysłanie żądania do serwera nie zwraca nam zadowalającej odpowiedzi. Przeanalizujmy scenariusz w którym zasób jest nieosiągalny a api zwraca nam status 404.
+Zazwyczaj mamy nadzieje że nasza komunikacja z serwerem zakończy się sukcesem i otrzymamy dane których się spodziewaliśmy. Czasami jednak, z różnych przyczyn, wysłanie żądania do serwera nie zwraca nam zadowalającej odpowiedzi. Przeanalizujmy scenariusz, w którym zasób jest nieosiągalny a API zwraca nam status 404.
 
-Na początek stwórzmy zapytanie do api podając błędny adres i spróbujmy wychwycić błąd za pomocą metody catch().
+Na początek stwórzmy zapytanie do API podając błędny adres i spróbujmy wychwycić błąd za pomocą metody catch().
 
 fetch('https://api.github.com/users/dariuszwzresien/repos')
   .then(data => console.log('dane z serwera: ', data))
@@ -165,6 +164,7 @@ type: "cors"
 url: "https://api.github.com/users/dariuszwzresien/repos"
 }
 ​
+Dlaczego metoda fetch() nie przechwyciła informacji o statusie błędu 404?
 Jak możemy przeczytać w dokumentacji, metoda fetch() zakończy się jako promise.reject() z błędem TypeError w przypadku braku możliwości dostania się do żądanej strony np. z powodu literówki w nazwie domeny lub z przyczyn bezpieczeństwa.
 
 fetch('https://api.guthub.com/users/dariuszwzresien/repos') //literówka w nazwie api.guthub.com
@@ -180,11 +180,9 @@ W tym przypadku nasze żądanie zostanie obsłużone przez metodę catch() i w k
 błąd: TypeError: NetworkError when attempting to fetch resource.
 ```
 
-Jeśli jednak chcielibyśmy aby metoda fetch() reagowała wywołaniem metody catch() w przypadku otrzymania statusu HTTP 404, możemy posłużyć się następującym rozwiązaniem:
+Jeśli jednak chcielibyśmy aby metoda fetch() reagowała wywołaniem metody catch() w przypadku otrzymania statusu HTTP 404, możemy sami wymusić wywołanie promise.reject().
 
-
-
-Najpierw napiszmy metodę, która w odpowiedni sposób zareaguje na otrzymaną odpowiedź z serwera. Metoda handleResponse() na podstawie otrzymanej odpowiedzi z serwera sprawdzi czy status jest równy 404 i jeśli tak, to odrzuci obietnice, powodując tym samym wywołanie metody catch() w łańcuchu wywołań fetch().
+Najpierw napiszmy metodę, która w odpowiedni sposób zareaguje na otrzymaną odpowiedź z serwera. Metoda handleResponse() na podstawie otrzymanej odpowiedzi sprawdzi czy status jest równy 404 i jeśli tak, to odrzuci obietnice, powodując tym samym wywołanie metody catch() w łańcuchu wywołań fetch().
 
 ```
 function handleResponse(response) {
@@ -200,12 +198,10 @@ fetch('https://api.github.com/users/dariuszwzresien/repos')
   .catch(error => console.log('błąd: ', error));
 ```
 
-
-
 Obiekty Fetch API
 
 Wspomniałem wcześniej że Fetch API oprócz metody fetch() wprowadziło do języka JavasScript obiekty Response, Request i Headers.
-Przyjrzyjmy się zatem każdemu z nich z osobna.
+Przyjrzyjmy się zatem każdemu z nich.
 
 Response
 
@@ -302,33 +298,43 @@ cors - odpowiedź została zwrócona z żądania "cross-origin" z nagłówkami C
 
 opaque - tego typu odpowiedź zwracana jest gdy komunikacja odbywa się pomiędzy różnymi domenami lecz bez użycia nagłówków CORS.
 
-
-
 Request
 
+Request pozwala nam w sposób obiektowy zarządzać danymi które chcemy przesłać w żądaniu.
+Spróbujmy zatem za pomocą poznanej wcześniej metody fetch() oraz obiektu Request wykonać żądanie do serwera.
+
+Zanim jednak stworzymy obiekt Request zastanówmy się jakie dane chcemy wysłać w żądaniu.
+
+
+const headers = new Headers();
+myHeaders.append('Content-Type', 'image/jpeg');
+
+const options = { 
+method: 'GET',
+headers: myHeaders,
+mode: 'cors',
+cache: 'default'
+};
+
+Powyżej przykład w jakim jawnie możemy zadeklarować z jakiej metody HTTP będzie korzystał nasz obiekt Request, oraz jakie nagłówki powinien wysłać. Dodatkowo ustawiliśmy parametr mode na cors, w przypadku przeglądari Firefox domyślnym trybem mode jest cors. Inaczej się to ma jednak w przypadku Chrome gdzie do wersji Chrome 47 domyślnym trybe był no-cors, a od wersji Chrome 47 (włącznie) domyślnym trybeb jest same-origin.
+Zmienna cache ustawiona na default informuje przeglądarkę że ma pobrać zasób jeśli w pamięci Cache nie znalazła pasującego do zapytania elementu. Jeśli zasób trzymany w cache nie jest aktualny przeglądarka wykonana tzw. zapytanie warunkowe (conditional request https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests) i na jego podstawie zdecyduje czy pobrać nowy zasób czy skorzystac z tego który posiada w cache.
+
+Następnie przechodzimy do osadzenia obiektu w metodzie fetch().
+
+const image = document.querySelector('img');
+
+fetch(request).then(function(response) {
+  return response.blob();
+}).then(function(response) {
+  image.src = URL.createObjectURL(response);
+});
+
+Obiekt Request przekazujemy do metody fetch() w ten sam sposób co wcześniej przekazywalismy do niej parametr URL.
+Na podstawie danych z obiektu metoda fetch wykona żądanie i zwróci otrzymaną odpowiedź.
 
 
 
 
-
-
-
-3. Handling errors with Fetch
-https://medium.com/@shahata/why-i-wont-be-using-fetch-api-in-my-apps-6900e6c6fe78
-What is a big deal, and what I’m sure many readers missed in the above example (as did I, when I first used fetch), is that actually the two code snippets above do not do the same thing. All of the http toolkits I mentioned above (seriously, each and every one of them) treat a response with error status from the server (i.e. status 404, 500, etc.) as an error. However, fetch (similarly to XMLHttpRequest) rejects the promise only in case of network error (i.e. address could not be resolved, server is unreachable or CORS not permitted).
-This means that when server returns 404, we will print ‘success’ to the console. If we want to do the more intuitive thing for an application developer and return a promise rejection in case server responded with an error, we’ll need to do something like this:
-fetch(url)
-  .then(response => {
-    return response.json().then(data => {
-      if (response.ok) {
-        return data;
-      } else {
-        return Promise.reject({status: response.status, data});
-      }
-    });
-  })
-  .then(result => console.log('success:', result))
-  .catch(error => console.log('error:', error));
 
 
 Podsumowanie.
