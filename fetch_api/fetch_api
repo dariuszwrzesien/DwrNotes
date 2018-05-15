@@ -68,9 +68,10 @@ fetch('https://jsonplaceholder.typicode.com/posts/1')
   .then(response => response.json())
   .then(json => console.log(json));
 
+https://jsfiddle.net/j1vs64vx/
+
 W przykładzie powyżej metoda fetch() jako parametr przyjmuje adres URL do zdalnego zasobu. Następnie po wykonaniu żądania, odpowiedź zamienia na obiekt za pomocą metody json() (https://developer.mozilla.org/en-US/docs/Web/API/Body/json), otrzymany obiekt wypisujemy na konsolę.
 
-https://jsfiddle.net/j1vs64vx/
 
 Oczywiście oprócz pobierania danych za pomocą metody HTTP GET, możemy także komunikować się za pomocą różnych innych metod HTTP (POST, PUT, DELETE czy też OPTIONS). Przykład poniżej pokazuje jak wysłać dane za pomoca metody POST.
 
