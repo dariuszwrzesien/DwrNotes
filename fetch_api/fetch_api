@@ -339,9 +339,26 @@ Na podstawie danych z obiektu metoda fetch wykona żądanie i zwróci otrzymaną
 
 
 Podsumowanie.
+
+Fetch API stało się standardem już w 2015 roku, dzięki czemu otrzymaliśmy całkiem przyjemne API umożliwiające asynchroniczne pobieranie zasobów z sieci, a wprowadzone obiekty z koleji pomagają nam w pracy z Service Workerami. Wprowadzony standard rozwiązuję większość problemów z którymi borykalismy się podczas pracy z XHR, jednakże nie jest wolny od wad.
+Najczęściej w tym kontekście wspomina się o utrudnionym przechwytywaniu błędów HTTP, braku możliwości śledzenia postępu oraz braku możliwości przerwania uruchomionego procesu fetch(). Jeśli chodzi o przerwanie metody fetch() na stronie Mozilli można znależć propozycję rozwiązania tego problemu za pomocą AbortSignal (https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal), niestety rozwiązanie to jest nadal w fazie eksperymentu
+
+
+
+Ma też swoje problemy Along with the transition to streams, Fetch will eventually have the ability to abort running fetch()es and some way to report the progress of a fetch. These are provided by XHR, but are a little tricky to fit in the Promise-based nature of the Fetch API.
+
+Obiekty 
+
 Fetch API jest wspierane we wszystkich nowoczesnych przegladarkach
 fetch_api_support.png,
 jeśli jednak istnieje konieczność użycia na niewspieranej platformie - można użyć polify: https://github.com/github/fetch
+
+
+
+
+
+
+
 
 If you need to use Fetch in Node.js, two of the most popular options are isomorphic-fetch and node-fetch.
 
