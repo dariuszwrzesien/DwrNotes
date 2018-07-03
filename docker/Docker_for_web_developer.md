@@ -22,6 +22,7 @@ docker rmi $(docker images -a -q) - usuwa wszystkie obrazy dockerowe
 docker rm $(docker ps -a -f status=exited -q) - usuwa wszystkie kontenery
 
 docker system prune - usuwa kontenery, obrazy.
+docker volume prune - usuwa volumeny
 
 docker exec -it [docker_container_name] /bin/bash - dostanie się do działającego kontenera dockerowego za pomocą basha
 ```
