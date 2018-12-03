@@ -28,5 +28,5 @@ Konkewncja zawarta w dokumentacji pozwala tez na zapis skrócony:
 Inne prototypy zawierają zachowania odpowienie dla ich typów, np. **Number.prototype.toFixed()** itd.
 
 Natomiast wszystkie funkcje dysponują dostępem do metod: **apply(...), call(...), bind(...)**, ponieważ
-są one defniowane przez włąsciwość **Function.prototype**
+są one defniowane przez właściwość **Function.prototype**
 
