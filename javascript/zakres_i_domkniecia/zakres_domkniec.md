@@ -21,7 +21,7 @@ funkcji, do której odwołuje się *bar*.
 
 Po wykonaniu funkcji **foo()** jej wartość zwrotna (wewnętrzna funkcja bar()) zostaje przypisana zmiennej o nazwie baz.
 Następnie mamy rzeczywiste wywołanie funkcji baz(), które powoduje wywołanie wewnętrznej funkcji bar().
-Nie ulega wątpliwości, że funkcja bar() zostanie wykoanana. Jednak w omawianym przykładzie będzie wykonana na zewnątrz
+Nie ulega wątpliwości, że funkcja bar() zostanie wykonana. Jednak w omawianym przykładzie będzie wykonana na zewnątrz
 jej zadeklarowanego zakresu leksykalnego.
 
 Mimo że wydaje się że funkcja foo() została już wywołana i nie jest dłużej utrzymywana to jednak funkcja **bar()**

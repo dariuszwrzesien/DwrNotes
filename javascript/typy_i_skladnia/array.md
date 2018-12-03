@@ -51,8 +51,8 @@ console.log(a); //[undefined, undefined, undefined, undefined, undefined, undefi
 Zamiast takiego rozwiązania należy użyć typu **object** i tam zadeklarować klucze (typu string) i wartości.
 
 ```javascript
-var a {
-    "foo" : 2;
-    "bar" : 3
+var a 
+    "foo": 2;
+    "bar"  3
 };
 ```

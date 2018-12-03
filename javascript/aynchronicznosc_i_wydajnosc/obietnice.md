@@ -29,7 +29,7 @@ object.save({ key: value }).then(
 ```
 
 Bardzo podobnie? Więc o co tyle szumu? Prawdziwa moc obietnic to wielokrotne wywoływanie i wzajemne łączenie.
-Wywołanie promise.then(func) zwraca nową obietnicę, która nie spełni się się dopóki func nie zakończy się.
+Wywołanie promise.then(func) zwraca nową obietnicę, która nie spełni się dopóki func nie zakończy się.
 Istnieje pewna wyjątkowa kwestia, dotycząca sposobu wywołania funkcji przy udziale obietnic. Jeśli funkcja zwrotna
 związana z then zwraca nową obietnicę, wówczas obietnica zwrócona przez then nie spełni się, dopóki nie spełni się
 obietnica funkcji zwrotnej.

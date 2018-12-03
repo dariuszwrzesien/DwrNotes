@@ -23,7 +23,7 @@ danej funkcji.
 ```
 
 Sposób działania powyższego kodu:
-1. podczas wywołania prefixer('AAA_') i przypisania do do zmiennej prefixAAA, otrzymujemy odwołanie do funkcji wewnetrznej
+1. podczas wywołania prefixer('AAA_') i przypisania do zmiennej prefixAAA, otrzymujemy odwołanie do funkcji wewnetrznej
 join(...), która pamięta że wartością zmiennej prefix jest AAA_.
 2. podczas wywołania prefixer('ZZZ_') otrzymujemy także odwołanie do funkcji wewnętrznej join(...),
 która pamięta przekazaną wartość prefix = 'ZZZ_';
@@ -35,8 +35,10 @@ podczas przypisania prefixAAA = prefixer('AAA_'), stąd też w rezultacie otrzym
 prefixAAA('kolejny_przykladowy_string');
 prefixZZZ('tym_razem_inny_prefix_niz_poprzednio');
 
-W reultacie wywołania skryptu otrzymujemy:
+W rezultacie wywołania skryptu otrzymujemy:
 
 AAA_przykladowy_string
+
 AAA_kolejny_przykladowy_string 
+
 ZZZ_tym_razem_inny_prefix_niz_poprzednio

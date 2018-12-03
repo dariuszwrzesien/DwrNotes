@@ -20,7 +20,7 @@
     foo.doAnother(); // 1 ! 2 ! 3
 ```
 
-**CoolModule** to poprostu funkcja, ale musi być wywyołana, aby utworzył się egzemplarz modułu.
+**CoolModule** to poprostu funkcja, ale musi być wywołana, aby utworzył się egzemplarz modułu.
 Wartością zwrotną funkcji CoolModule() jest obiekt zapisany składnią *{ klucz: wartosc, ...}*.
 Zwrócony obiekt ma odwołania do naszych funkcji wewnętrznych, ale nie do wewnętrznych zmiennych, kóre pozostają
 ukryte i prywatne.

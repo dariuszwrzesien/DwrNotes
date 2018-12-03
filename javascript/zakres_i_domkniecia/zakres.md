@@ -48,7 +48,7 @@ Zakres funkcji **foo(...)** zawiera identyfikatory a, b, c, bar.
 Nie ma znaczenia w którym miejscu pojawia się deklaracja, ponieważ, niezależnie od tego zmienna lub funkcja należą do zakresu.
 
 
-Oprócz tego mamy zakres globalny w którym istnieje tylko identyfikator **foo(...)**. Oznacza to że jęsli z zakresu globalnego
+Oprócz tego mamy zakres globalny w którym istnieje tylko identyfikator **foo(...)**. Oznacza to że jeśli z zakresu globalnego
 będziemy próbować odwołać się do zmiennych w zakresie funkcji foo() otrzymamy ReferenceError.
 
 ```javascript
@@ -100,5 +100,5 @@ tę zmienną.
 ```
 
 Słowo kluczowe ***const***
-Oprócz **let** w specyfikacji ES6 pojawiło się także polecenie ***const***, które również towrzy zmienną o zakresie bloku.
+Oprócz **let** w specyfikacji ES6 pojawiło się także polecenie ***const***, które również tworzy zmienną o zakresie bloku.
 Wartość utworzonej stałej ***const*** jest niezmienna, każda próba zmodyfikowania generuje błąd *ReferenceError*.

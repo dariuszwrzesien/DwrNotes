@@ -13,7 +13,7 @@ Jeżeli funkcja zawiera wewnątrz odwołanie *this*, zwykle prowadzi ono do obie
         foo: foo
     }
 
-    var object2 {
+    var object2 = {
         bar: "Object2"
     }
 

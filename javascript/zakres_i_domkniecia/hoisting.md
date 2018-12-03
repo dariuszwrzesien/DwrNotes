@@ -2,7 +2,7 @@
 
 Ciekawymi przykładami do rozważenia przed wyjaśnieniem zasady hoistingu są:
 
-1.
+1
 
 ```javascript
     a = 2;
@@ -16,7 +16,7 @@ Jednakże console.log(a) zwróci ***2***.
 
 Kolejny przykład:
 
-2.
+2
 
 ```javascript
     console.log( a );

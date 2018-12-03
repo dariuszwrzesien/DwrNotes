@@ -29,8 +29,7 @@ Funkcja User() przechowuje zmienne username i password oraz funkcję doLogin.
 Są to prywatne szczegóły modułu User, niedostępne z zewnątrz.
 
 Wewnętrzna funkcja doLogin() ma **domknięcie** przez username i password,
-oznacza to zachowanie dostępu do wymienionych elementów nawet po zakoń-
-czeniu wykonywania funkcji User() .
+oznacza to zachowanie dostępu do wymienionych elementów nawet po zakończeniu wykonywania funkcji User() .
 
 Funkcja User() zwraca **obiekt API** posiada on jedną metodę "login", która
 jest odwołaniem do wewnętrznej funkcji doLogin().
